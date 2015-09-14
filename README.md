@@ -1,2 +1,1 @@
-# hot-pursuit-game
-# hot-pursuit-game
+# Игра "Тараканьи бега"
