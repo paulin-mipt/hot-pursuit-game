@@ -1,7 +1,7 @@
 #include <string>
 #include "CGame.h"
 
-const std::string MAP_PATH = ""; // Путь для поля (таблицы)
+const std::string MAP_PATH = ""; // Path for field-table
 
 int main()
 {

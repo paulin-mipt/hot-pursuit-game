@@ -11,13 +11,13 @@ Reader::~Reader()
 Field Reader::readMap( const std::string& path )
 {
 	Field gameField;
-	// Чтение из файла
+	// Reading from file
 	return gameField;
 }
 
 PlayersInfo Reader::readPlayers()
 {
 	PlayersInfo info;
-	// Чтение с консоли
+	// Reading from console
 	return info;
 }

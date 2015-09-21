@@ -13,5 +13,5 @@ public:
 	~Map();
 
 private:
-	Field map; // Таблица, элементы котрой 1/0. 1 - препятствие, 0 - свободная клетка
+	Field map; // Table, in which cells are: 0-free cell, 1-non-free cell
 };
