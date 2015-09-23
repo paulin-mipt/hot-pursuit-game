@@ -8,7 +8,7 @@ int main()
 	Reader reader;
 	Map newMap( reader.readMap( MAP_PATH ) );
 	PlayersInfo newPlayersInfo = reader.readPlayers();
-	Game newGame( newMap, newPlayersInfo );
+	Game newGame( newMap, newPlayersInfo, reader );
 	newGame.start();
 
 	return 0;

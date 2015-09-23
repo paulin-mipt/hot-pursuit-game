@@ -16,4 +16,6 @@ public:
 	Field readMap( const std::string& path );
 
 	PlayersInfo readPlayers();
+
+	Coordinates readPlayersChoice();
 };

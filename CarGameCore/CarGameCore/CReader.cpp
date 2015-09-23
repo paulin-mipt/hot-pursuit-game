@@ -21,3 +21,10 @@ PlayersInfo Reader::readPlayers()
 	// Reading from console
 	return info;
 }
+
+
+Coordinates Reader::readPlayersChoice()
+{
+	// direction, in which player should go
+	return Coordinates( 0, 0 );
+}

@@ -36,5 +36,6 @@ public:
 
 private:
 	Coordinates currentCoordinates;
+	Coordinates innertion;
 	bool isAlive;
 };
