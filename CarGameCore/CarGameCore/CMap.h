@@ -14,6 +14,6 @@ public:
 	~Map();
 
 private:
-	Field map; // Table, in which cells are: 0-free cell, 1-non-free cell
+	Field map; // Карта (таблица), в которой 1 - препятствие, дороги нет. А 0 - дорога.
 	Size size;
 };

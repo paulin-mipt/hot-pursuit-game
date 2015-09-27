@@ -21,15 +21,13 @@ Game::~Game()
 
 bool Game::playersOnFinish()
 {
-	// need to check finish line and its storage, intersection
-	// vector of two line points with
-	// vector of car trajectory
+	// 2 точки задают пр€мую старта. Ќужно посчитать пересекаетс€ ли траектори€ машины с ней.
 	return false;
 }
 
 void Game::turnOfPlayer( size_t number )
 {
-	// algo goes here
+	// »гра
 }
 
 void Game::start()

@@ -2,5 +2,7 @@
 *.sdf
 *.suo
 *.ncb
+*user
 Debug/
 Release/
+x64/

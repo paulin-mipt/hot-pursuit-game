@@ -1,7 +1,7 @@
 #include <string>
 #include "CGame.h"
 
-const std::string MAP_PATH = ""; // Path for field-table
+const std::string MAP_PATH = ""; // ѕуть к карте
 
 int main()
 {
