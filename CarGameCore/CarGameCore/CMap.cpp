@@ -1,4 +1,4 @@
-#include "CMap.h"
+п»ї#include "CMap.h"
 
 Map::Map()
 {
@@ -7,7 +7,7 @@ Map::Map()
 Map::Map( const Field& newMap ) :
 	map( newMap )
 {
-	size.first = 0; // todo: инициализировать размером newMap
+	size.first = 0; // todo: РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ СЂР°Р·РјРµСЂРѕРј newMap
 	size.second = 0;
 }
 

@@ -1,4 +1,4 @@
-#include "CReader.h"
+п»ї#include "CReader.h"
 
 Reader::Reader()
 {
@@ -11,14 +11,14 @@ Reader::~Reader()
 Field Reader::readMap( const std::string& path )
 {
 	Field gameField;
-	// Чтение из файла
+	// Р§С‚РµРЅРёРµ РёР· С„Р°Р№Р»Р°
 	return gameField;
 }
 
 PlayersInfo Reader::readPlayers()
 {
 	PlayersInfo info;
-	// Чтение с консоли
+	// Р§С‚РµРЅРёРµ СЃ РєРѕРЅСЃРѕР»Рё
 	return info;
 }
 

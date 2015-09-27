@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CMap.h"
 #include "CPlayer.h"
