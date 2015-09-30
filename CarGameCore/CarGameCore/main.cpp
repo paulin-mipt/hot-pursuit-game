@@ -1,7 +1,7 @@
 #include <string>
 #include "CGame.h"
 
-const std::string MAP_PATH = ""; // Путь к карте
+const std::string MAP_PATH = "../map.txt";
 
 int main()
 {

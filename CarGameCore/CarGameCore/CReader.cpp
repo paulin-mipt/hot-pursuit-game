@@ -13,7 +13,7 @@ Field Reader::readMap( const std::string& path )
 	Field gameField;
 	std::ifstream fin( path );
 
-	if (fin == NULL)
+	if (!fin)
 	{
 		std::string error = "Can't open file ";
 		error += path;
@@ -21,15 +21,16 @@ Field Reader::readMap( const std::string& path )
 	}
 
 	std::string currentLine;
-	std::vector <size_t> line;
 
-	while ( !std::getline(fin, currentLine) )
+	while ( std::getline(fin, currentLine) )
 	{
+		std::vector <size_t> line;
 		currentLine += " ";
 		while (currentLine.length() > 0)
 		{
 			size_t pos = currentLine.find( " " );
-			line.push_back( atoi( currentLine.substr( pos ).c_str() ) );
+			line.push_back( atoi( currentLine.substr( 0, pos ).c_str() ) );
+			currentLine.erase( 0, pos + 1 );
 		}
 		gameField.push_back( line );
 	}
@@ -37,16 +38,23 @@ Field Reader::readMap( const std::string& path )
 	return gameField;
 }
 
+Coordinates readCoordinates()
+{
+	int x, y;
+	std::cin >> x >> y;
+
+	return Coordinates(x, y);
+}
+
 PlayersInfo Reader::readPlayers()
 {
 	PlayersInfo info;
-	// Чтение с консоли
+	info.positions.push_back(readCoordinates());
 	return info;
 }
 
 
 Coordinates Reader::readPlayersChoice()
 {
-	
-	return Coordinates( 0, 0 );
+	return readCoordinates();
 }
