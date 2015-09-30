@@ -9,6 +9,7 @@ int main()
 	try
 	{
 		Map newMap( reader.readMap( MAP_PATH ) );
+		//Read Start Line Here reader.readLine();
 		PlayersInfo newPlayersInfo = reader.readPlayers();
 		Game newGame( newMap, newPlayersInfo, reader );
 		newGame.start();

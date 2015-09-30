@@ -49,7 +49,10 @@ Coordinates readCoordinates()
 PlayersInfo Reader::readPlayers()
 {
 	PlayersInfo info;
-	info.positions.push_back(readCoordinates());
+	size_t number_of_players;
+	std::cin >> number_of_players;
+	for ( int i = 0; i < number_of_players; ++i )
+		info.positions.push_back(readCoordinates());
 	return info;
 }
 
@@ -57,4 +60,12 @@ PlayersInfo Reader::readPlayers()
 Coordinates Reader::readPlayersChoice()
 {
 	return readCoordinates();
+}
+
+Line Reader::readLine()
+{
+	Coordinates first_point = readCoordinates(), 
+				second_point = readCoordinates();
+
+	return Line(first_point, second_point);
 }
