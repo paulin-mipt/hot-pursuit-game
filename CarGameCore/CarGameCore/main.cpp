@@ -6,16 +6,13 @@ const std::string MAP_PATH = "../map.txt";
 int main()
 {
 	Reader reader;
-	try
-	{
+	try {
 		Map newMap( reader.readMap( MAP_PATH ) );
-		//Read Start Line Here reader.readLine();
+		Line startLine = reader.readLine();
 		PlayersInfo newPlayersInfo = reader.readPlayers();
-		Game newGame( newMap, newPlayersInfo, reader );
+		Game newGame( newMap, newPlayersInfo, startLine, reader );
 		newGame.start();
-	}
-	catch (std::exception const &e)
-	{
+	} catch( std::exception const &e ) {
 		std::cerr << e.what() << std::endl;
 	}
 

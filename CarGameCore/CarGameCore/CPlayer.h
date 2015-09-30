@@ -16,23 +16,13 @@ struct Coordinates {
 	int y;
 };
 
-struct Line {
-	Line(Coordinates x, Coordinates y) :
-		firstPoint(x), secondPoint(y)
-	{
-	}
-
-	Coordinates firstPoint;
-	Coordinates secondPoint;
-};
-
 struct PlayersInfo {
 	PlayersInfo()
 	{
 		numberOfPlayers = 0;
 	}
 
-	int numberOfPlayers;
+	size_t numberOfPlayers;
 	std::vector<Coordinates> positions;
 };
 

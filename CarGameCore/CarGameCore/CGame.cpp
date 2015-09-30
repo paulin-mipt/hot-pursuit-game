@@ -4,8 +4,8 @@ Game::Game()
 {
 }
 
-Game::Game( const Map& newMap, const PlayersInfo& newPlayersInfo, const Reader& newReader ) :
-	map( newMap ), reader( newReader )
+Game::Game( const Map& newMap, const PlayersInfo& newPlayersInfo, const Line& newStartLine, const Reader& newReader ) :
+	map( newMap ), reader( newReader ), startLine( newStartLine )
 {
 
 	size_t numOfPlayers = newPlayersInfo.numberOfPlayers;

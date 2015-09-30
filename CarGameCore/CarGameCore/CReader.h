@@ -8,6 +8,20 @@
 
 typedef std::vector< std::vector<size_t> > Field;
 
+struct Line {
+	Line()
+	{
+	}
+
+	Line( Coordinates x, Coordinates y ) :
+		firstPoint( x ), secondPoint( y )
+	{
+	}
+
+	Coordinates firstPoint;
+	Coordinates secondPoint;
+};
+
 class Reader {
 
 public:

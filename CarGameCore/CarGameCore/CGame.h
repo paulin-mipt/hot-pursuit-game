@@ -10,7 +10,7 @@ class Game {
 public:
 	Game();
 
-	Game( const Map& map, const PlayersInfo& playersInfo, const Reader& reader );
+	Game( const Map& map, const PlayersInfo& playersInfo, const Line& startLine, const Reader& reader );
 
 	~Game();
 
@@ -20,6 +20,7 @@ private:
 	Map map;
 	Reader reader;
 	std::vector<Player> players;
+	Line startLine;
 
 	bool playersOnFinish();
 	void turnOfPlayer( size_t number );
