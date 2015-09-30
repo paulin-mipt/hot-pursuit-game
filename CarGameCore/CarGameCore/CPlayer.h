@@ -3,7 +3,7 @@
 #include <vector>
 
 struct Coordinates {
-	Coordinates( size_t newX, size_t newY ) :
+	Coordinates( int newX, int newY ) :
 		x( newX ), y( newY )
 	{
 	}
@@ -12,8 +12,8 @@ struct Coordinates {
 	{
 	}
 
-	size_t x;
-	size_t y;
+	int x;
+	int y;
 };
 
 struct PlayersInfo {

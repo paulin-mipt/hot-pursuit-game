@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include "CPlayer.h"
+#include <exception>
+#include <string>
 
 typedef std::vector< std::vector<size_t> > Field;
 
