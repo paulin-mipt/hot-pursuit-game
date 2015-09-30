@@ -15,6 +15,7 @@ public:
 	~Game();
 
 	void start();
+	void finish( size_t winner );
 
 private:
 	Map map;
@@ -22,6 +23,6 @@ private:
 	std::vector<Player> players;
 	Line startLine;
 
-	bool playersOnFinish();
+	int getPlayerOnFinish( bool& begining );
 	void turnOfPlayer( size_t number );
 };

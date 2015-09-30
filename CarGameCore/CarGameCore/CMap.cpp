@@ -7,8 +7,8 @@ Map::Map()
 Map::Map( const Field& newMap ) :
 	map( newMap )
 {
-	size.first = 0; // todo: инициализировать размером newMap
-	size.second = 0;
+	size.first = newMap[0].size();
+	size.second = newMap.size();
 }
 
 Map::~Map()
