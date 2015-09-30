@@ -20,4 +20,6 @@ public:
 	PlayersInfo readPlayers();
 
 	Coordinates readPlayersChoice();
+
+	Line readLine();
 };

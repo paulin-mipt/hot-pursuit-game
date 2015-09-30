@@ -16,6 +16,16 @@ struct Coordinates {
 	int y;
 };
 
+struct Line {
+	Line(Coordinates x, Coordinates y) :
+		firstPoint(x), secondPoint(y)
+	{
+	}
+
+	Coordinates firstPoint;
+	Coordinates secondPoint;
+};
+
 struct PlayersInfo {
 	PlayersInfo()
 	{
