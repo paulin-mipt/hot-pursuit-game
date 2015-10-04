@@ -33,7 +33,7 @@ public:
 
 	PlayersInfo readPlayers();
 
-	Coordinates readPlayersChoice();
+	Coordinates readPlayersChoice(); // todo: сделать параметром номер игрока, чтобы обращаться к нему при считывани его хода
 
 	Line readLine();
 };

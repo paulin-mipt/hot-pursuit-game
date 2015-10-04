@@ -4,7 +4,9 @@
 #include "CPlayer.h"
 #include "CReader.h"
 #include <vector>
+#include <algorithm>
 #include <iostream>
+#include <memory>
 
 class Game {
 public:
@@ -16,6 +18,7 @@ public:
 
 	void start();
 	void finish( size_t winner );
+	std::pair<Coordinates, Coordinates> getPlayersBasePoints( size_t num );
 
 private:
 	Map map;
@@ -24,5 +27,8 @@ private:
 	Line startLine;
 
 	int getPlayerOnFinish( bool& begining );
-	void turnOfPlayer( size_t number );
+	bool startLineIntersectsWithPlayer( size_t num );
+	void turnOfPlayer( size_t num );
+	int playerCrashedIntoCar( size_t num );
+	bool playerOutOfTrack( size_t num );
 };

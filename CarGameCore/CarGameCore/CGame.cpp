@@ -19,11 +19,36 @@ Game::~Game()
 {
 }
 
-bool startLineIntersectsWithPlayer( size_t num )
+bool inBoxOnAxis( int firstPoint, int secondPoint, int thirdPoint, int forthPoint )
 {
-	// Дано: startLine и players[num].
-	// Требуется проверить, пересекается ли она с траекторией игрока.
-	return false;
+	if( firstPoint > secondPoint ) {
+		std::swap ( firstPoint, secondPoint );
+	}
+	if( thirdPoint > forthPoint ) {
+		std::swap ( thirdPoint, forthPoint );
+	}
+	return std::max( firstPoint, thirdPoint ) <= std::min( secondPoint, forthPoint );
+}
+
+int area( Coordinates firstPoint, Coordinates secondPoint, Coordinates thirdPoint )
+{
+	return ( secondPoint.x - firstPoint.x ) * ( thirdPoint.y - firstPoint.y )
+		- ( secondPoint.y - firstPoint.y ) * ( thirdPoint.x - firstPoint.x );
+}
+
+bool Game::startLineIntersectsWithPlayer( size_t num )
+{
+	// Происходит проверка:
+	// 1. Проекции отрезков на оси пересекаются
+	// 2. Считается ориентированная площадь треугольников. Нужно, чтобы эти площади были разных знаков.
+	Coordinates playersPreviousCoordinates = players[num].getPreviousPosition();
+	Coordinates playersCoordinates = players[num].getPosition();
+	return inBoxOnAxis( playersPreviousCoordinates.x, playersCoordinates.x, startLine.firstPoint.x, startLine.secondPoint.x )
+		&& inBoxOnAxis( playersPreviousCoordinates.y, playersCoordinates.y, startLine.firstPoint.y, startLine.secondPoint.y )
+		&& ( area( players[num].getPreviousPosition(), players[num].getPosition(), startLine.firstPoint )
+			 * area( players[num].getPreviousPosition(), players[num].getPosition(), startLine.secondPoint ) ) <= 0
+		&& ( area( startLine.firstPoint, startLine.secondPoint, playersPreviousCoordinates )
+			 * area( startLine.firstPoint, startLine.secondPoint, playersCoordinates ) ) <= 0;
 }
 
 int Game::getPlayerOnFinish( bool& begining )
@@ -40,10 +65,33 @@ int Game::getPlayerOnFinish( bool& begining )
 	return -1;
 }
 
-void Game::turnOfPlayer( size_t number )
+int Game::playerCrashedIntoCar( size_t num )
 {
-	// Ход игрока + проверка, что остался на треке
+	// врезался ли в другие машины?
+	return -1;
 }
+
+bool Game::playerOutOfTrack( size_t num )
+{
+	// todo: вылетает ли траектория за пределы трассы?
+}
+
+void Game::turnOfPlayer( size_t num )
+{
+	Coordinates direction = reader.readPlayersChoice();
+	Coordinates newPreviousCoordinations = players[num].getPosition();
+	// todo: players[num].move();
+	int car = playerCrashedIntoCar( num );
+	if( car != -1 ) {
+		// todo: players[num].setPosition(players[num].getInitialPosition());
+		return;
+	}
+	if( playerOutOfTrack( num ) ) {
+		players[num].die();
+		return;
+	}
+}
+
 
 void Game::start()
 {
@@ -52,7 +100,9 @@ void Game::start()
 	int player;
 	while( ( player = getPlayerOnFinish( begining ) ) == -1 ) { // -1 - никто пока к финишу не пришел
 		for( size_t i = 0; i < players.size(); ++i ) {
+			// todo: if (players[i].isAlive()) {
 			turnOfPlayer( i );
+			// }
 		}
 	}
 	finish( player );
@@ -61,4 +111,9 @@ void Game::start()
 void Game::finish( size_t winner )
 {
 	std::cout << "Player number " << winner + 1 << " is winner! Congratulations!!!" << std::endl;
+}
+
+std::pair<Coordinates, Coordinates> Game::getPlayersBasePoints( size_t num ) // Отдаем Frontend у
+{
+	return std::make_pair( players[num].getPreviousPosition(), players[num].getPosition() );
 }
