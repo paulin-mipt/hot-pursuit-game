@@ -21,7 +21,7 @@ void Player::goToStart()
 	this->position = this->initial_position;
 };
 
-Coordinates * Player::move( int direction_code )
+std::tr1::shared_ptr<Coordinates> Player::move( int direction_code )
 {
 	Coordinates direction;
 
@@ -69,7 +69,7 @@ Coordinates * Player::move( int direction_code )
 	return this->moveInDirection( direction );
 };
 
-Coordinates * Player::moveInDirection( Coordinates direction )
+std::tr1::shared_ptr<Coordinates> Player::moveInDirection( Coordinates direction )
 {
 
 	Coordinates move;
@@ -86,7 +86,8 @@ Coordinates * Player::moveInDirection( Coordinates direction )
 	this->position.y = this->position.y + move.y;
 
 
-	Coordinates * result = new Coordinates[2];
+        std::tr1::shared_ptr<Coordinates> result(new Coordinates[2]);
+
 	result[0] = move;
 	result[1] = pure_inertial;
 

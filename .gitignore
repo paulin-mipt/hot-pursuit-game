@@ -8,3 +8,6 @@ Debug/
 Release/
 x64/
 *.o
+CarGameCore/CarGameCore/testplayer
+CarGameCore/CarGameCore/testplayer.cpp
+*/Makefile
