@@ -15,6 +15,11 @@ struct Coordinates {
 	{
 	}
 
+	bool operator == ( const Coordinates &point ) const
+	{
+		return this->x == point.x && this->y == point.y;
+	}
+
 	int x;
 	int y;
 };

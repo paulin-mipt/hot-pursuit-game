@@ -67,7 +67,11 @@ int Game::getPlayerOnFinish( bool& begining )
 
 int Game::playerCrashedIntoCar( size_t num )
 {
-	// врезался ли в другие машины?
+	for( size_t i = 0; i < players.size(); ++i ) {
+		if( i != num && players[i].getPosition() == players[num].getPosition() ) {
+			return i;
+		}
+	}
 	return -1;
 }
 
