@@ -8,7 +8,7 @@ Player::Player()
 }
 
 Player::Player( const Coordinates& newCoordinates, const bool state ) :
-	initial_position( newCoordinates ), position( newCoordinates ), isAlive( state )
+	initial_position( newCoordinates ), previous_position( newCoordinates ), position( newCoordinates ), isAlive( state )
 {
 }
 Coordinates Player::getPosition()
@@ -81,6 +81,8 @@ std::tr1::shared_ptr<Coordinates> Player::moveInDirection( Coordinates direction
 	pure_inertial.y = this->position.y + this->inertia.y;
 
 	this->inertia = move;
+        
+        this->previous_position = this->position;
 
 	this->position.x = this->position.x + move.x;
 	this->position.y = this->position.y + move.y;

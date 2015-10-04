@@ -50,6 +50,7 @@ private:
 	Coordinates position;
 	Coordinates inertia;
 	Coordinates initial_position;
+        Coordinates previous_position;
 	std::tr1::shared_ptr<Coordinates> moveInDirection( Coordinates );
 	bool isAlive;
 };
