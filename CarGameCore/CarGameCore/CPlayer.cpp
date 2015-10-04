@@ -21,7 +21,7 @@ void Player::goToStart()
 	this->position = this->initial_position;
 };
 
-std::tr1::shared_ptr<Coordinates> Player::move( int direction_code )
+void Player::move( int direction_code )
 {
 	Coordinates direction;
 
@@ -66,10 +66,10 @@ std::tr1::shared_ptr<Coordinates> Player::move( int direction_code )
 			throw std::invalid_argument( "Unknown direction code" );
 	}
 
-	return this->moveInDirection( direction );
+	this->moveInDirection( direction );
 };
 
-std::tr1::shared_ptr<Coordinates> Player::moveInDirection( Coordinates direction )
+void Player::moveInDirection( Coordinates direction )
 {
 
 	Coordinates move;
@@ -88,12 +88,12 @@ std::tr1::shared_ptr<Coordinates> Player::moveInDirection( Coordinates direction
 	this->position.y = this->position.y + move.y;
 
 
-        std::tr1::shared_ptr<Coordinates> result(new Coordinates[2]);
+        //std::tr1::shared_ptr<Coordinates> result = std::tr1::make_shared(
+        //        move,
+        //        pure_inertial
+        //);
 
-	result[0] = move;
-	result[1] = pure_inertial;
-
-	return result;
+	//return result;
 
 };
 

@@ -45,13 +45,13 @@ public:
 	void goToStart( void );
 
 	Coordinates getPosition( void );
-	std::tr1::shared_ptr<Coordinates> move( int );
+	void move( int );
 private:
 	Coordinates position;
 	Coordinates inertia;
 	Coordinates initial_position;
         Coordinates previous_position;
-	std::tr1::shared_ptr<Coordinates> moveInDirection( Coordinates );
+	void moveInDirection( Coordinates );
 	bool isAlive;
 };
 
