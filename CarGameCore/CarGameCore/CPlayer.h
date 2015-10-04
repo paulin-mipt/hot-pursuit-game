@@ -20,11 +20,10 @@ struct Coordinates {
 };
 
 enum Directions {
-    SW=1, S, SE, 
-    W, C, E, // `C` for no direction
-    NW, N, NE
+	SW = 1, S, SE,
+	W, C, E, // `C` for no direction
+	NW, N, NE
 };
-
 
 struct PlayersInfo {
 	PlayersInfo()
@@ -42,16 +41,16 @@ public:
 	Player( const Coordinates& coordinates, const bool isAlive );
 	~Player();
 
-        void die(void);
-        void goToStart(void);
+	void die( void );
+	void goToStart( void );
 
-        Coordinates getPosition(void);
-        Coordinates* move(int);
+	Coordinates getPosition( void );
+	Coordinates* move( int );
 private:
 	Coordinates position;
 	Coordinates inertia;
 	Coordinates initial_position;
-        Coordinates* moveInDirection(Coordinates);
+	Coordinates* moveInDirection( Coordinates );
 	bool isAlive;
 };
 
