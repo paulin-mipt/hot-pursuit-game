@@ -85,9 +85,10 @@ void Game::turnOfPlayer( size_t num )
 	Coordinates direction = reader.readPlayersChoice();
 	Coordinates newPreviousCoordinations = players[num].getPosition();
 	// todo: players[num].move();
-	int car = playerCrashedIntoCar( num );
-	if( car != -1 ) {
-		// todo: players[num].setPosition(players[num].getInitialPosition());
+	int crashedPlayer = playerCrashedIntoCar( num );
+	if( crashedPlayer != -1 ) {
+		players[num].goToStart();
+		players[crashedPlayer].goToStart();
 		return;
 	}
 	if( playerOutOfTrack( num ) ) {
