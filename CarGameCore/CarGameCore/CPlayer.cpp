@@ -10,6 +10,8 @@ Player::Player()
 Player::Player( const Coordinates& newCoordinates, const bool state ) :
 	initial_position( newCoordinates ), previous_position( newCoordinates ), position( newCoordinates ), isAlive( state )
 {
+	inertia.x = 0;
+	inertia.y = 0;
 }
 Coordinates Player::getPosition()
 {
@@ -71,6 +73,8 @@ void Player::move( int direction_code )
 
 void Player::moveInDirection( Coordinates direction )
 {
+
+
 
 	Coordinates move;
 	move.x = this->inertia.x + direction.x;
