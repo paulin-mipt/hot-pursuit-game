@@ -69,7 +69,7 @@ int Game::playerCrashedIntoCar( size_t num )
 {
 	for( size_t i = 0; i < players.size(); ++i ) {
 		if( i != num && players[i].getPosition() == players[num].getPosition() ) {
-			return i;
+			return ( int ) i;
 		}
 	}
 	return -1;
@@ -78,12 +78,13 @@ int Game::playerCrashedIntoCar( size_t num )
 bool Game::playerOutOfTrack( size_t num )
 {
 	// todo: вылетает ли траектория за пределы трассы?
+	return false;
 }
 
 void Game::turnOfPlayer( size_t num )
 {
-	Coordinates direction = reader.readPlayersChoice();
-	// todo: players[num].move(direction);, direction - переделать в цифру
+	int direction = reader.readPlayersChoice( num );
+	players[num].move( direction );
 	int crashedPlayer = playerCrashedIntoCar( num );
 	if( crashedPlayer != -1 ) {
 		players[num].goToStart();

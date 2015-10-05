@@ -46,6 +46,7 @@ Coordinates readCoordinates()
 PlayersInfo Reader::readPlayers()
 {
 	PlayersInfo info;
+	std::cout << "Введите количество игроков:" << std::endl;
 	size_t number_of_players;
 	std::cin >> number_of_players;
 	info.numberOfPlayers = number_of_players;
@@ -55,13 +56,18 @@ PlayersInfo Reader::readPlayers()
 }
 
 
-Coordinates Reader::readPlayersChoice()
+int Reader::readPlayersChoice( size_t num )
 {
-	return readCoordinates();
+	std::cout << "Сейчас ход " << num + 1 << " игрока:" << std::endl;
+	int move;
+	std::cin >> move;
+	return move;
 }
 
 Line Reader::readLine()
 {
+
+	std::cout << "Введите координаты стартовой линии:" << std::endl;
 	Coordinates first_point = readCoordinates(),
 		second_point = readCoordinates();
 

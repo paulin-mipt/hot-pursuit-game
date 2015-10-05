@@ -14,6 +14,10 @@ Player::Player( const Coordinates& newCoordinates, const bool state ) :
 	inertia.y = 0;
 }
 
+Player::~Player()
+{
+}
+
 Coordinates Player::getPosition()
 {
 	return this->position;
@@ -82,19 +86,19 @@ void Player::moveInDirection( Coordinates direction )
 	pure_inertial.y = this->position.y + this->inertia.y;
 
 	this->inertia = move;
-        
-        this->previous_position = this->position;
+
+	this->previous_position = this->position;
 
 	this->position.x = this->position.x + move.x;
 	this->position.y = this->position.y + move.y;
 
 
-        //std::tr1::shared_ptr<Coordinates> result = std::tr1::make_shared(
-        //        move,
-        //        pure_inertial
-        //);
+	//std::tr1::shared_ptr<Coordinates> result = std::tr1::make_shared(
+	//        move,
+	//        pure_inertial
+	//);
 
-	//return result;
+//return result;
 }
 
 Coordinates Player::getPreviousPosition()
