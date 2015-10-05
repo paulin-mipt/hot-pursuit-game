@@ -8,6 +8,18 @@
 #include <iostream>
 #include <memory>
 
+struct PointsInformation {
+	PointsInformation( const bool condition, const Coordinates& oldCoordinates, const Coordinates& newCoordinate ) :
+		isAlive( condition ), previousCoordinates( oldCoordinates ), currentCoordinates( newCoordinate )
+	{
+	}
+
+	bool isAlive;
+	Coordinates previousCoordinates;
+	Coordinates currentCoordinates;
+};
+
+
 class Game {
 public:
 	Game();
@@ -18,7 +30,7 @@ public:
 
 	void start();
 	void finish( size_t winner );
-	std::pair<Coordinates, Coordinates> getPlayersBasePoints( size_t num );
+	PointsInformation getPlayersBasePoints( size_t num ); // Отдаем Frontend у
 
 private:
 	Map map;

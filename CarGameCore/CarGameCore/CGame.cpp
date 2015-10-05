@@ -83,8 +83,7 @@ bool Game::playerOutOfTrack( size_t num )
 void Game::turnOfPlayer( size_t num )
 {
 	Coordinates direction = reader.readPlayersChoice();
-	Coordinates newPreviousCoordinations = players[num].getPosition();
-	// todo: players[num].move();
+	// todo: players[num].move(direction);, direction - переделать в цифру
 	int crashedPlayer = playerCrashedIntoCar( num );
 	if( crashedPlayer != -1 ) {
 		players[num].goToStart();
@@ -96,7 +95,6 @@ void Game::turnOfPlayer( size_t num )
 		return;
 	}
 }
-
 
 void Game::start()
 {
@@ -118,7 +116,9 @@ void Game::finish( size_t winner )
 	std::cout << "Player number " << winner + 1 << " is winner! Congratulations!!!" << std::endl;
 }
 
-std::pair<Coordinates, Coordinates> Game::getPlayersBasePoints( size_t num ) // Отдаем Frontend у
+PointsInformation Game::getPlayersBasePoints( size_t num )
 {
-	return std::make_pair( players[num].getPreviousPosition(), players[num].getPosition() );
+	return PointsInformation( true, players[num].getPreviousPosition(), players[num].getPosition() );
+	// todo: вместо true
+	// поставить players[num].isAlive()
 }
