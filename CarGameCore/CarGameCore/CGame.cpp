@@ -45,8 +45,8 @@ bool Game::startLineIntersectsWithPlayer( size_t num )
 	Coordinates playersCoordinates = players[num].getPosition();
 	return inBoxOnAxis( playersPreviousCoordinates.x, playersCoordinates.x, startLine.firstPoint.x, startLine.secondPoint.x )
 		&& inBoxOnAxis( playersPreviousCoordinates.y, playersCoordinates.y, startLine.firstPoint.y, startLine.secondPoint.y )
-		&& ( area( players[num].getPreviousPosition(), players[num].getPosition(), startLine.firstPoint )
-			 * area( players[num].getPreviousPosition(), players[num].getPosition(), startLine.secondPoint ) ) <= 0
+		&& ( area( playersPreviousCoordinates, playersCoordinates, startLine.firstPoint )
+			 * area( playersPreviousCoordinates, playersCoordinates, startLine.secondPoint ) ) <= 0
 		&& ( area( startLine.firstPoint, startLine.secondPoint, playersPreviousCoordinates )
 			 * area( startLine.firstPoint, startLine.secondPoint, playersCoordinates ) ) <= 0;
 }
