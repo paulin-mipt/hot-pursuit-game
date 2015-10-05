@@ -13,6 +13,7 @@ Player::Player( const Coordinates& newCoordinates, const bool state ) :
 	inertia.x = 0;
 	inertia.y = 0;
 }
+
 Coordinates Player::getPosition()
 {
 	return this->position;
@@ -26,7 +27,6 @@ void Player::goToStart()
 void Player::move( int direction_code )
 {
 	Coordinates direction;
-
 	switch( direction_code ) {
 		case SW:
 			direction.x = -1;
@@ -73,9 +73,6 @@ void Player::move( int direction_code )
 
 void Player::moveInDirection( Coordinates direction )
 {
-
-
-
 	Coordinates move;
 	move.x = this->inertia.x + direction.x;
 	move.y = this->inertia.y + direction.y;
@@ -98,7 +95,11 @@ void Player::moveInDirection( Coordinates direction )
         //);
 
 	//return result;
+}
 
+Coordinates Player::getPreviousPosition()
+{
+	return this->previous_position;
 };
 
 void Player::die()

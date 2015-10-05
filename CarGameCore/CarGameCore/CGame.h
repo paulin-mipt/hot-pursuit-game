@@ -4,7 +4,21 @@
 #include "CPlayer.h"
 #include "CReader.h"
 #include <vector>
+#include <algorithm>
 #include <iostream>
+#include <memory>
+
+struct PointsInformation {
+	PointsInformation( const bool condition, const Coordinates& oldCoordinates, const Coordinates& newCoordinate ) :
+		isAlive( condition ), previousCoordinates( oldCoordinates ), currentCoordinates( newCoordinate )
+	{
+	}
+
+	bool isAlive;
+	Coordinates previousCoordinates;
+	Coordinates currentCoordinates;
+};
+
 
 class Game {
 public:
@@ -15,6 +29,8 @@ public:
 	~Game();
 
 	void start();
+	void finish( size_t winner );
+	PointsInformation getPlayersBasePoints( size_t num ); // Отдаем Frontend у
 
 private:
 	Map map;
@@ -22,6 +38,9 @@ private:
 	std::vector<Player> players;
 	Line startLine;
 
-	bool playersOnFinish();
-	void turnOfPlayer( size_t number );
+	int getPlayerOnFinish( bool& begining );
+	bool startLineIntersectsWithPlayer( size_t num );
+	void turnOfPlayer( size_t num );
+	int playerCrashedIntoCar( size_t num );
+	bool playerOutOfTrack( size_t num );
 };

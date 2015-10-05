@@ -15,6 +15,11 @@ struct Coordinates {
 	{
 	}
 
+	bool operator == ( const Coordinates &point ) const
+	{
+		return this->x == point.x && this->y == point.y;
+	}
+
 	int x;
 	int y;
 };
@@ -46,11 +51,13 @@ public:
 
 	Coordinates getPosition( void );
 	void move( int );
+	Coordinates getPreviousPosition( void );
+
 private:
 	Coordinates position;
 	Coordinates inertia;
 	Coordinates initial_position;
-        Coordinates previous_position;
+    Coordinates previous_position;
 	void moveInDirection( Coordinates );
 	bool isAlive;
 };
