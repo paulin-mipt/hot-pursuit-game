@@ -8,6 +8,16 @@ Reader::~Reader()
 {
 }
 
+bool isNumber( std::string number )
+{
+	for ( int i = 0; i < number.length(); ++i ) {
+		if ( number[i] > '9' || number[i] < '0' ) {
+			return false;
+		}
+	}
+	return true;
+}
+
 Field Reader::readMap( const std::string& path )
 {
 	Field gameField;
@@ -26,7 +36,13 @@ Field Reader::readMap( const std::string& path )
 		currentLine += " ";
 		while( currentLine.length() > 0 ) {
 			size_t pos = currentLine.find( " " );
-			line.push_back( atoi( currentLine.substr( 0, pos ).c_str() ) );
+			std::string number = currentLine.substr(0, pos);
+			if ( !isNumber(number) ) {
+				std::string error = "Bad file with map: invalid symbol in ";
+				error += number;
+				throw std::runtime_error( error );
+			}
+			line.push_back( atoi( number.c_str() ) );
 			currentLine.erase( 0, pos + 1 );
 		}
 		gameField.push_back( line );
@@ -47,10 +63,10 @@ PlayersInfo Reader::readPlayers()
 {
 	PlayersInfo info;
 	std::cout << "Введите количество игроков:" << std::endl;
-	size_t number_of_players;
-	std::cin >> number_of_players;
-	info.numberOfPlayers = number_of_players;
-	for( size_t i = 0; i < number_of_players; ++i )
+	size_t numberOfPlayers;
+	std::cin >> numberOfPlayers;
+	info.numberOfPlayers = numberOfPlayers;
+	for( size_t i = 0; i < numberOfPlayers; ++i )
 		info.positions.push_back( readCoordinates() );
 	return info;
 }
@@ -68,8 +84,8 @@ Line Reader::readLine()
 {
 
 	std::cout << "Введите координаты стартовой линии:" << std::endl;
-	Coordinates first_point = readCoordinates(),
-		second_point = readCoordinates();
+	Coordinates firstPoint = readCoordinates(),
+		secondPoint = readCoordinates();
 
-	return Line( first_point, second_point );
+	return Line( firstPoint, secondPoint );
 }
