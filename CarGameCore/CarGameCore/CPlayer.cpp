@@ -5,6 +5,8 @@ Player::Player()
 	isAlive = true;
 	inertia.x = 0;
 	inertia.y = 0;
+	firstStep = true;
+	secondStep = true;
 }
 
 Player::Player( const Coordinates& newCoordinates, const bool state ) :
@@ -12,6 +14,8 @@ Player::Player( const Coordinates& newCoordinates, const bool state ) :
 {
 	inertia.x = 0;
 	inertia.y = 0;
+	firstStep = true;
+	secondStep = true;
 }
 
 Player::~Player()
@@ -26,22 +30,27 @@ Coordinates Player::getPosition()
 void Player::goToStart()
 {
 	this->position = this->initial_position;
+	this->previous_position = this->initial_position;
+	this->inertia.x = 0;
+	this->inertia.y = 0;
+	this->firstStep = true;
+	this->secondStep = true;
 };
 
-void Player::move( int direction_code )
+Coordinates Player::convertFromDirectionCode( int directionCode )
 {
-	Coordinates direction;
-	switch( direction_code ) {
+	Coordinates direction( 0, 0 );
+	switch( directionCode ) {
 		case SW:
 			direction.x = -1;
-			direction.y = -1;
+			direction.y = +1;
 			break;
 		case S:
 			direction.x = 0;
-			direction.y = -1;
+			direction.y = +1;
 			break;
 		case SE:
-			direction.x = -1;
+			direction.x = +1;
 			direction.y = +1;
 			break;
 		case W:
@@ -54,24 +63,29 @@ void Player::move( int direction_code )
 			break;
 		case E:
 			direction.x = +1;
-			direction.y = +0;
+			direction.y = 0;
 			break;
 		case NW:
 			direction.x = -1;
-			direction.y = +1;
+			direction.y = -1;
 			break;
 		case N:
 			direction.x = 0;
-			direction.y = +1;
+			direction.y = -1;
 			break;
 		case NE:
 			direction.x = +1;
-			direction.y = +1;
+			direction.y = -1;
 			break;
 		default:
 			throw std::invalid_argument( "Unknown direction code" );
 	}
+	return direction;
+}
 
+void Player::move( int direction_code, Size size )
+{
+	Coordinates direction = convertFromDirectionCode( direction_code );
 	this->moveInDirection( direction );
 };
 
@@ -81,7 +95,7 @@ void Player::moveInDirection( Coordinates direction )
 	move.x = this->inertia.x + direction.x;
 	move.y = this->inertia.y + direction.y;
 
-	Coordinates pure_inertial;
+	Coordinates pure_inertial; // Точка, куда по инерции приходим
 	pure_inertial.x = this->position.x + this->inertia.x;
 	pure_inertial.y = this->position.y + this->inertia.y;
 
@@ -110,3 +124,34 @@ void Player::die()
 {
 	isAlive = false;
 };
+
+bool Player::wasFirstStep()
+{
+	return firstStep;
+}
+
+bool Player::wasSecondStep()
+{
+	return secondStep;
+}
+
+void Player::makeFirstStep()
+{
+	firstStep = false;
+}
+
+void Player::makeSecondStep()
+{
+	secondStep = false;
+}
+
+bool Player::directionIsValid( int directionCode, const Size& size )
+{
+	Coordinates direction = convertFromDirectionCode( directionCode );
+	if( 0 <= ( direction + position + inertia ).x && ( direction + position + inertia ).x <= size.first - 1 &&
+		0 <= ( direction + position + inertia ).y && ( direction + position + inertia ).y <= size.second - 1 ) {
+		return true;
+	} else {
+		return false;
+	}
+}

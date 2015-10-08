@@ -51,13 +51,19 @@ bool Game::startLineIntersectsWithPlayer( size_t num )
 			 * area( startLine.firstPoint, startLine.secondPoint, playersCoordinates ) ) <= 0;
 }
 
-int Game::getPlayerOnFinish( bool& begining )
+int Game::getPlayerOnFinish()
 {
-	if( begining ) { // Чтобы избавиться от ситуации, когда первый ход и все на старте (финише)
-		begining = false;
-		return -1;
-	}
 	for( size_t i = 0; i < players.size(); ++i ) {
+		bool begining = players[i].wasFirstStep();
+		bool second = players[i].wasSecondStep();
+		if( begining ) { // Чтобы избавиться от ситуации, когда траектория на первом и втором ходу пересекается со стартом
+			players[i].makeFirstStep();
+			continue;
+		}
+		if( second ) {
+			players[i].makeSecondStep();
+			continue;
+		}
 		if( startLineIntersectsWithPlayer( i ) ) {
 			return ( int ) i;
 		}
@@ -84,11 +90,19 @@ bool Game::playerOutOfTrack( size_t num )
 void Game::turnOfPlayer( size_t num )
 {
 	int direction = reader.readPlayersChoice( num );
-	players[num].move( direction );
+	while( !players[num].directionIsValid( direction, map.getSize() ) ) {
+		std::cout << "Out of bounds error. Try again." << std::endl;
+		direction = reader.readPlayersChoice( num );
+	}
+
+	players[num].move( direction, map.getSize() );
+
 	int crashedPlayer = playerCrashedIntoCar( num );
 	if( crashedPlayer != -1 ) {
 		players[num].goToStart();
+		clearPlayersState( crashedPlayer );
 		players[crashedPlayer].goToStart();
+		paintPlayersState( crashedPlayer );
 		return;
 	}
 	if( playerOutOfTrack( num ) ) {
@@ -97,15 +111,42 @@ void Game::turnOfPlayer( size_t num )
 	}
 }
 
-void Game::start()
+void Game::initPlayersPositionsInMap()
+{
+	for( size_t i = 0; i < players.size(); ++i ) {
+		Coordinates currentCoordinates = players[i].getPosition();
+		map.setPosition( currentCoordinates.x, currentCoordinates.y );
+	}
+}
+
+void Game::clearPlayersState( size_t num ) // Стирает изображение игрока с поля
+{
+	Coordinates old = players[num].getPreviousPosition();
+	Coordinates now = players[num].getPosition();
+	map.clearPosition( old.x, old.y );
+	map.clearPosition( now.x, now.y );
+}
+
+void Game::paintPlayersState( size_t num ) // Рисует изображение игрока на поле
+{
+	Coordinates previousCoordinates = players[num].getPreviousPosition();
+	Coordinates currentCoordinates = players[num].getPosition();
+	map.setPosition( previousCoordinates.x, previousCoordinates.y );
+	map.setPosition( currentCoordinates.x, currentCoordinates.y );
+}
+
+void Game::start() // TODO: сделать метод под стирание ходов с карты и записывание заново
 {
 	std::cout << "Game has been started. Gl hf!" << std::endl;
-	bool begining = true;
 	int player;
-	while( ( player = getPlayerOnFinish( begining ) ) == -1 ) { // -1 - никто пока к финишу не пришел
+	initPlayersPositionsInMap(); // На карте проставляются координаты машинок
+	while( ( player = getPlayerOnFinish() ) == -1 ) { // -1 - никто пока к финишу не пришел
 		for( size_t i = 0; i < players.size(); ++i ) {
 			// todo: if (players[i].isAlive()) {
+			clearPlayersState( i );
 			turnOfPlayer( i );
+			paintPlayersState( i );
+			map.print();  // Вывод поля на консоль
 			// }
 		}
 	}

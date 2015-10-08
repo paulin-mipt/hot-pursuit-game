@@ -38,9 +38,12 @@ private:
 	std::vector<Player> players;
 	Line startLine;
 
-	int getPlayerOnFinish( bool& begining );
+	int getPlayerOnFinish();
 	bool startLineIntersectsWithPlayer( size_t num );
 	void turnOfPlayer( size_t num );
 	int playerCrashedIntoCar( size_t num );
 	bool playerOutOfTrack( size_t num );
+	void initPlayersPositionsInMap();
+	void clearPlayersState( size_t num );
+	void paintPlayersState( size_t num );
 };
