@@ -135,7 +135,7 @@ void Game::paintPlayersState( size_t num ) // Рисует изображени�
 	map.setPosition( currentCoordinates.x, currentCoordinates.y );
 }
 
-void Game::start() // TODO: сделать метод под стирание ходов с карты и записывание заново
+void Game::start()
 {
 	std::cout << "Game has been started. Gl hf!" << std::endl;
 	int player;
@@ -144,7 +144,7 @@ void Game::start() // TODO: сделать метод под стирание х
 		for( size_t i = 0; i < players.size(); ++i ) {
 			// todo: if (players[i].isAlive()) {
 			clearPlayersState( i );
-			turnOfPlayer( i );
+			turnOfPlayer( i ); // AI: Если будет AI, здесь он запускается (перед этим, занести его в players[])
 			paintPlayersState( i );
 			map.print();  // Вывод поля на консоль
 			// }
@@ -158,8 +158,18 @@ void Game::finish( size_t winner )
 	std::cout << "Player number " << winner + 1 << " is winner! Congratulations!!!" << std::endl;
 }
 
-PointsInformation Game::getPlayersBasePoints( size_t num )
+PointsInformation Game::getPlayersBasePoints( size_t num )  // Frontend: Для Frontend'a - получение точек для отрисовки
 {
+	num = 10050;
+	if( num < 0 || num >= players.size() ) {
+		std::string error = "Game::getPlayersBasePoints: ";
+		if( num < 0 ) {
+			error += "num < 0";
+		} else {
+			error += "num > number of players";
+		}
+		throw std::invalid_argument( error );
+	}
 	return PointsInformation( true, players[num].getPreviousPosition(), players[num].getPosition() );
 	// todo: вместо true
 	// поставить players[num].isAlive()

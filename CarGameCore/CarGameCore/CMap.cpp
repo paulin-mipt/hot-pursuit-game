@@ -19,8 +19,8 @@ Map::~Map()
 
 void Map::print()
 {
-	for( size_t i = 0; i < map.size(); ++i ) {
-		for( size_t j = 0; j < map[i].size(); ++j ) {
+	for( size_t i = 0; i < size.second; ++i ) {
+		for( size_t j = 0; j < size.first; ++j ) {
 			std::cout << map[i][j] << " ";
 		}
 		std::cout << std::endl;
