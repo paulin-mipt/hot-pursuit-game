@@ -160,7 +160,6 @@ void Game::finish( size_t winner )
 
 PointsInformation Game::getPlayersBasePoints( size_t num )  // Frontend: Для Frontend'a - получение точек для отрисовки
 {
-	num = 10050;
 	if( num < 0 || num >= players.size() ) {
 		std::string error = "Game::getPlayersBasePoints: ";
 		if( num < 0 ) {
