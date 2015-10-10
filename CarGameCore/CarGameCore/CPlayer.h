@@ -5,6 +5,8 @@
 #include <exception>
 #include <stdexcept>
 
+typedef std::pair<size_t, size_t> Size;
+
 struct Coordinates {
 	Coordinates( int newX, int newY ) :
 		x( newX ), y( newY )
@@ -18,6 +20,11 @@ struct Coordinates {
 	bool operator == ( const Coordinates &point ) const
 	{
 		return this->x == point.x && this->y == point.y;
+	}
+
+	Coordinates operator + ( const Coordinates &point ) const
+	{
+		return Coordinates( this->x + point.x, this->y + point.y );
 	}
 
 	int x;
@@ -50,15 +57,23 @@ public:
 	void goToStart( void );
 
 	Coordinates getPosition( void );
-	void move( int );
+	void move( int, Size );
 	Coordinates getPreviousPosition( void );
+	bool wasFirstStep();
+	bool wasSecondStep();
+	void makeFirstStep();
+	void makeSecondStep();
+	bool directionIsValid( int direction, const Size& size );
 
 private:
 	Coordinates position;
 	Coordinates inertia;
-	Coordinates initial_position;
-    Coordinates previous_position;
+	Coordinates initial_position; // Для возвращения на старт, после столкновения с машиной
+	Coordinates previous_position;
 	void moveInDirection( Coordinates );
 	bool isAlive;
+	bool firstStep;
+	bool secondStep;
+	Coordinates convertFromDirectionCode( int );
 };
 

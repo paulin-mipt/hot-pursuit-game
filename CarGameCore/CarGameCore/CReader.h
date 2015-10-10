@@ -33,7 +33,7 @@ public:
 
 	PlayersInfo readPlayers();
 
-	int readPlayersChoice( size_t num ); // todo: сделать параметром номер игрока, чтобы обращаться к нему при считывани его хода
+	int readPlayersChoice( size_t num );
 
 	Line readLine();
 };
