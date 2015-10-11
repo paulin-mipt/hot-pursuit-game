@@ -14,3 +14,7 @@ Map::Map( const Field& newMap ) :
 Map::~Map()
 {
 }
+
+bool Map::isEmpty(int i, int j) {
+	return ( map[i][j] == 0 );
+}

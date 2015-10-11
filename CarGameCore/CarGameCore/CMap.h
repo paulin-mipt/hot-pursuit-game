@@ -13,6 +13,8 @@ public:
 
 	~Map();
 
+	bool isEmpty(int i, int j);
+
 private:
 	Field map; // Карта (таблица), в которой 1 - препятствие (дороги нет). А 0 - дорога.
 	Size size;
