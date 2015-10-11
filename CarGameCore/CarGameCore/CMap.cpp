@@ -41,3 +41,7 @@ Size Map::getSize()
 {
 	return this->size;
 }
+
+bool Map::isEmpty(int i, int j) {
+	return ( map[i][j] == 0 );
+}

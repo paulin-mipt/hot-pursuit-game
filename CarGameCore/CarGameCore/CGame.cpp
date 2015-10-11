@@ -36,6 +36,16 @@ int area( Coordinates firstPoint, Coordinates secondPoint, Coordinates thirdPoin
 		- ( secondPoint.y - firstPoint.y ) * ( thirdPoint.x - firstPoint.x );
 }
 
+bool isIntersects( Coordinates firstPoint, Coordinates secondPoint, Coordinates thirdPoint, Coordinates fourthPoint )
+{
+	return inBoxOnAxis(firstPoint.x, secondPoint.x, thirdPoint.x, fourthPoint.x)
+		&& inBoxOnAxis(firstPoint.y, secondPoint.y, thirdPoint.y, fourthPoint.y)
+		&& (area(firstPoint, secondPoint, thirdPoint)
+			* area(firstPoint, secondPoint, fourthPoint)) <= 0
+		&& (area(thirdPoint, fourthPoint, firstPoint)
+			* area(thirdPoint, fourthPoint, secondPoint)) <= 0;
+}
+
 bool Game::startLineIntersectsWithPlayer( size_t num )
 {
 	// Происходит проверка:
@@ -43,12 +53,7 @@ bool Game::startLineIntersectsWithPlayer( size_t num )
 	// 2. Считается ориентированная площадь треугольников. Нужно, чтобы эти площади были разных знаков.
 	Coordinates playersPreviousCoordinates = players[num].getPreviousPosition();
 	Coordinates playersCoordinates = players[num].getPosition();
-	return inBoxOnAxis( playersPreviousCoordinates.x, playersCoordinates.x, startLine.firstPoint.x, startLine.secondPoint.x )
-		&& inBoxOnAxis( playersPreviousCoordinates.y, playersCoordinates.y, startLine.firstPoint.y, startLine.secondPoint.y )
-		&& ( area( playersPreviousCoordinates, playersCoordinates, startLine.firstPoint )
-			 * area( playersPreviousCoordinates, playersCoordinates, startLine.secondPoint ) ) <= 0
-		&& ( area( startLine.firstPoint, startLine.secondPoint, playersPreviousCoordinates )
-			 * area( startLine.firstPoint, startLine.secondPoint, playersCoordinates ) ) <= 0;
+	return isIntersects(playersPreviousCoordinates, playersCoordinates, startLine.firstPoint, startLine.secondPoint);
 }
 
 int Game::getPlayerOnFinish()
@@ -71,11 +76,11 @@ int Game::getPlayerOnFinish()
 	return -1;
 }
 
-int Game::playerCrashedIntoCar( size_t num )
+int Game::playerCrashedIntoCar(size_t num)
 {
-	for( size_t i = 0; i < players.size(); ++i ) {
-		if( i != num && players[i].getPosition() == players[num].getPosition() ) {
-			return ( int ) i;
+	for (size_t i = 0; i < players.size(); ++i) {
+		if (i != num && players[i].getPosition() == players[num].getPosition()) {
+			return (int)i;
 		}
 	}
 	return -1;
@@ -83,7 +88,35 @@ int Game::playerCrashedIntoCar( size_t num )
 
 bool Game::playerOutOfTrack( size_t num )
 {
-	// todo: вылетает ли траектория за пределы трассы?
+	Coordinates playersPreviousCoordinates = players[num].getPreviousPosition();
+	Coordinates playersCoordinates = players[num].getPosition();
+
+	int minX = std::min( playersPreviousCoordinates.x, playersCoordinates.x ), 
+		maxX = std::max( playersPreviousCoordinates.x, playersCoordinates.x ),
+	    minY = std::min( playersPreviousCoordinates.y, playersCoordinates.y ),
+		maxY = std::max( playersPreviousCoordinates.y, playersCoordinates.y );
+	
+	Coordinates realCoordinates( playersCoordinates.x * 10 + 5, playersCoordinates.y * 10 + 5),
+				realPreviousCoordinates( playersPreviousCoordinates.x * 10 + 5, playersPreviousCoordinates.y * 10 + 5 );
+
+	for ( int i = minX; i <= maxX; ++i ) {
+		for ( int j = minY; j <= minY; ++j ) {
+			if ( map.isEmpty( i, j ) ) {
+				continue;
+			}
+			Coordinates firstPoint( i * 10, j * 10),
+						secondPoint( (i + 1) * 10, j * 10 ),
+						thirdPoint( (i + 1) * 10, (j + 1) * 10),
+						fourthPoint( i * 10, (j + 1) * 10 );
+			
+			if ( isIntersects( realPreviousCoordinates, realCoordinates, firstPoint, secondPoint ) ||
+				 isIntersects( realPreviousCoordinates, realCoordinates, secondPoint, thirdPoint ) ||
+				 isIntersects( realPreviousCoordinates, realCoordinates, thirdPoint, fourthPoint ) ||
+				 isIntersects( realPreviousCoordinates, realCoordinates, fourthPoint, firstPoint ) ) {
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
