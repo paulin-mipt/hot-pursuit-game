@@ -15,7 +15,6 @@ bool isNumber( std::string number )
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -49,8 +48,6 @@ Field Reader::readMap( const std::string& path )
 		gameField.push_back( line );
 	}
 
-	std::cout << gameField.size() << " " << gameField[0].size() << std::endl;
-
 	return gameField;
 }
 
@@ -59,37 +56,36 @@ Coordinates readCoordinates()
 	int x, y;
 	std::cin >> x >> y;
 
-	return Coordinates( x - 1, y - 1 );
+	return Coordinates( x, y );
 }
 
 PlayersInfo Reader::readPlayers()
 {
 	PlayersInfo info;
-	std::cout << "Enter number of players:" << std::endl;
-	size_t number_of_players;
-	std::cin >> number_of_players;
-	info.numberOfPlayers = number_of_players;
-	for( size_t i = 0; i < number_of_players; ++i )
+	std::cout << "Введите количество игроков:" << std::endl;
+	size_t numberOfPlayers;
+	std::cin >> numberOfPlayers;
+	info.numberOfPlayers = numberOfPlayers;
+	for( size_t i = 0; i < numberOfPlayers; ++i )
 		info.positions.push_back( readCoordinates() );
-
 	return info;
 }
 
 
 int Reader::readPlayersChoice( size_t num )
 {
-	std::cout << "Now " << num + 1 << " player:" << std::endl;
+	std::cout << "Сейчас ход " << num + 1 << " игрока:" << std::endl;
 	int move;
 	std::cin >> move;
-
 	return move;
 }
 
 Line Reader::readLine()
 {
-	std::cout << "Enter coordinates of startline:" << std::endl;
-	Coordinates first_point = readCoordinates(),
-		second_point = readCoordinates();
-		
+
+	std::cout << "Введите координаты стартовой линии:" << std::endl;
+	Coordinates firstPoint = readCoordinates(),
+		        secondPoint = readCoordinates();
+
 	return Line( firstPoint, secondPoint );
 }
