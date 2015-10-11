@@ -43,5 +43,5 @@ Size Map::getSize()
 }
 
 bool Map::isEmpty(int i, int j) {
-	return ( map[i][j] == 0 );
+	return ( map[j][i] != 1 );
 }

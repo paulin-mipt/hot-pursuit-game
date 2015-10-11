@@ -10,8 +10,8 @@ Reader::~Reader()
 
 bool isNumber( std::string number )
 {
-	for ( int i = 0; i < number.length(); ++i ) {
-		if ( number[i] > '9' || number[i] < '0' ) {
+	for( int i = 0; i < number.length(); ++i ) {
+		if( number[i] > '9' || number[i] < '0' ) {
 			return false;
 		}
 	}
@@ -36,8 +36,8 @@ Field Reader::readMap( const std::string& path )
 		currentLine += " ";
 		while( currentLine.length() > 0 ) {
 			size_t pos = currentLine.find( " " );
-			std::string number = currentLine.substr(0, pos);
-			if ( !isNumber(number) ) {
+			std::string number = currentLine.substr( 0, pos );
+			if( !isNumber( number ) ) {
 				std::string error = "Bad file with map: invalid symbol in ";
 				error += number;
 				throw std::runtime_error( error );

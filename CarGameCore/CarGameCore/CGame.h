@@ -30,11 +30,13 @@ public:
 
 	void start();
 	void finish( size_t winner );
+	void fatalFinish();
 	PointsInformation getPlayersBasePoints( size_t num ); // Отдаем Frontend у
 
 private:
 	Map map;
 	Reader reader;
+	size_t numOfDeadPlayers;
 	std::vector<Player> players;
 	Line startLine;
 

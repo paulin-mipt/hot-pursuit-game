@@ -2,12 +2,13 @@
 
 Game::Game()
 {
+	numOfDeadPlayers = 0;
 }
 
 Game::Game( const Map& newMap, const PlayersInfo& newPlayersInfo, const Line& newStartLine, const Reader& newReader ) :
 	map( newMap ), reader( newReader ), startLine( newStartLine )
 {
-
+	numOfDeadPlayers = 0;
 	size_t numOfPlayers = newPlayersInfo.numberOfPlayers;
 	for( size_t i = 0; i < numOfPlayers; ++i ) {
 		Player newPlayer( newPlayersInfo.positions[i], true );
@@ -36,14 +37,14 @@ int area( Coordinates firstPoint, Coordinates secondPoint, Coordinates thirdPoin
 		- ( secondPoint.y - firstPoint.y ) * ( thirdPoint.x - firstPoint.x );
 }
 
-bool isIntersects( Coordinates firstPoint, Coordinates secondPoint, Coordinates thirdPoint, Coordinates fourthPoint )
+bool isIntersects( Coordinates& firstPoint, Coordinates& secondPoint, Coordinates& thirdPoint, Coordinates& fourthPoint )
 {
-	return inBoxOnAxis(firstPoint.x, secondPoint.x, thirdPoint.x, fourthPoint.x)
-		&& inBoxOnAxis(firstPoint.y, secondPoint.y, thirdPoint.y, fourthPoint.y)
-		&& (area(firstPoint, secondPoint, thirdPoint)
-			* area(firstPoint, secondPoint, fourthPoint)) <= 0
-		&& (area(thirdPoint, fourthPoint, firstPoint)
-			* area(thirdPoint, fourthPoint, secondPoint)) <= 0;
+	return inBoxOnAxis( firstPoint.x, secondPoint.x, thirdPoint.x, fourthPoint.x )
+		&& inBoxOnAxis( firstPoint.y, secondPoint.y, thirdPoint.y, fourthPoint.y )
+		&& ( area( firstPoint, secondPoint, thirdPoint )
+			 * area( firstPoint, secondPoint, fourthPoint ) ) <= 0
+		&& ( area( thirdPoint, fourthPoint, firstPoint )
+			 * area( thirdPoint, fourthPoint, secondPoint ) ) <= 0;
 }
 
 bool Game::startLineIntersectsWithPlayer( size_t num )
@@ -53,7 +54,7 @@ bool Game::startLineIntersectsWithPlayer( size_t num )
 	// 2. Считается ориентированная площадь треугольников. Нужно, чтобы эти площади были разных знаков.
 	Coordinates playersPreviousCoordinates = players[num].getPreviousPosition();
 	Coordinates playersCoordinates = players[num].getPosition();
-	return isIntersects(playersPreviousCoordinates, playersCoordinates, startLine.firstPoint, startLine.secondPoint);
+	return isIntersects( playersPreviousCoordinates, playersCoordinates, startLine.firstPoint, startLine.secondPoint );
 }
 
 int Game::getPlayerOnFinish()
@@ -76,11 +77,11 @@ int Game::getPlayerOnFinish()
 	return -1;
 }
 
-int Game::playerCrashedIntoCar(size_t num)
+int Game::playerCrashedIntoCar( size_t num )
 {
-	for (size_t i = 0; i < players.size(); ++i) {
-		if (i != num && players[i].getPosition() == players[num].getPosition()) {
-			return (int)i;
+	for( size_t i = 0; i < players.size(); ++i ) {
+		if( i != num && players[i].getPosition() == players[num].getPosition() ) {
+			return ( int ) i;
 		}
 	}
 	return -1;
@@ -91,28 +92,28 @@ bool Game::playerOutOfTrack( size_t num )
 	Coordinates playersPreviousCoordinates = players[num].getPreviousPosition();
 	Coordinates playersCoordinates = players[num].getPosition();
 
-	int minX = std::min( playersPreviousCoordinates.x, playersCoordinates.x ), 
+	int minX = std::min( playersPreviousCoordinates.x, playersCoordinates.x ),
 		maxX = std::max( playersPreviousCoordinates.x, playersCoordinates.x ),
-	    minY = std::min( playersPreviousCoordinates.y, playersCoordinates.y ),
+		minY = std::min( playersPreviousCoordinates.y, playersCoordinates.y ),
 		maxY = std::max( playersPreviousCoordinates.y, playersCoordinates.y );
-	
-	Coordinates realCoordinates( playersCoordinates.x * 10 + 5, playersCoordinates.y * 10 + 5),
-				realPreviousCoordinates( playersPreviousCoordinates.x * 10 + 5, playersPreviousCoordinates.y * 10 + 5 );
 
-	for ( int i = minX; i <= maxX; ++i ) {
-		for ( int j = minY; j <= minY; ++j ) {
-			if ( map.isEmpty( i, j ) ) {
+	Coordinates realCoordinates( playersCoordinates.x * 10 + 5, playersCoordinates.y * 10 + 5 ),
+		realPreviousCoordinates( playersPreviousCoordinates.x * 10 + 5, playersPreviousCoordinates.y * 10 + 5 );
+
+	for( int i = minX; i <= maxX; ++i ) {
+		for( int j = minY; j <= maxY; ++j ) {
+			if( map.isEmpty( i, j ) ) {
 				continue;
 			}
-			Coordinates firstPoint( i * 10, j * 10),
-						secondPoint( (i + 1) * 10, j * 10 ),
-						thirdPoint( (i + 1) * 10, (j + 1) * 10),
-						fourthPoint( i * 10, (j + 1) * 10 );
-			
-			if ( isIntersects( realPreviousCoordinates, realCoordinates, firstPoint, secondPoint ) ||
-				 isIntersects( realPreviousCoordinates, realCoordinates, secondPoint, thirdPoint ) ||
-				 isIntersects( realPreviousCoordinates, realCoordinates, thirdPoint, fourthPoint ) ||
-				 isIntersects( realPreviousCoordinates, realCoordinates, fourthPoint, firstPoint ) ) {
+			Coordinates firstPoint( i * 10, j * 10 ),
+				secondPoint( ( i + 1 ) * 10, j * 10 ),
+				thirdPoint( ( i + 1 ) * 10, ( j + 1 ) * 10 ),
+				fourthPoint( i * 10, ( j + 1 ) * 10 );
+
+			if( isIntersects( realPreviousCoordinates, realCoordinates, firstPoint, secondPoint ) ||
+				isIntersects( realPreviousCoordinates, realCoordinates, secondPoint, thirdPoint ) ||
+				isIntersects( realPreviousCoordinates, realCoordinates, thirdPoint, fourthPoint ) ||
+				isIntersects( realPreviousCoordinates, realCoordinates, fourthPoint, firstPoint ) ) {
 				return true;
 			}
 		}
@@ -123,9 +124,11 @@ bool Game::playerOutOfTrack( size_t num )
 void Game::turnOfPlayer( size_t num )
 {
 	int direction = reader.readPlayersChoice( num );
-	while( !players[num].directionIsValid( direction, map.getSize() ) ) {
-		std::cout << "Out of bounds error. Try again." << std::endl;
-		direction = reader.readPlayersChoice( num );
+	if( !players[num].directionIsValid( direction, map.getSize() ) ) { // todo:refactoring in function
+		players[num].die();
+		++numOfDeadPlayers;
+		std::cout << "Player " << num + 1 << " is dead" << std::endl;
+		return;
 	}
 
 	players[num].move( direction, map.getSize() );
@@ -140,6 +143,8 @@ void Game::turnOfPlayer( size_t num )
 	}
 	if( playerOutOfTrack( num ) ) {
 		players[num].die();
+		++numOfDeadPlayers;
+		std::cout << "Player " << num + 1 << " is dead" << std::endl;
 		return;
 	}
 }
@@ -175,13 +180,20 @@ void Game::start()
 	initPlayersPositionsInMap(); // На карте проставляются координаты машинок
 	while( ( player = getPlayerOnFinish() ) == -1 ) { // -1 - никто пока к финишу не пришел
 		for( size_t i = 0; i < players.size(); ++i ) {
-			// todo: if (players[i].isAlive()) {
-			clearPlayersState( i );
-			turnOfPlayer( i ); // AI: Если будет AI, здесь он запускается (перед этим, занести его в players[])
-			paintPlayersState( i );
-			map.print();  // Вывод поля на консоль
-			// }
+			if( players[i].playerIsAlive() ) {
+				clearPlayersState( i );
+				turnOfPlayer( i ); // AI: Если будет AI, здесь он запускается (перед этим, занести его в players[])
+				paintPlayersState( i );
+				map.print();  // Вывод поля на консоль
+			}
 		}
+		if( numOfDeadPlayers == players.size() ) {
+			break;
+		}
+	}
+	if( numOfDeadPlayers == players.size() ) {
+		fatalFinish();
+		return;
 	}
 	finish( player );
 }
@@ -189,6 +201,11 @@ void Game::start()
 void Game::finish( size_t winner )
 {
 	std::cout << "Player number " << winner + 1 << " is winner! Congratulations!!!" << std::endl;
+}
+
+void Game::fatalFinish()
+{
+	std::cout << "All players are dead! Congratulations ^_^" << std::endl;
 }
 
 PointsInformation Game::getPlayersBasePoints( size_t num )  // Frontend: Для Frontend'a - получение точек для отрисовки
@@ -202,7 +219,5 @@ PointsInformation Game::getPlayersBasePoints( size_t num )  // Frontend: Для 
 		}
 		throw std::invalid_argument( error );
 	}
-	return PointsInformation( true, players[num].getPreviousPosition(), players[num].getPosition() );
-	// todo: вместо true
-	// поставить players[num].isAlive()
+	return PointsInformation( players[num].playerIsAlive(), players[num].getPreviousPosition(), players[num].getPosition() );
 }

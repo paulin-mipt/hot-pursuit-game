@@ -64,6 +64,7 @@ public:
 	void makeFirstStep();
 	void makeSecondStep();
 	bool directionIsValid( int direction, const Size& size );
+	bool playerIsAlive();
 
 private:
 	Coordinates position;

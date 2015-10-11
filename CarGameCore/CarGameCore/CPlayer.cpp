@@ -155,3 +155,8 @@ bool Player::directionIsValid( int directionCode, const Size& size )
 		return false;
 	}
 }
+
+bool Player::playerIsAlive()
+{
+	return isAlive;
+}
