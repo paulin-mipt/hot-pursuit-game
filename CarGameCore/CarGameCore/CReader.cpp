@@ -55,7 +55,10 @@ Coordinates readCoordinates()
 {
 	int x, y;
 	std::cin >> x >> y;
-
+	if( x <= 0 || y <= 0 ) {
+		std::string error = "Bad input: invalid coordinates";
+		throw std::runtime_error( error );
+	}
 	return Coordinates( x - 1, y - 1 );
 }
 
@@ -63,10 +66,14 @@ PlayersInfo Reader::readPlayers()
 {
 	PlayersInfo info;
 	std::cout << "Enter number of players:" << std::endl;
-	size_t numberOfPlayers;
+	int numberOfPlayers;
 	std::cin >> numberOfPlayers;
+	if( numberOfPlayers <= 0 ) {
+		std::string error = "Bad input: invalid number of players";
+		throw std::runtime_error( error );
+	}
 	info.numberOfPlayers = numberOfPlayers;
-	for( size_t i = 0; i < numberOfPlayers; ++i )
+	for( int i = 0; i < numberOfPlayers; ++i )
 		info.positions.push_back( readCoordinates() );
 	return info;
 }
@@ -77,6 +84,10 @@ int Reader::readPlayersChoice( size_t num )
 	std::cout << "Now " << num + 1 << " player:" << std::endl;
 	int move;
 	std::cin >> move;
+	if( move < 1 || move > 9 ) {
+		std::string error = "Bad input: invalid move";
+		throw std::runtime_error( error );
+	}
 	return move;
 }
 

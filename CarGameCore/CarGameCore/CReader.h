@@ -5,6 +5,7 @@
 #include "CPlayer.h"
 #include <exception>
 #include <string>
+#include <assert.h>
 
 typedef std::vector< std::vector<size_t> > Field;
 
