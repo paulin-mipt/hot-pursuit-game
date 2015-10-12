@@ -108,7 +108,7 @@ void Player::moveInDirection( Coordinates direction )
 
 
 	//std::tr1::shared_ptr<Coordinates> result = std::tr1::make_shared(
-	//        move,
+	//        move,   splain)
 	//        pure_inertial
 	//);
 

@@ -60,6 +60,7 @@ bool Game::startLineIntersectsWithPlayer( size_t num )
 int Game::getPlayerOnFinish()
 {
 	for( size_t i = 0; i < players.size(); ++i ) {
+		/* todo: */
 		bool begining = players[i].wasFirstStep();
 		bool second = players[i].wasSecondStep();
 		if( begining ) { // Чтобы избавиться от ситуации, когда траектория на первом и втором ходу пересекается со стартом
@@ -70,6 +71,7 @@ int Game::getPlayerOnFinish()
 			players[i].makeSecondStep();
 			continue;
 		}
+		/* заменить на проверку, что игрок подъезжает к финишу с правильной стороны */
 		if( startLineIntersectsWithPlayer( i ) ) {
 			return ( int ) i;
 		}
