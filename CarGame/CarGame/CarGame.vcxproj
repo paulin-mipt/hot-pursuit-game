@@ -161,7 +161,6 @@
     <ClInclude Include="Graphics\Map.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\Resources\Maps\cars_file.txt" />
     <Text Include="..\..\Resources\Maps\map.txt" />
     <Text Include="..\..\Resources\Maps\map_file.txt" />
   </ItemGroup>

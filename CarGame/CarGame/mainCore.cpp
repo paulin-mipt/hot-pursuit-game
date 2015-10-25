@@ -4,7 +4,7 @@
 #include "GlobalDefinitions.h"
 #include "Core/Game.h"
 
-int main()
+int main2()
 {
 	using namespace Core;
 

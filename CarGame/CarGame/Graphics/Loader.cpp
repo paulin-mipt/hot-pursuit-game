@@ -4,23 +4,20 @@
 #include "Graphics/Map.h"
 
 namespace Graphics {
-	CLoader::CLoader( std::string map_file, std::string cars_file, int argc, char* argv[] )
+	CLoader::CLoader( const std::string& map_file, const std::string& cars_file, CMap& map, std::vector<CCar>& cars )
 	{
 		color_dict["Red"] = Red;
 		color_dict["Green"] = Green;
 		color_dict["Blue"] = Blue;
 
 		std::ifstream map_in( map_file );
-		CMap map = read_map( map_in );
+		map = read_map( map_in );
 
 		std::ifstream cars_in( cars_file );
-		std::vector<CCar> cars = read_cars( cars_in );
-
-		CDrawing drawing_module( map, cars );
-		drawing_module.draw( argc, argv );
+		cars = read_cars( cars_in );
 	}
 
-	CMap CLoader::read_map( std::ifstream & input )
+	CMap CLoader::read_map( std::istream & input )
 	{
 		int n = 0,
 			m = 0,
@@ -39,7 +36,7 @@ namespace Graphics {
 		return map;
 	}
 
-	std::vector<CCar> CLoader::read_cars( std::ifstream & input )
+	std::vector<CCar> CLoader::read_cars( std::istream & input )
 	{
 		int n = 0,
 			number_of_steps = 0;

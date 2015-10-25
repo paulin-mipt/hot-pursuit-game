@@ -16,13 +16,12 @@ namespace Graphics {
 
 	class CLoader {
 	public:
-		CLoader( std::string map_file, std::string cars_file, int argc, char* argv[] ); // конструктор с указанным входным файлом
+		CLoader( const std::string& map_file, const std::string& cars_file, CMap& map, std::vector<CCar>& cars );
 
 	private:
-		CMap read_map( std::ifstream & input );
-		std::vector<CCar> read_cars( std::ifstream & input );
+		CMap read_map( std::istream & input );
+		std::vector<CCar> read_cars( std::istream & input );
 
-		CDrawing drawing_module;
 		std::map< std::string, Color > color_dict;
 	};
 }

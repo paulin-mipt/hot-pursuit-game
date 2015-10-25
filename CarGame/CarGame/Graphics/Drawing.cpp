@@ -30,7 +30,6 @@ namespace Graphics {
 		glutTimerFunc( 1, timer, 0 );
 	}
 
-
 	void CDrawing::display()
 	{
 		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
