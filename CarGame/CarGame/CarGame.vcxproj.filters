@@ -22,11 +22,11 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{7b64674d-37c6-4b78-9a82-f98c107d038a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Images">
+      <UniqueIdentifier>{4d50607e-c11f-4a27-acb6-1490255bcb05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Game.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -50,6 +50,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\Map.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="mainGraphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mainCore.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,5 +94,34 @@
     <Text Include="..\..\Resources\Maps\map.txt">
       <Filter>Resource Files\Maps</Filter>
     </Text>
+    <Text Include="..\..\Resources\Maps\cars_file.txt">
+      <Filter>Resource Files\Maps</Filter>
+    </Text>
+    <Text Include="..\..\Resources\Maps\map_file.txt">
+      <Filter>Resource Files\Maps</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Resources\Images\car_blue.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="..\..\Resources\Images\car_green.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="..\..\Resources\Images\car_orange.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="..\..\Resources\Images\car_red.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="..\..\Resources\Images\car_topview.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="..\..\Resources\Images\forest.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="..\..\Resources\Images\road.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

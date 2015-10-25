@@ -1,4 +1,5 @@
 ﻿#include "Graphics/Drawing.h"
+#include "GlobalDefinitions.h"
 
 namespace Graphics {
 	CMap CDrawing::map; // static data members must be explicitly defined in exactly one translation unit
@@ -67,23 +68,23 @@ namespace Graphics {
 	void CDrawing::load()
 	{
 		//load textures for map
-		Load_texture( "..\\images\\road.png", map.texture_road ); // road
-		Load_texture( "..\\images\\forest.png", map.texture_board ); // board
+		Load_texture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.texture_road ); // road
+		Load_texture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.texture_board ); // board
 		//load textures for cars (depends on color)
 		std::string car_filename;
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			switch( cars[i].Get_color() ) {
 				case Red:
-					car_filename = "..\\images\\car_red.png";
+					car_filename = RESOURCE_DIRECTORY + "Images\\car_red.png";
 					break;
 				case Blue:
-					car_filename = "..\\images\\car_blue.png";
+					car_filename = RESOURCE_DIRECTORY + "Images\\car_blue.png";
 					break;
 				case Green:
-					car_filename = "..\\images\\car_green.png";
+					car_filename = RESOURCE_DIRECTORY + "Images\\car_green.png";
 					break;
 				default:
-					car_filename = "..\\images\\car_red.png";
+					car_filename = RESOURCE_DIRECTORY + "Images\\car_red.png";
 			}
 			Load_texture( car_filename.c_str(), cars[i].texture );
 		}
