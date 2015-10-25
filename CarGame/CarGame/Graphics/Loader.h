@@ -14,15 +14,15 @@ namespace Graphics {
 	const int DEFAULT_WINDOW_HEIGHT = 500;
 	const int DEFAULT_STEPS_PER_CELL = 20;
 
-	class Loader {
+	class CLoader {
 	public:
-		Loader( std::string map_file, std::string cars_file, int argc, char* argv[] ); // конструктор с указанным входным файлом
+		CLoader( std::string map_file, std::string cars_file, int argc, char* argv[] ); // конструктор с указанным входным файлом
 
 	private:
-		Map read_map( std::ifstream & input );
-		std::vector<Car> read_cars( std::ifstream & input );
+		CMap read_map( std::ifstream & input );
+		std::vector<CCar> read_cars( std::ifstream & input );
 
-		Drawing drawing_module;
+		CDrawing drawing_module;
 		std::map< std::string, Color > color_dict;
 	};
 }

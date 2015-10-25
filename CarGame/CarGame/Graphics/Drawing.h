@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include <Windows.h>
+
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 #include <GL/glut.h>
 
@@ -10,10 +10,10 @@
 /* OpenGL needs static functions and command line arguments for drawing*/
 
 namespace Graphics {
-	class Drawing {
+	class CDrawing {
 	public:
-		Drawing( Map &map_data, std::vector<Car> &_cars );
-		Drawing() {};
+		CDrawing( CMap &map_data, std::vector<CCar> &_cars );
+		CDrawing() {};
 		void draw( int argc, char * argv[] );
 		static void Load_texture( const char*, GLuint& texture );
 
@@ -22,7 +22,7 @@ namespace Graphics {
 		static void reshape( int width, int height );
 		static void load();
 		static void timer( int value );
-		static Map map;
-		static std::vector<Car> cars;
+		static CMap map;
+		static std::vector<CCar> cars;
 	};
 }

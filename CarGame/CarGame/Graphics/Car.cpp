@@ -3,7 +3,7 @@
 #include "Graphics/Car.h"
 
 namespace Graphics {
-	Car::Car( std::vector<Coordinates> &coords_data, int _frames_per_step, Color _color = Red ) :
+	CCar::CCar( std::vector<CCoordinates> &coords_data, int _frames_per_step, Color _color = Red ) :
 		coords( coords_data ),
 		current_step( 0 ),
 		step_iteration( 0 ),
@@ -11,13 +11,13 @@ namespace Graphics {
 		color( _color )
 	{}
 
-	Car::Car( std::vector<Coordinates>& coords_data )
+	CCar::CCar( std::vector<CCoordinates>& coords_data )
 	{
 		coords = coords_data;
 		color = Red;
 	}
 
-	Car::Car( Color _color )
+	CCar::CCar( Color _color )
 	{
 		color = _color;
 		frames_per_step = 200;
@@ -25,17 +25,17 @@ namespace Graphics {
 		step_iteration = 0;
 	}
 
-	Color Car::Get_color()
+	Color CCar::Get_color()
 	{
 		return color;
 	}
 
-	void Car::Push( Coordinates step )
+	void CCar::Push( CCoordinates step )
 	{
 		coords.push_back( step );
 	}
 
-	void Car::rotate( float &x, float &y, float angle )
+	void CCar::rotate( float &x, float &y, float angle )
 	{
 		float tx = x,
 			ty = y;
@@ -43,7 +43,7 @@ namespace Graphics {
 		y = tx * sin( angle ) + ty * cos( angle );
 	}
 
-	void Car::rotate_car( float &Ax, float &Ay, float &Bx, float &By, float &Cx, float &Cy, float &Dx, float &Dy, float centerX, float centerY, float angle )
+	void CCar::rotate_car( float &Ax, float &Ay, float &Bx, float &By, float &Cx, float &Cy, float &Dx, float &Dy, float centerX, float centerY, float angle )
 	{
 		Ax -= centerX;
 		Bx -= centerX;
@@ -72,13 +72,13 @@ namespace Graphics {
 	}
 
 
-	void Car::Draw( float cell_size, WindowCoordinates indent )
+	void CCar::Draw( float cell_size, CWindowCoordinates indent )
 	{
 		glEnable( GL_TEXTURE_2D );
 		glBindTexture( GL_TEXTURE_2D, texture );
 		glTexEnvf( GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 		float angle = 0.0;
-		WindowCoordinates cord = move( cell_size, indent, angle );
+		CWindowCoordinates cord = move( cell_size, indent, angle );
 		float left = cord.x;
 		float right = cord.x + cell_size;
 		float bottom = cord.y + cell_size / 2;
@@ -108,7 +108,7 @@ namespace Graphics {
 		glDepthMask( GL_TRUE );
 	}
 
-	WindowCoordinates Car::move( float cell_size, WindowCoordinates indent, float &angle )
+	CWindowCoordinates CCar::move( float cell_size, CWindowCoordinates indent, float &angle )
 	{
 		if( current_step + 1 < coords.size() ) {
 			if( step_iteration < frames_per_step ) {
@@ -130,7 +130,7 @@ namespace Graphics {
 			angle = abs( 2.0*coords[current_step].help_angle - coords[current_step].angle );
 			return transate_to_wcoord( x, y, cell_size, indent );
 		} else {
-			Coordinates last = coords.back();
+			CCoordinates last = coords.back();
 			return transate_to_wcoord( last.x, last.y, cell_size, indent );
 		}
 	}
@@ -145,7 +145,7 @@ namespace Graphics {
 		return acos( angle );
 	}
 
-	void Car::Calculate_angles()
+	void CCar::Calculate_angles()
 	{
 		for( int i = 1; i < coords.size(); ++i ) {
 			coords[i - 1].angle = find_angle( coords[i].x - coords[i - 1].x, coords[i].y - coords[i - 1].y );
@@ -158,9 +158,9 @@ namespace Graphics {
 	}
 
 	// TODO добавить умножение на коэфициент сжатия чтобы соответствовать 2.5D
-	WindowCoordinates Car::transate_to_wcoord( float x, float y, float cell_size, WindowCoordinates indent )
+	CWindowCoordinates CCar::transate_to_wcoord( float x, float y, float cell_size, CWindowCoordinates indent )
 	{
-		WindowCoordinates wcoord( 0, 0 );
+		CWindowCoordinates wcoord( 0, 0 );
 		wcoord.x = x * cell_size + indent.x;
 		wcoord.y = y * cell_size + indent.y;
 		return wcoord;

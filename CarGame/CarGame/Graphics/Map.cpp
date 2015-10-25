@@ -1,7 +1,7 @@
 ﻿#include "Graphics/Map.h"
 
 namespace Graphics {
-	Map::Map() :
+	CMap::CMap() :
 		texture_board( 0 ),
 		texture_road( 0 ),
 		texture_map( 0 ),
@@ -10,7 +10,7 @@ namespace Graphics {
 		need_reload( 0 )
 	{}
 
-	Map::Map( const std::vector<std::vector<int>>& map_data ) :
+	CMap::CMap( const std::vector<std::vector<int>>& map_data ) :
 		texture_board( 0 ),
 		texture_road( 0 ),
 		texture_map( 0 ),
@@ -25,7 +25,7 @@ namespace Graphics {
 		need_reload = true;
 	}
 
-	void Map::Calculate()
+	void CMap::Calculate()
 	{
 		int n = map.size(), m = map[0].size();
 		float height = glutGet( GLUT_WINDOW_HEIGHT ),
@@ -36,7 +36,7 @@ namespace Graphics {
 		need_reload = true; // need to reload map
 	}
 
-	void Map::save_texture()
+	void CMap::save_texture()
 	{
 		// write window to array of pixels
 		unsigned long imageSize;
@@ -56,7 +56,7 @@ namespace Graphics {
 			float( GL_MODULATE) );
 	}
 
-	void Map::reload()
+	void CMap::reload()
 	{
 		int n = map.size(), m = map[0].size();
 		for( int i = 0; i < n; i++ ) {
@@ -86,7 +86,7 @@ namespace Graphics {
 		need_reload = false;
 	}
 
-	void Map::Draw()
+	void CMap::Draw()
 	{
 		if( need_reload ) {
 			reload();
@@ -108,17 +108,17 @@ namespace Graphics {
 
 	}
 
-	float Map::Get_cell_size()
+	float CMap::Get_cell_size()
 	{
 		return cell_size;
 	}
 
-	WindowCoordinates Map::Get_indent()
+	CWindowCoordinates CMap::Get_indent()
 	{
 		return indent;
 	}
 
-	bool Map::Need_to_reload()
+	bool CMap::Need_to_reload()
 	{
 		return need_reload;
 	}

@@ -2,7 +2,7 @@
 
 namespace Graphics {
 	// координаты в игре
-	struct Coordinates {
+	struct CCoordinates {
 		int x;
 		int y;
 		float angle;
@@ -10,10 +10,10 @@ namespace Graphics {
 	};
 
 	// координаты в окне
-	struct WindowCoordinates {
+	struct CWindowCoordinates {
 		float x;
 		float y;
-		WindowCoordinates( float _x, float _y ) :
+		CWindowCoordinates( float _x, float _y ) :
 			x( _x ),
 			y( _y )
 		{}

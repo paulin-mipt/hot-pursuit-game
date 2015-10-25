@@ -1,16 +1,16 @@
 ﻿#include "Graphics/Drawing.h"
 
 namespace Graphics {
-	Map Drawing::map; // static data members must be explicitly defined in exactly one translation unit
-	std::vector<Car> Drawing::cars;
+	CMap CDrawing::map; // static data members must be explicitly defined in exactly one translation unit
+	std::vector<CCar> CDrawing::cars;
 
-	Drawing::Drawing( Map &map_data, std::vector<Car> &_cars )
+	CDrawing::CDrawing( CMap &map_data, std::vector<CCar> &_cars )
 	{
 		map = map_data;
 		cars = _cars;
 	}
 
-	void Drawing::reshape( int width, int height )
+	void CDrawing::reshape( int width, int height )
 	{
 		glViewport( 0, 0, width, height ); // set view block
 
@@ -23,14 +23,14 @@ namespace Graphics {
 		map.Calculate(); // recalculate map
 	}
 
-	void Drawing::timer( int value )
+	void CDrawing::timer( int value )
 	{
 		glutPostRedisplay();
 		glutTimerFunc( 1, timer, 0 );
 	}
 
 
-	void Drawing::display()
+	void CDrawing::display()
 	{
 		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
@@ -47,7 +47,7 @@ namespace Graphics {
 	}
 
 	// load image from file to texture
-	void Drawing::Load_texture( const char* filename, GLuint& texture )
+	void CDrawing::Load_texture( const char* filename, GLuint& texture )
 	{
 		// create and choose texture
 		glGenTextures( 1, &texture );
@@ -64,7 +64,7 @@ namespace Graphics {
 		glBindTexture( GL_TEXTURE_2D, 0 );
 	}
 
-	void Drawing::load()
+	void CDrawing::load()
 	{
 		//load textures for map
 		Load_texture( "..\\images\\road.png", map.texture_road ); // road
@@ -89,7 +89,7 @@ namespace Graphics {
 		}
 	}
 
-	void Drawing::draw( int argc, char * argv[] )
+	void CDrawing::draw( int argc, char * argv[] )
 	{
 		glutInit( &argc, argv );
 		glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA );

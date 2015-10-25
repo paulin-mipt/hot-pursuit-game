@@ -7,14 +7,14 @@
 #include "Graphics/Coord.h"
 
 namespace Graphics {
-	class Map {
+	class CMap {
 	public:
-		Map();
-		Map( const std::vector<std::vector<int>> &map_data );
+		CMap();
+		CMap( const std::vector<std::vector<int>> &map_data );
 		void Calculate();
 		void Draw();
 		float Get_cell_size();
-		WindowCoordinates Get_indent();
+		CWindowCoordinates Get_indent();
 
 		bool Need_to_reload();
 
@@ -24,7 +24,7 @@ namespace Graphics {
 	private:
 		std::vector<std::vector<int>> map; // TODO может тут хранить не в виде 2мерного массива?
 		float cell_size;
-		WindowCoordinates indent;
+		CWindowCoordinates indent;
 		bool need_reload;
 
 		void save_texture();

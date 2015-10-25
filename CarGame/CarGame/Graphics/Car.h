@@ -9,29 +9,29 @@ namespace Graphics {
 
 #define PI 3.14159265
 
-	class Car {
+	class CCar {
 	public:
-		Car( std::vector<Coordinates> &coords_data, int _frames_per_step, Color _color );
-		Car( std::vector<Coordinates> &coords_data );
+		CCar( std::vector<CCoordinates> &coords_data, int _frames_per_step, Color _color );
+		CCar( std::vector<CCoordinates> &coords_data );
 
-		Car( Color _color );
+		CCar( Color _color );
 
 		Color Get_color();
 
-		void Push( Coordinates step );
+		void Push( CCoordinates step );
 
 		void Calculate_angles();
 
-		void Draw( float cell_size, WindowCoordinates indent );
+		void Draw( float cell_size, CWindowCoordinates indent );
 
 		GLuint texture;
 	private:
-		WindowCoordinates transate_to_wcoord( float x, float y, float cell_size, WindowCoordinates indent );
+		CWindowCoordinates transate_to_wcoord( float x, float y, float cell_size, CWindowCoordinates indent );
 		void rotate( float &x, float &y, float angle );
 		void rotate_car( float &Ax, float &Ay, float &Bx, float &By, float &Cx, float &Cy, float &Dx, float &Dy, float centerX, float centerY, float angle );
-		WindowCoordinates move( float cell_size, WindowCoordinates, float &angle );
+		CWindowCoordinates move( float cell_size, CWindowCoordinates, float &angle );
 
-		std::vector<Coordinates> coords;
+		std::vector<CCoordinates> coords;
 		int current_step;
 		int step_iteration;
 		int frames_per_step;
