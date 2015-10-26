@@ -12,7 +12,7 @@
 namespace Graphics {
 	class CDrawing {
 	public:
-		CDrawing( CMap &map_data, std::vector<CCar> &_cars );
+		CDrawing( CMap &map_data, std::vector<std::shared_ptr<CCar>> &_cars );
 		CDrawing() {};
 		void draw( int argc, char * argv[] );
 		static void Load_texture( const char*, GLuint& texture );
@@ -22,7 +22,8 @@ namespace Graphics {
 		static void reshape( int width, int height );
 		static void load();
 		static void timer( int value );
+
 		static CMap map;
-		static std::vector<CCar> cars;
+		static std::vector<std::shared_ptr<CCar>> cars;
 	};
 }

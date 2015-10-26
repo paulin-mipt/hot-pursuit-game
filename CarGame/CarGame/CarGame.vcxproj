@@ -70,12 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\Externals\FreeGlut\include;$(SolutionDir)\Externals\SOIL\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Externals\FreeGLUT\lib;$(SolutionDir)\Externals\SOIL\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\Externals\FreeGlut\include;$(SolutionDir)\..\Externals\SOIL\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\Externals\FreeGLUT\lib;$(SolutionDir)\..\Externals\SOIL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\work\HotPursuitGame\Externals\FreeGLUT\include;C:\work\HotPursuitGame\Externals\SOIL\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>C:\work\HotPursuitGame\Externals\FreeGLUT\lib;C:\work\HotPursuitGame\Externals\SOIL\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\Externals\FreeGLUT\include;$(SolutionDir)\..\Externals\SOIL\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\Externals\FreeGLUT\lib;$(SolutionDir)\..\Externals\SOIL\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -91,6 +91,10 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\postBuildDebug.cmd</Command>
+      <Message>Copy resources and dlls to output directories.</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -121,6 +125,12 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
+    <PostBuildEvent>
+      <Command>$(SolutionDir)..\postBuildRelease.cmd</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy resources and dlls to output directories.</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -163,6 +173,7 @@
   <ItemGroup>
     <Text Include="..\..\Resources\Maps\map.txt" />
     <Text Include="..\..\Resources\Maps\map_file.txt" />
+    <Text Include="..\..\Resources\Players.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Resources\Images\car_blue.png" />

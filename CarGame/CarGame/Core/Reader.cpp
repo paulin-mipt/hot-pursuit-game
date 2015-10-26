@@ -26,17 +26,14 @@ namespace Core {
 	CField CReader::readMap( const std::string& path )
 	{
 		CField gameField;
-		std::ifstream fin( path );
-
-		if( !fin ) {
-			std::string error = "Can't open file ";
-			error += path;
-			throw std::runtime_error( error );
+		std::ifstream in( path );
+		if( !in ) {
+			throw std::runtime_error( std::string( "Can't open file " ) + path );
 		}
 
 		std::string currentLine;
 
-		while( std::getline( fin, currentLine ) ) {
+		while( std::getline( in, currentLine ) ) {
 			std::vector <size_t> line;
 			currentLine += " ";
 			while( currentLine.length() > 0 ) {
@@ -56,10 +53,10 @@ namespace Core {
 		return gameField;
 	}
 
-	CCoordinates readCoordinates()
+	CCoordinates readCoordinates( std::istream& in )
 	{
 		int x, y;
-		std::cin >> x >> y;
+		in >> x >> y;
 		if( x <= 0 || y <= 0 ) {
 			std::string error = "Bad input: invalid coordinates";
 			throw std::runtime_error( error );
@@ -67,19 +64,24 @@ namespace Core {
 		return CCoordinates( x - 1, y - 1 );
 	}
 
-	CPlayersInfo CReader::readPlayers()
+	CPlayersInfo CReader::readPlayers( const std::string& path )
 	{
 		CPlayersInfo info;
-		std::cout << "Enter number of players:" << std::endl;
+
+		std::ifstream in( path );
+		if( !in ) {
+			throw std::runtime_error( std::string( "Can't open file " ) + path );
+		}
+
 		int numberOfPlayers;
-		std::cin >> numberOfPlayers;
+		in >> numberOfPlayers;
 		if( numberOfPlayers <= 0 ) {
 			std::string error = "Bad input: invalid number of players";
 			throw std::runtime_error( error );
 		}
 		info.numberOfPlayers = numberOfPlayers;
 		for( int i = 0; i < numberOfPlayers; ++i )
-			info.positions.push_back( readCoordinates() );
+			info.positions.push_back( readCoordinates(in) );
 		return info;
 	}
 
@@ -95,11 +97,11 @@ namespace Core {
 		return move;
 	}
 
-	CLine CReader::readLine()
+	CLine CReader::readLine(std::istream& in)
 	{
 		std::cout << "Enter coordinates of startline:" << std::endl;
-		CCoordinates firstPoint = readCoordinates(),
-			secondPoint = readCoordinates();
+		CCoordinates firstPoint = readCoordinates(in),
+			secondPoint = readCoordinates(in);
 
 		return CLine( firstPoint, secondPoint );
 	}

@@ -25,10 +25,10 @@ namespace Core {
 
 		CField readMap( const std::string& path );
 
-		CPlayersInfo readPlayers();
+		CPlayersInfo readPlayers( const std::string & path );
 
 		int readPlayersChoice( size_t num );
 
-		CLine readLine();
+		CLine readLine(std::istream& in);
 	};
 }

@@ -4,7 +4,7 @@
 #include "Graphics/Map.h"
 
 namespace Graphics {
-	CLoader::CLoader( const std::string& map_file, const std::string& cars_file, CMap& map, std::vector<CCar>& cars )
+	CLoader::CLoader( const std::string& map_file, const std::string& players_info_file, CMap& map, std::vector<std::shared_ptr<CCar>>& cars )
 	{
 		color_dict["Red"] = Red;
 		color_dict["Green"] = Green;
@@ -13,16 +13,17 @@ namespace Graphics {
 		std::ifstream map_in( map_file );
 		map = read_map( map_in );
 
-		std::ifstream cars_in( cars_file );
+		std::ifstream cars_in( players_info_file );
 		cars = read_cars( cars_in );
 	}
 
 	CMap CLoader::read_map( std::istream & input )
 	{
-		int n = 0,
-			m = 0,
-			cell = 0;
+		int n = 0;
+		int m = 0;
+		int cell = 0;
 		input >> n >> m;
+
 		std::vector<std::vector<int>> map_data;
 		map_data.resize( n );
 		for( int i = n - 1; i >= 0; i-- ) {
@@ -36,23 +37,17 @@ namespace Graphics {
 		return map;
 	}
 
-	std::vector<CCar> CLoader::read_cars( std::istream & input )
+	std::vector<std::shared_ptr<CCar>> CLoader::read_cars( std::istream & input )
 	{
-		int n = 0,
-			number_of_steps = 0;
+		int n = 0;
+		int number_of_steps = 0;
 		std::string color = "";
 		input >> n;
-		std::vector<CCar> cars;
+		std::vector<std::shared_ptr<CCar>> cars;
 		for( int i = 0; i < n; ++i ) {
 			input >> color;
 			input >> number_of_steps; // should it be the same for all cars?
-			CCar car( color_dict[color] );
-			for( int j = 0; j < number_of_steps; ++j ) {
-				CCoordinates step;
-				input >> step.x >> step.y;
-				car.Push( step );
-			}
-			car.Calculate_angles();
+			std::shared_ptr<CCar> car(new CCar( color_dict[color] ));
 			cars.push_back( car );
 		}
 		return cars;

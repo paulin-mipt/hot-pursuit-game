@@ -11,14 +11,14 @@ namespace Graphics {
 
 	class CCar {
 	public:
-		CCar( std::vector<CCoordinates> &coords_data, int _frames_per_step, Color _color );
-		CCar( std::vector<CCoordinates> &coords_data );
+		CCar( const CCoordinates& coords_data, int _frames_per_step, Color _color );
+		CCar( const CCoordinates& coords_data );
 
 		CCar( Color _color );
 
 		Color Get_color();
 
-		void Push( CCoordinates step );
+//		void Push( CCoordinates step );
 
 		void Calculate_angles();
 
@@ -31,7 +31,7 @@ namespace Graphics {
 		void rotate_car( float &Ax, float &Ay, float &Bx, float &By, float &Cx, float &Cy, float &Dx, float &Dy, float centerX, float centerY, float angle );
 		CWindowCoordinates move( float cell_size, CWindowCoordinates, float &angle );
 
-		std::vector<CCoordinates> coords;
+		CCoordinates coords;
 		int current_step;
 		int step_iteration;
 		int frames_per_step;

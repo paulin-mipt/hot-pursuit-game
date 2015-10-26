@@ -97,6 +97,9 @@
     <Text Include="..\..\Resources\Maps\map_file.txt">
       <Filter>Resource Files\Maps</Filter>
     </Text>
+    <Text Include="..\..\Resources\Players.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Resources\Images\car_blue.png">

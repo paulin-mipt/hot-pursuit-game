@@ -16,11 +16,11 @@ namespace Graphics {
 
 	class CLoader {
 	public:
-		CLoader( const std::string& map_file, const std::string& cars_file, CMap& map, std::vector<CCar>& cars );
+		CLoader( const std::string& map_file, const std::string& players_info_file, CMap& map, std::vector<std::shared_ptr<CCar>>& cars );
 
 	private:
 		CMap read_map( std::istream & input );
-		std::vector<CCar> read_cars( std::istream & input );
+		std::vector<std::shared_ptr<CCar>> read_cars( std::istream& input );
 
 		std::map< std::string, Color > color_dict;
 	};

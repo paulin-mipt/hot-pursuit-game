@@ -3,9 +3,9 @@
 
 namespace Graphics {
 	CMap CDrawing::map; // static data members must be explicitly defined in exactly one translation unit
-	std::vector<CCar> CDrawing::cars;
+	std::vector<std::shared_ptr<CCar>> CDrawing::cars;
 
-	CDrawing::CDrawing( CMap &map_data, std::vector<CCar> &_cars )
+	CDrawing::CDrawing( CMap &map_data, std::vector<std::shared_ptr<CCar>> &_cars )
 	{
 		map = map_data;
 		cars = _cars;
@@ -38,7 +38,7 @@ namespace Graphics {
 		bool map_reloaded = !map.Need_to_reload();
 		map.Draw(); // draw the map
 		for( size_t i = 0; i < cars.size(); i++ ) {
-			cars[i].Draw( map.Get_cell_size(), map.Get_indent() ); // draw car
+			cars[i]->Draw( map.Get_cell_size(), map.Get_indent() ); // draw car
 		}
 		glFlush(); // flush changes
 		if( map_reloaded ) {
@@ -72,7 +72,7 @@ namespace Graphics {
 		//load textures for cars (depends on color)
 		std::string car_filename;
 		for( size_t i = 0; i < cars.size(); i++ ) {
-			switch( cars[i].Get_color() ) {
+			switch( cars[i]->Get_color() ) {
 				case Red:
 					car_filename = RESOURCE_DIRECTORY + "Images\\car_red.png";
 					break;
@@ -85,7 +85,7 @@ namespace Graphics {
 				default:
 					car_filename = RESOURCE_DIRECTORY + "Images\\car_red.png";
 			}
-			Load_texture( car_filename.c_str(), cars[i].texture );
+			Load_texture( car_filename.c_str(), cars[i]->texture );
 		}
 	}
 

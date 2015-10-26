@@ -11,8 +11,8 @@ int main2()
 	CReader reader;
 	try {
 		CMap newMap( reader.readMap( RESOURCE_DIRECTORY + "Maps\\map.txt" ) );
-		CLine startLine = reader.readLine();
-		CPlayersInfo newPlayersInfo = reader.readPlayers();
+		CLine startLine = reader.readLine(std::cin); // не очень. нужно переделать.
+		CPlayersInfo newPlayersInfo = reader.readPlayers( RESOURCE_DIRECTORY + "Players.txt" );
 		CGame newGame( newMap, newPlayersInfo, startLine, reader );
 		newGame.start();
 	} catch( std::exception const &e ) {
