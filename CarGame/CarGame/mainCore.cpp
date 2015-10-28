@@ -1,20 +1,25 @@
 #include <string>
 #include <iostream>
 
-#include "GlobalDefinitions.h"
+#include "Core/Reader.h"
 #include "Core/Game.h"
+#include "GlobalDefinitions.h"
 
-int main2()
+int main()
 {
 	using namespace Core;
 
 	CReader reader;
 	try {
-		CMap newMap( reader.readMap( RESOURCE_DIRECTORY + "Maps\\map.txt" ) );
-		CLine startLine = reader.readLine(std::cin); // не очень. нужно переделать.
-		CPlayersInfo newPlayersInfo = reader.readPlayers( RESOURCE_DIRECTORY + "Players.txt" );
-		CGame newGame( newMap, newPlayersInfo, startLine, reader );
-		newGame.start();
+		CMap map = reader.ReadMap( RESOURCE_DIRECTORY + "Maps\\map.txt" );
+//		CLine startLine = reader.readLine(std::cin); // не очень. нужно переделать.
+//		CPlayersInfo newPlayersInfo = reader.ReadPlayers( RESOURCE_DIRECTORY + "Players.txt" );
+//		CGame newGame( newMap, newPlayersInfo, startLine, reader );
+
+		size_t playerCount;
+		std::cin >> playerCount; // берём количество игроков у UI
+		CGame game( map, playerCount );
+		game.Start();
 	} catch( std::exception const &e ) {
 		std::cerr << e.what() << std::endl;
 	}

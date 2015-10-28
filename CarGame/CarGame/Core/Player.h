@@ -1,63 +1,42 @@
 ﻿#pragma once
 
-#include <utility>
-#include <vector>
+#include "GlobalDefinitions.h"
 
 namespace Core {
-	typedef std::pair<size_t, size_t> CSize;
-
-	struct CCoordinates {
-		CCoordinates( int newX, int newY ) :
-			x( newX ),
-			y( newY )
-		{}
-
-		bool operator == ( const CCoordinates &point ) const
-		{
-			return this->x == point.x && this->y == point.y;
-		}
-
-		CCoordinates operator + ( const CCoordinates &point ) const
-		{
-			return CCoordinates( this->x + point.x, this->y + point.y );
-		}
-
-		int x;
-		int y;
-	};
-
-	enum Directions {
+	enum Direction {
 		SW = 1, S, SE,
 		W, C, E, // `C` for no direction
 		NW, N, NE
 	};
 
-	struct CPlayersInfo {
-		CPlayersInfo()
-		{
-			numberOfPlayers = 0;
-		}
-
-		size_t numberOfPlayers;
-		std::vector<CCoordinates> positions;
-	};
+//	struct CPlayersInfo {
+//		size_t numberOfPlayers;
+//		std::vector<CCoordinates> positions;
+//
+//		CPlayersInfo() :
+//			numberOfPlayers( 0 )
+//		{}
+//	};
 
 	class CPlayer {
 	public:
-		CPlayer( const CCoordinates& coordinates, const bool isAlive );
+		CPlayer( const CCoordinates& coordinates, size_t playerNumber );
 
-		void die();
-		void goToStart();
+		void Die();
+		void GoToStart();
+		void StartCheating();
+		void StopCheating();
 
-		CCoordinates getPosition();
-		void move( int, CSize );
-		CCoordinates getPreviousPosition();
-		bool wasFirstStep();
-		bool wasSecondStep();
-		void makeFirstStep();
-		void makeSecondStep();
-		bool directionIsValid( int direction, const CSize& size );
-		bool playerIsAlive();
+		void Move( Direction direction, CSize mapSize );
+		bool DirectionIsValid( Direction direction, const CSize& size ) const;
+		
+		CCoordinates GetPosition() const;
+		CCoordinates GetPreviousPosition() const;
+		size_t GetNumber() const;
+		bool IsAlive() const;
+		bool IsCheating() const;
+
+		bool operator< ( const CPlayer& player ) const;
 
 	private:
 		CCoordinates position;
@@ -65,10 +44,9 @@ namespace Core {
 		CCoordinates initialPosition; // Для возвращения на старт, после столкновения с машиной
 		CCoordinates previousPosition;
 		bool isAlive;
-		bool firstStep;
-		bool secondStep;
+		bool isCheating;
+		size_t number;
 
-		void moveInDirection( CCoordinates );
-		CCoordinates convertFromDirectionCode( int );
+		CCoordinates convertFromDirectionCode( Direction directionCode ) const;
 	};
 }

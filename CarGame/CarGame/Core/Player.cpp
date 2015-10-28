@@ -1,132 +1,110 @@
 ﻿#include "Core/Player.h"
 
 namespace Core {
-	CPlayer::CPlayer( const CCoordinates& newCoordinates, const bool state ) :
-		position( newCoordinates ),
+	CPlayer::CPlayer( const CCoordinates& coordinates, size_t playerNumber ) :
+		position( coordinates ),
 		inertia( 0, 0 ),
-		initialPosition( newCoordinates ),
-		previousPosition( newCoordinates ),
-		isAlive( state ),
-		firstStep( true ),
-		secondStep( true )
+		initialPosition( coordinates ),
+		previousPosition( coordinates ),
+		isAlive( true ),
+		isCheating( false ),
+		number( playerNumber )
 	{}
 
-	CCoordinates CPlayer::getPosition()
+	CCoordinates CPlayer::GetPosition() const
 	{
 		return this->position;
 	}
 
-	void CPlayer::goToStart()
+	void CPlayer::GoToStart()
 	{
 		this->position = this->initialPosition;
 		this->previousPosition = this->initialPosition;
 		this->inertia.x = 0;
 		this->inertia.y = 0;
-		this->firstStep = true;
-		this->secondStep = true;
 	}
 
-	CCoordinates CPlayer::convertFromDirectionCode( int directionCode )
+	void CPlayer::StartCheating()
 	{
-		CCoordinates direction( 0, 0 );
+		isCheating = true;
+	}
+
+	void CPlayer::StopCheating()
+	{
+		isCheating = false;
+	}
+
+	CCoordinates CPlayer::convertFromDirectionCode( Direction directionCode ) const
+	{
 		switch( directionCode ) {
 			case SW:
-				direction.x = -1;
-				direction.y = +1;
-				break;
+				return CCoordinates( -1, 1 );
 			case S:
-				direction.x = 0;
-				direction.y = +1;
-				break;
+				return CCoordinates( 0, 1 );
 			case SE:
-				direction.x = +1;
-				direction.y = +1;
-				break;
+				return CCoordinates( 1, 1 );
 			case W:
-				direction.x = -1;
-				direction.y = 0;
-				break;
+				return CCoordinates( -1, 0 );
 			case C:
-				direction.x = 0;
-				direction.y = 0;
-				break;
+				return CCoordinates( 0, 0 );
 			case E:
-				direction.x = +1;
-				direction.y = 0;
-				break;
+				return CCoordinates( 1, 0 );
 			case NW:
-				direction.x = -1;
-				direction.y = -1;
-				break;
+				return CCoordinates( -1, -1 );
 			case N:
-				direction.x = 0;
-				direction.y = -1;
-				break;
+				return CCoordinates( 0, -1 );
 			case NE:
-				direction.x = +1;
-				direction.y = -1;
-				break;
+				return CCoordinates( 1, -1 );
 			default:
 				throw std::invalid_argument( "Unknown direction code" );
 		}
-		return direction;
 	}
 
-	void CPlayer::move( int direction_code, CSize size )
+	void CPlayer::Move( Direction direction_code, CSize size )
 	{
 		CCoordinates direction = convertFromDirectionCode( direction_code );
-		this->moveInDirection( direction );
-	};
-
-	void CPlayer::moveInDirection( CCoordinates direction )
-	{
 		CCoordinates move( inertia.x + direction.x, inertia.y + direction.y );
 
 		inertia = move;
 		previousPosition = position;
 		position.x += move.x;
 		position.y += move.y;
-	}
-
-	CCoordinates CPlayer::getPreviousPosition()
-	{
-		return this->previousPosition;
 	};
 
-	void CPlayer::die()
+	CCoordinates CPlayer::GetPreviousPosition() const
+	{
+		return this->previousPosition;
+	}
+
+	size_t CPlayer::GetNumber() const
+	{
+		return number;
+	}
+
+	void CPlayer::Die()
 	{
 		isAlive = false;
 	};
 
-	bool CPlayer::wasFirstStep()
-	{
-		return firstStep;
-	}
-
-	bool CPlayer::wasSecondStep()
-	{
-		return secondStep;
-	}
-
-	void CPlayer::makeFirstStep()
-	{
-		firstStep = false;
-	}
-
-	void CPlayer::makeSecondStep()
-	{
-		secondStep = false;
-	}
-
-	bool CPlayer::directionIsValid( int directionCode, const CSize& size )
+	bool CPlayer::DirectionIsValid( Direction directionCode, const CSize& size ) const
 	{
 		CCoordinates direction = convertFromDirectionCode( directionCode );
 		return 0 <= (direction + position + inertia).x && (direction + position + inertia).x <= size.first - 1 &&
 			0 <= (direction + position + inertia).y && (direction + position + inertia).y <= size.second - 1;
 	}
 
-	bool CPlayer::playerIsAlive()
+	bool CPlayer::IsAlive() const
 	{
 		return isAlive;
+	}
+
+	bool CPlayer::IsCheating() const
+	{
+		return isCheating;
+	}
+
+	bool CPlayer::operator< ( const CPlayer& player ) const
+	{
+		return number < player.number;
 	}
 }

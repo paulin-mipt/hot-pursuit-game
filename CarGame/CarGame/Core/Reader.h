@@ -2,33 +2,17 @@
 
 #include <vector>
 
-#include "Core/Player.h"
+#include "GlobalDefinitions.h"
 
 namespace Core {
-	typedef std::vector< std::vector<size_t> > CField;
-
-	struct CLine {
-		CLine( const CCoordinates& x, const CCoordinates& y ) :
-			firstPoint( x ), secondPoint( y )
-		{}
-
-		CCoordinates firstPoint;
-		CCoordinates secondPoint;
-	};
+	class CMap;
 
 	class CReader {
-
 	public:
-		CReader();
+		CMap ReadMap( const std::string& path );
 
-		~CReader();
-
-		CField readMap( const std::string& path );
-
-		CPlayersInfo readPlayers( const std::string & path );
-
-		int readPlayersChoice( size_t num );
-
-		CLine readLine(std::istream& in);
+//		CPlayersInfo ReadPlayers( const std::string & path );
+//
+//		int ReadPlayersChoice( size_t num );
 	};
 }

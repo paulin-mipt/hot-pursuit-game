@@ -5,93 +5,92 @@
 #include "Core/Game.h"
 
 namespace Core {
-	CGame::CGame( const CMap& newMap, const CPlayersInfo& newPlayersInfo, const CLine& newStartLine, const CReader& newReader ) :
-		map( newMap ), reader( newReader ), startLine( newStartLine )
-	{
-		numOfDeadPlayers = 0;
-		size_t numOfPlayers = newPlayersInfo.numberOfPlayers;
-		for( size_t i = 0; i < numOfPlayers; ++i ) {
-			CPlayer newPlayer( newPlayersInfo.positions[i], true );
-			players.push_back( newPlayer );
+	namespace {
+		bool inBoxOnAxis( int firstPoint, int secondPoint, int thirdPoint, int forthPoint )
+		{
+			if( firstPoint > secondPoint ) {
+				std::swap( firstPoint, secondPoint );
+			}
+			if( thirdPoint > forthPoint ) {
+				std::swap( thirdPoint, forthPoint );
+			}
+			return std::max( firstPoint, thirdPoint ) <= std::min( secondPoint, forthPoint );
+		}
+
+		int area( const CCoordinates& firstPoint, const CCoordinates& secondPoint, const CCoordinates& thirdPoint )
+		{
+			return (secondPoint.x - firstPoint.x) * (thirdPoint.y - firstPoint.y)
+				- (secondPoint.y - firstPoint.y) * (thirdPoint.x - firstPoint.x);
+		}
+
+		bool isIntersects(
+			const CCoordinates& firstPoint,
+			const CCoordinates& secondPoint,
+			const CCoordinates& thirdPoint,
+			const CCoordinates& fourthPoint )
+		{
+			return inBoxOnAxis( firstPoint.x, secondPoint.x, thirdPoint.x, fourthPoint.x )
+				&& inBoxOnAxis( firstPoint.y, secondPoint.y, thirdPoint.y, fourthPoint.y )
+				&& (area( firstPoint, secondPoint, thirdPoint )
+					* area( firstPoint, secondPoint, fourthPoint )) <= 0
+				&& (area( thirdPoint, fourthPoint, firstPoint )
+					* area( thirdPoint, fourthPoint, secondPoint )) <= 0;
 		}
 	}
 
-	CGame::~CGame()
-	{}
-
-	bool inBoxOnAxis( int firstPoint, int secondPoint, int thirdPoint, int forthPoint )
+	CGame::CGame( const CMap& newMap, size_t playersNumber ) :
+		map( newMap ),
+		numOfDeadPlayers( 0 )
 	{
-		if( firstPoint > secondPoint ) {
-			std::swap( firstPoint, secondPoint );
+		if (playersNumber > map.GetStartPoints().size() ) {
+			throw std::invalid_argument( std::string( "Too many players. This map is for " ) + std::to_string( map.GetStartPoints().size() ) + " players or less." );
 		}
-		if( thirdPoint > forthPoint ) {
-			std::swap( thirdPoint, forthPoint );
+		for( int i = 0; i < playersNumber; ++i ) {
+			players.push_back( CPlayer( map.GetStartPoints()[i], i ) );
 		}
-		return std::max( firstPoint, thirdPoint ) <= std::min( secondPoint, forthPoint );
 	}
 
-	int area( CCoordinates firstPoint, CCoordinates secondPoint, CCoordinates thirdPoint )
-	{
-		return (secondPoint.x - firstPoint.x) * (thirdPoint.y - firstPoint.y)
-			- (secondPoint.y - firstPoint.y) * (thirdPoint.x - firstPoint.x);
-	}
-
-	bool isIntersects( CCoordinates& firstPoint, CCoordinates& secondPoint, CCoordinates& thirdPoint, CCoordinates& fourthPoint )
-	{
-		return inBoxOnAxis( firstPoint.x, secondPoint.x, thirdPoint.x, fourthPoint.x )
-			&& inBoxOnAxis( firstPoint.y, secondPoint.y, thirdPoint.y, fourthPoint.y )
-			&& (area( firstPoint, secondPoint, thirdPoint )
-				* area( firstPoint, secondPoint, fourthPoint )) <= 0
-			&& (area( thirdPoint, fourthPoint, firstPoint )
-				* area( thirdPoint, fourthPoint, secondPoint )) <= 0;
-	}
-
-	bool CGame::startLineIntersectsWithPlayer( size_t num )
+	int CGame::finishLineIntersectsWithPlayer( const CPlayer& player ) const
 	{
 		// Происходит проверка:
 		// 1. Проекции отрезков на оси пересекаются
 		// 2. Считается ориентированная площадь треугольников. Нужно, чтобы эти площади были разных знаков.
-		CCoordinates playersPreviousCoordinates = players[num].getPreviousPosition();
-		CCoordinates playersCoordinates = players[num].getPosition();
-		return isIntersects( playersPreviousCoordinates, playersCoordinates, startLine.firstPoint, startLine.secondPoint );
+		CCoordinates playersPreviousCoordinates = player.GetPreviousPosition();
+		CCoordinates playersCoordinates = player.GetPosition();
+		return isIntersects( playersPreviousCoordinates, playersCoordinates, map.GetFinishLine().first, map.GetFinishLine().second );
 	}
 
-	int CGame::getPlayerOnFinish()
+	const CPlayer* CGame::handleFinishLineIntersections()
 	{
-		for( size_t i = 0; i < players.size(); ++i ) {
-			/* todo: */
-			bool begining = players[i].wasFirstStep();
-			bool second = players[i].wasSecondStep();
-			if( begining ) { // Чтобы избавиться от ситуации, когда траектория на первом и втором ходу пересекается со стартом
-				players[i].makeFirstStep();
-				continue;
+		for( auto player : players ) {
+			if( finishLineIntersectsWithPlayer( player ) == -1 ) {
+				player.StartCheating();
 			}
-			if( second ) {
-				players[i].makeSecondStep();
-				continue;
-			}
-			/* заменить на проверку, что игрок подъезжает к финишу с правильной стороны */
-			if( startLineIntersectsWithPlayer( i ) ) {
-				return int( i );
+			if( finishLineIntersectsWithPlayer( player ) == 1 ) {
+				if (player.IsCheating() ) {
+					player.StopCheating();
+				} else {
+					return &player;
+				}
 			}
 		}
-		return -1;
+		return nullptr;
 	}
 
-	int CGame::playerCrashedIntoCar( size_t num )
-	{
-		for( size_t i = 0; i < players.size(); ++i ) {
-			if( i != num && players[i].getPosition() == players[num].getPosition() ) {
-				return int( i );
-			}
-		}
-		return -1;
-	}
+//	int CGame::playerCrashedIntoCar( size_t num ) const
+//	{
+//		for( size_t i = 0; i < players.size(); ++i ) {
+//			if( i != num && players[i].GetPosition() == players[num].GetPosition() ) {
+//				return int( i );
+//			}
+//		}
+//		return -1;
+//	}
 
-	bool CGame::playerOutOfTrack( size_t num )
+	bool CGame::playerOutOfTrack( const CPlayer& player ) const
 	{
-		CCoordinates playersPreviousCoordinates = players[num].getPreviousPosition();
-		CCoordinates playersCoordinates = players[num].getPosition();
+		CCoordinates playersPreviousCoordinates = player.GetPreviousPosition();
+		CCoordinates playersCoordinates = player.GetPosition();
 
 		int minX = std::min( playersPreviousCoordinates.x, playersCoordinates.x ),
 			maxX = std::max( playersPreviousCoordinates.x, playersCoordinates.x ),
@@ -103,7 +102,7 @@ namespace Core {
 
 		for( int i = minX; i <= maxX; ++i ) {
 			for( int j = minY; j <= maxY; ++j ) {
-				if( map.isEmpty( i, j ) ) {
+				if( map.IsEmpty( i, j ) ) {
 					continue;
 				}
 				CCoordinates firstPoint( i * 10, j * 10 ),
@@ -122,98 +121,139 @@ namespace Core {
 		return false;
 	}
 
-	void CGame::turnOfPlayer( size_t num )
-	{
-		int direction = reader.readPlayersChoice( num );
-		if( !players[num].directionIsValid( direction, map.getSize() ) ) { // todo:refactoring in function
-			players[num].die();
-			++numOfDeadPlayers;
-			std::cout << "Player " << num + 1 << " is dead" << std::endl;
-			return;
-		}
-
-		players[num].move( direction, map.getSize() );
-
-		int crashedPlayer = playerCrashedIntoCar( num );
-		if( crashedPlayer != -1 ) {
-			players[num].goToStart();
-			clearPlayersState( crashedPlayer );
-			players[crashedPlayer].goToStart();
-			paintPlayersState( crashedPlayer );
-			return;
-		}
-		if( playerOutOfTrack( num ) ) {
-			players[num].die();
-			++numOfDeadPlayers;
-			std::cout << "Player " << num + 1 << " is dead" << std::endl;
-			return;
-		}
-	}
-
-	void CGame::initPlayersPositionsInMap()
+	void CGame::findCollisions()
 	{
 		for( size_t i = 0; i < players.size(); ++i ) {
-			CCoordinates currentCoordinates = players[i].getPosition();
-			map.setPosition( currentCoordinates.x, currentCoordinates.y );
+			for( size_t j = i + 1; j < players.size(); ++j ) {
+				if ( players[i].GetPosition() == players[j].GetPosition() && players[i].IsAlive() && players[j].IsAlive() ) {
+					collidedPlayers.insert( players[i] );
+					collidedPlayers.insert( players[j] );
+				}
+			}
 		}
 	}
 
-	void CGame::clearPlayersState( size_t num ) // Стирает изображение игрока с поля
+	void CGame::findCrashes()
 	{
-		CCoordinates old = players[num].getPreviousPosition();
-		CCoordinates now = players[num].getPosition();
-		map.clearPosition( old.x, old.y );
-		map.clearPosition( now.x, now.y );
+		for( auto player : players ) {
+			if( playerOutOfTrack( player ) ) {
+				crashedPlayers.insert( player );
+			}
+		}
 	}
 
-	void CGame::paintPlayersState( size_t num ) // Рисует изображение игрока на поле
+	void CGame::turnOfPlayer( CPlayer& player )
 	{
-		CCoordinates previousCoordinates = players[num].getPreviousPosition();
-		CCoordinates currentCoordinates = players[num].getPosition();
-		map.setPosition( previousCoordinates.x, previousCoordinates.y );
-		map.setPosition( currentCoordinates.x, currentCoordinates.y );
+		// взять у UI направление
+//		int direction = reader.readPlayersChoice( num );
+		int direction;
+		std::cin >> direction;
+		if( !player.DirectionIsValid( Direction( direction ), map.GetSize() ) ) {
+			player.Die();
+			crashedPlayers.insert( player );
+			++numOfDeadPlayers;
+//			std::cout << "Player " << num + 1 << " is dead" << std::endl;
+			return;
+		}
+
+		player.Move( Direction( direction ), map.GetSize() );
+
+		// заменено на проверку после отрисовки столкновений всех игроков
+//		int crashedPlayer = playerCrashedIntoCar( num );
+//		if( crashedPlayer != -1 ) {
+//			players[num].GoToStart();
+////			clearPlayersState( crashedPlayer );
+//			players[crashedPlayer].GoToStart();
+////			paintPlayersState( crashedPlayer );
+//			return;
+//		}
+
+		// заменено на проверку после отрисовки всех вылетевших за пределы трассы игроков
+//		if( playerOutOfTrack( num ) ) {
+//			players[num].Die();
+//			++numOfDeadPlayers;
+//			std::cout << "Player " << num + 1 << " is dead" << std::endl;
+//			return;
+//		}
 	}
 
-	void CGame::start()
+//	void CGame::initPlayersPositionsInMap()
+//	{
+//		for( size_t i = 0; i < players.size(); ++i ) {
+//			CCoordinates currentCoordinates = players[i].GetPosition();
+//			map.SetPosition( currentCoordinates.x, currentCoordinates.y );
+//		}
+//	}
+//	
+//	void CGame::clearPlayersState( size_t num ) // Стирает изображение игрока с поля
+//	{
+//		CCoordinates old = players[num].GetPreviousPosition();
+//		CCoordinates now = players[num].GetPosition();
+//		map.ClearPosition( old.x, old.y );
+//		map.ClearPosition( now.x, now.y );
+//	}
+//
+//	void CGame::paintPlayersState( size_t num ) // Рисует изображение игрока на поле
+//	{
+//		CCoordinates previousCoordinates = players[num].GetPreviousPosition();
+//		CCoordinates currentCoordinates = players[num].GetPosition();
+//		map.SetPosition( previousCoordinates.x, previousCoordinates.y );
+//		map.SetPosition( currentCoordinates.x, currentCoordinates.y );
+//	}
+
+	void CGame::Start()
 	{
-		std::cout << "Game has been started. Gl hf!" << std::endl;
-		int player;
-		initPlayersPositionsInMap(); // На карте проставляются координаты машинок
-		while( (player = getPlayerOnFinish()) == -1 ) { // -1 - никто пока к финишу не пришел
+		std::cout << "Game has been started." << std::endl;
+		const CPlayer* winner = nullptr;
+		// сообщение UI, чтобы он создал карту и расставил игроков
+//		initPlayersPositionsInMap(); // На карте проставляются координаты машинок
+		while( (winner = handleFinishLineIntersections()) == nullptr ) { // -1 - никто пока к финишу не пришел
 			for( size_t i = 0; i < players.size(); ++i ) {
-				if( players[i].playerIsAlive() ) {
-					clearPlayersState( i );
-					turnOfPlayer( i ); // AI: Если будет AI, здесь он запускается (перед этим, занести его в players[])
-					paintPlayersState( i );
-					map.print();  // Вывод поля на консоль
+				// в далёком будущем здесь будет посылаться сообщение UI, чтобы он отрисовал возможные ходы, выделил ходящего игрока и т.д.
+				if( players[i].IsAlive() ) {
+//					clearPlayersState( i );
+					turnOfPlayer( players[i] ); // AI: Если будет AI, здесь он запускается (перед этим, занести его в players[])
+//					paintPlayersState( i );
+//					map.print();  // Вывод поля на консоль
 				}
+			}
+
+			// сообщение UI, чтобы он отрисовал ход
+
+			findCollisions();
+			findCrashes();
+			for( auto collidedPlayer : collidedPlayers ) {
+				if ( crashedPlayers.find( collidedPlayer ) != crashedPlayers.end() ) {
+					collidedPlayer.GoToStart();
+					// сообщение UI, чтобы он отрисовал исчезновение игрока и появление на старте
+				}
+			}
+			for ( auto crashedPlayer : crashedPlayers ) {
+				crashedPlayer.Die();
+				// сообщение UI, чтобы он отрисовал исчезновение игрока и появление на старте
 			}
 			if( numOfDeadPlayers == players.size() ) {
 				break;
 			}
 		}
-		if( numOfDeadPlayers == players.size() ) {
-			fatalFinish();
-			return;
+		finish( winner );
+	}
+
+	void CGame::finish( const CPlayer* winner )
+	{
+		// сообщение UI, чтобы вывел всё на экран
+		if (winner == nullptr ) {
+			std::cout << "All players are dead! Congratulations ^_^" << std::endl;
+		} else {
+			std::cout << "Player number " << winner->GetNumber() + 1 << " is winner! Congratulations!!!" << std::endl;
 		}
-		finish( player );
 	}
 
-	void CGame::finish( size_t winner )
-	{
-		std::cout << "Player number " << winner + 1 << " is winner! Congratulations!!!" << std::endl;
-	}
-
-	void CGame::fatalFinish()
-	{
-		std::cout << "All players are dead! Congratulations ^_^" << std::endl;
-	}
-
-	CPointsInformation CGame::getPlayersBasePoints( size_t num )  // Frontend: Для Frontend'a - получение точек для отрисовки
-	{
-		if( num >= players.size() ) {
-			throw std::invalid_argument( "CGame::getPlayersBasePoints: num > number of players" );
-		}
-		return CPointsInformation( players[num].playerIsAlive(), players[num].getPreviousPosition(), players[num].getPosition() );
-	}
+//	CPointsInformation CGame::GetPlayersBasePoints( size_t num )  // нужно для UI
+//	{
+//		if( num >= players.size() ) {
+//			throw std::invalid_argument( "CGame::GetPlayersBasePoints: num > number of players" );
+//		}
+//		return CPointsInformation( players[num].IsAlive(), players[num].GetPreviousPosition(), players[num].GetPosition() );
+//	}
 }

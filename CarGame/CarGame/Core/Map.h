@@ -2,26 +2,28 @@
 
 #include <vector>
 
-namespace Core {
-	typedef std::pair<size_t, size_t> CSize;
-	typedef std::vector< std::vector<size_t> > CField;
+#include "GlobalDefinitions.h"
 
+namespace Core {
 	class CMap {
 	public:
-		CMap();
+		CMap( const CField& newMap, CLine finish, const std::vector<CCoordinates>& startPoints );
 
-		CMap( const CField& newMap );
-
-		~CMap();
-
-		void print();
-		void setPosition( int x, int y );
-		void clearPosition( int x, int y );
-		CSize getSize();
-		bool isEmpty( int i, int j );
-
+//		void print();
+//		
+//		// для работы с клеткой
+//		void SetPosition( int x, int y );
+//		void ClearPosition( int x, int y );
+		bool IsEmpty( int x, int y ) const;
+		
+		CSize GetSize() const;
+		CLine GetFinishLine() const;
+		const std::vector<CCoordinates>& GetStartPoints() const;
+		
 	private:
-		CField map; // Карта (таблица), в которой 1 - препятствие (дороги нет). А 0 - дорога.
+		CField map;
 		CSize size;
+		CLine finishLine;
+		std::vector<CCoordinates> startPoints;
 	};
 }

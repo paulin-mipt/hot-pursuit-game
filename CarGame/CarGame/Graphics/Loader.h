@@ -4,7 +4,6 @@
 #include <map>
 #include <fstream>
 
-#include "Graphics/Drawing.h"
 #include "Graphics/Car.h"
 #include "Graphics/Coord.h"
 #include "Graphics/Map.h"
