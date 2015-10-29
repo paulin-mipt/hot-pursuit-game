@@ -9,14 +9,10 @@ namespace Core {
 	public:
 		CMap( const CField& newMap, CLine finish, const std::vector<CCoordinates>& startPoints );
 
-//		void print();
-//		
-//		// для работы с клеткой
-//		void SetPosition( int x, int y );
-//		void ClearPosition( int x, int y );
 		bool IsEmpty( int x, int y ) const;
 		
 		CSize GetSize() const;
+		CField GetField() const;
 		CLine GetFinishLine() const;
 		const std::vector<CCoordinates>& GetStartPoints() const;
 		

@@ -1,12 +1,19 @@
 ﻿#pragma once
 
-namespace Graphics {
+namespace UI {
 	// координаты в игре
 	struct CCoordinates {
-		int x;
-		int y;
+		float x;
+		float y;
 		float angle;
-		float help_angle = 0.0;
+		float helpAngle;
+
+		CCoordinates( float _x, float _y, float _angle = 0, float _helpAngle = 0 ) :
+			x( _x ),
+			y( _y ),
+			angle( _angle ),
+			helpAngle( _helpAngle )
+		{}
 	};
 
 	// координаты в окне

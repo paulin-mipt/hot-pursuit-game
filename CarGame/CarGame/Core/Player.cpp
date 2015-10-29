@@ -11,11 +11,6 @@ namespace Core {
 		number( playerNumber )
 	{}
 
-	CCoordinates CPlayer::GetPosition() const
-	{
-		return this->position;
-	}
-
 	void CPlayer::GoToStart()
 	{
 		this->position = this->initialPosition;
@@ -60,7 +55,7 @@ namespace Core {
 		}
 	}
 
-	void CPlayer::Move( Direction direction_code, CSize size )
+	void CPlayer::Move( Direction direction_code )
 	{
 		CCoordinates direction = convertFromDirectionCode( direction_code );
 		CCoordinates move( inertia.x + direction.x, inertia.y + direction.y );
@@ -73,7 +68,17 @@ namespace Core {
 
 	CCoordinates CPlayer::GetPreviousPosition() const
 	{
-		return this->previousPosition;
+		return previousPosition;
+	}
+
+	CCoordinates CPlayer::GetInitialPosition() const
+	{
+		return initialPosition;
+	}
+
+	CCoordinates CPlayer::GetPosition() const
+	{
+		return position;
 	}
 
 	size_t CPlayer::GetNumber() const

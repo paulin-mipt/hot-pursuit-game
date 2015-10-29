@@ -19,11 +19,11 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{6bcea50d-19c0-43a1-87e2-69fdfa1ce7c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Graphics">
-      <UniqueIdentifier>{7b64674d-37c6-4b78-9a82-f98c107d038a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Images">
       <UniqueIdentifier>{4d50607e-c11f-4a27-acb6-1490255bcb05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{7b64674d-37c6-4b78-9a82-f98c107d038a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,22 +39,19 @@
     <ClCompile Include="Core\Reader.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Car.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Drawing.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Loader.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Map.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="mainGraphics.cpp">
+    <ClCompile Include="mainCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainCore.cpp">
+    <ClCompile Include="UI\Car.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Drawing.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Map.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,32 +71,21 @@
     <ClInclude Include="Core\Player.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Car.h">
-      <Filter>Source Files\Graphics</Filter>
+    <ClInclude Include="UIManager.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Coord.h">
-      <Filter>Source Files\Graphics</Filter>
+    <ClInclude Include="UI\Car.h">
+      <Filter>Source Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Drawing.h">
-      <Filter>Source Files\Graphics</Filter>
+    <ClInclude Include="UI\Coord.h">
+      <Filter>Source Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Loader.h">
-      <Filter>Source Files\Graphics</Filter>
+    <ClInclude Include="UI\Drawing.h">
+      <Filter>Source Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Map.h">
-      <Filter>Source Files\Graphics</Filter>
+    <ClInclude Include="UI\Map.h">
+      <Filter>Source Files\UI</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\Resources\Maps\map.txt">
-      <Filter>Resource Files\Maps</Filter>
-    </Text>
-    <Text Include="..\..\Resources\Maps\map_file.txt">
-      <Filter>Resource Files\Maps</Filter>
-    </Text>
-    <Text Include="..\..\Resources\Players.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Resources\Images\car_blue.png">
@@ -114,14 +100,19 @@
     <Image Include="..\..\Resources\Images\car_red.png">
       <Filter>Resource Files\Images</Filter>
     </Image>
-    <Image Include="..\..\Resources\Images\car_topview.png">
-      <Filter>Resource Files\Images</Filter>
-    </Image>
     <Image Include="..\..\Resources\Images\forest.png">
       <Filter>Resource Files\Images</Filter>
     </Image>
     <Image Include="..\..\Resources\Images\road.png">
       <Filter>Resource Files\Images</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Resources\Maps\map1.txt">
+      <Filter>Resource Files\Maps</Filter>
+    </Text>
+    <Text Include="..\..\Resources\Maps\map2.txt">
+      <Filter>Resource Files\Maps</Filter>
+    </Text>
   </ItemGroup>
 </Project>

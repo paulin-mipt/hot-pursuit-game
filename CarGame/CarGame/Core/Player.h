@@ -9,15 +9,6 @@ namespace Core {
 		NW, N, NE
 	};
 
-//	struct CPlayersInfo {
-//		size_t numberOfPlayers;
-//		std::vector<CCoordinates> positions;
-//
-//		CPlayersInfo() :
-//			numberOfPlayers( 0 )
-//		{}
-//	};
-
 	class CPlayer {
 	public:
 		CPlayer( const CCoordinates& coordinates, size_t playerNumber );
@@ -27,17 +18,17 @@ namespace Core {
 		void StartCheating();
 		void StopCheating();
 
-		void Move( Direction direction, CSize mapSize );
+		void Move( Direction direction );
 		bool DirectionIsValid( Direction direction, const CSize& size ) const;
 		
 		CCoordinates GetPosition() const;
 		CCoordinates GetPreviousPosition() const;
+		CCoordinates GetInitialPosition() const;
 		size_t GetNumber() const;
 		bool IsAlive() const;
 		bool IsCheating() const;
 
 		bool operator< ( const CPlayer& player ) const;
-
 	private:
 		CCoordinates position;
 		CCoordinates inertia;

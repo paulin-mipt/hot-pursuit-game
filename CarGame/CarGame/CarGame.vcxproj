@@ -88,8 +88,8 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>freeglut.lib;soil.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <EntryPointSymbol>
-      </EntryPointSymbol>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>$(SolutionDir)..\postBuildDebug.cmd</Command>
@@ -151,12 +151,11 @@
     <ClCompile Include="Core\Map.cpp" />
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="Core\Reader.cpp" />
-    <ClCompile Include="Graphics\Car.cpp" />
-    <ClCompile Include="Graphics\Drawing.cpp" />
-    <ClCompile Include="Graphics\Loader.cpp" />
-    <ClCompile Include="Graphics\Map.cpp" />
     <ClCompile Include="mainCore.cpp" />
-    <ClCompile Include="mainGraphics.cpp" />
+    <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UI\Car.cpp" />
+    <ClCompile Include="UI\Drawing.cpp" />
+    <ClCompile Include="UI\Map.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Game.h" />
@@ -164,25 +163,23 @@
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="Core\Reader.h" />
     <ClInclude Include="GlobalDefinitions.h" />
-    <ClInclude Include="Graphics\Car.h" />
-    <ClInclude Include="Graphics\Coord.h" />
-    <ClInclude Include="Graphics\Drawing.h" />
-    <ClInclude Include="Graphics\Loader.h" />
-    <ClInclude Include="Graphics\Map.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\Resources\Maps\map.txt" />
-    <Text Include="..\..\Resources\Maps\map_file.txt" />
-    <Text Include="..\..\Resources\Players.txt" />
+    <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UI\Car.h" />
+    <ClInclude Include="UI\Coord.h" />
+    <ClInclude Include="UI\Drawing.h" />
+    <ClInclude Include="UI\Map.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Resources\Images\car_blue.png" />
     <Image Include="..\..\Resources\Images\car_green.png" />
     <Image Include="..\..\Resources\Images\car_orange.png" />
     <Image Include="..\..\Resources\Images\car_red.png" />
-    <Image Include="..\..\Resources\Images\car_topview.png" />
     <Image Include="..\..\Resources\Images\forest.png" />
     <Image Include="..\..\Resources\Images\road.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Resources\Maps\map1.txt" />
+    <Text Include="..\..\Resources\Maps\map2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

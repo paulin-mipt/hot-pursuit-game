@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-#include <vector>
-
-#include "GlobalDefinitions.h"
+#include <string>
 
 namespace Core {
 	class CMap;
@@ -10,9 +8,5 @@ namespace Core {
 	class CReader {
 	public:
 		CMap ReadMap( const std::string& path );
-
-//		CPlayersInfo ReadPlayers( const std::string & path );
-//
-//		int ReadPlayersChoice( size_t num );
 	};
 }

@@ -30,7 +30,8 @@ namespace Core {
 		int y;
 	};
 
-	typedef std::pair<size_t, size_t> CSize;
 	typedef std::pair<CCoordinates, CCoordinates> CLine;
 	typedef std::vector<std::vector<Cell>> CField;
 }
+
+typedef std::pair<size_t, size_t> CSize;

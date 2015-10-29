@@ -1,21 +1,12 @@
 ﻿#include <fstream>
 #include <exception>
-#include <string>
+#include <vector>
 
 #include "Core/Reader.h"
 #include "Core/Map.h"
+#include "GlobalDefinitions.h"
 
 namespace Core {
-//	bool isNumber( std::string number )
-//	{
-//		for( int i = 0; i < number.length(); ++i ) {
-//			if( number[i] > '9' || number[i] < '0' ) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-
 	CMap CReader::ReadMap( const std::string& path )
 	{
 		CField gameField;
@@ -29,7 +20,7 @@ namespace Core {
 		int n, m;
 		in >> n >> m;
 		for( int i = 0; i < n; ++i ) {
-			gameField.push_back( std::vector<Cell>( 0 ) );
+			gameField.push_back( std::vector<Cell>() );
 			for( int j = 0; j < m; ++j ) {
 				int cellCode;
 				in >> cellCode;
@@ -53,65 +44,5 @@ namespace Core {
 		CLine finishLine = CLine( CCoordinates( x1, y1 ), CCoordinates( x2, y2 ) );
 
 		return CMap( gameField, finishLine, startPoints );
-//		std::string currentLine;
-//
-//		while( std::getline( in, currentLine ) ) {
-//			std::vector<Cell> row;
-//			currentLine += " ";
-//			while( currentLine.length() > 0 ) {
-//				size_t pos = currentLine.find( " " );
-//				std::string number = currentLine.substr( 0, pos );
-//				if( !isNumber( number ) ) {
-//					throw std::runtime_error( std::string( "Bad file with map: invalid symbol in " ) + number );
-//				}
-//				row.push_back( Cell( std::atoi( number.c_str() ) ) );
-//				currentLine.erase( 0, pos + 1 );
-//			}
-//			gameField.push_back( row );
-//		}
 	}
-
-//	CCoordinates readCoordinates( std::istream& in )
-//	{
-//		int x, y;
-//		in >> x >> y;
-//		if( x <= 0 || y <= 0 ) {
-//			std::string error = "Bad input: invalid coordinates";
-//			throw std::runtime_error( error );
-//		}
-//		return CCoordinates( x - 1, y - 1 );
-//	}
-//
-//	CPlayersInfo CReader::ReadPlayers( const std::string& path )
-//	{
-//		CPlayersInfo info;
-//
-//		std::ifstream in( path );
-//		if( !in ) {
-//			throw std::runtime_error( std::string( "Can't open file " ) + path );
-//		}
-//
-//		int numberOfPlayers;
-//		in >> numberOfPlayers;
-//		if( numberOfPlayers <= 0 ) {
-//			std::string error = "Bad input: invalid number of players";
-//			throw std::runtime_error( error );
-//		}
-//		info.numberOfPlayers = numberOfPlayers;
-//		for( int i = 0; i < numberOfPlayers; ++i )
-//			info.positions.push_back( readCoordinates(in) );
-//		return info;
-//	}
-//
-//	int CReader::ReadPlayersChoice( size_t num )
-//	{
-//		std::cout << "Now " << num + 1 << " player:" << std::endl;
-//		int move;
-//		std::cin >> move;
-//		if( move < 1 || move > 9 ) {
-//			std::string error = "Bad input: invalid move";
-//			throw std::runtime_error( error );
-//		}
-//		return move;
-//	}
 }
