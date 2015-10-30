@@ -13,15 +13,15 @@
 namespace UI {
 	class CDrawing {
 	public:
-		static void Init(const CMap &mapData, const std::vector<CCar> &carsData);
+		static void Init( const CMap &mapData, const std::vector<CCar> &carsData );
 
 		static void Drop();
-		static void Draw(int argc, char** argv);
-		static void keyboardFunction(unsigned char key, int x, int y);
+		static void Draw( int argc, char** argv );
+		static void keyboardFunction( unsigned char key, int x, int y );
 
-		static void MoveCars(const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates);
-		static void MoveCarsToStart(const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates);
-		static void DeleteCars(const std::vector<int>& numbers);
+		static void MoveCars( const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates );
+		static void MoveCarsToStart( const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates );
+		static void DeleteCars( const std::vector<int>& numbers );
 
 		static void Start();
 		static void Stop();
@@ -34,10 +34,10 @@ namespace UI {
 		static int GetKey();
 	private:
 		static void display();
-		static void reshape(int width, int height);
+		static void reshape( int width, int height );
 		static void load();
-		static void loadTexture(const char*, GLuint& texture);
-		static void timer(int value);
+		static void loadTexture( const char*, GLuint& texture );
+		static void timer( int value );
 
 		static bool initialized;
 		static bool started;
