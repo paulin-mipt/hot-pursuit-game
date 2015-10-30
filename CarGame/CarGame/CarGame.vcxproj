@@ -124,6 +124,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EntryPointSymbol>
       </EntryPointSymbol>
+      <AdditionalDependencies>freeglut.lib;soil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>$(SolutionDir)..\postBuildRelease.cmd</Command>
