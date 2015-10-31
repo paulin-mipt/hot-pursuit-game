@@ -128,6 +128,9 @@ namespace Core {
 	void CGame::findCrashes()
 	{
 		for( auto player : players ) {
+			if( !player.IsAlive() ) {
+				continue;
+			}
 			if( playerOutOfTrack( player ) && player.IsAlive() ) {
 				crashedPlayers.insert( player );
 			}

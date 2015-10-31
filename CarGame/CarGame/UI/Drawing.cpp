@@ -124,47 +124,47 @@ namespace UI {
 		}
 		lock.unlock();
 		const int fps = 100;
-		for (int i : numbers ) {
-			cars[i].Rotate( oldCoordinates[i].x, oldCoordinates[i].y, newCoordinates[i].x, newCoordinates[i].y );
+		for( int i = 0; i < numbers.size(); ++i ) {
+			cars[numbers[i]].Rotate( oldCoordinates[i].x, oldCoordinates[i].y, newCoordinates[i].x, newCoordinates[i].y );
 		}
 		for( int j = 0; j <= fps; ++j ) {
-			for( int i : numbers ) {
+			for( int i = 0; i < numbers.size(); ++i ) {
 				cars[i].Move( UI::CCoordinates(
-					float( oldCoordinates[i].x * (fps - j) + newCoordinates[i].x * j ) / fps,
-					float( oldCoordinates[i].y * (fps - j) + newCoordinates[i].y * j ) / fps ) );
-				std::this_thread::sleep_for( std::chrono::milliseconds( 500 / fps ) );
+					float( oldCoordinates[numbers[i]].x * (fps - j) + newCoordinates[i].x * j ) / fps,
+					float( oldCoordinates[numbers[i]].y * (fps - j) + newCoordinates[i].y * j ) / fps ) );
 			}
+			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / fps ) );
 		}
 	}
 
 	void CDrawing::MoveCarsToStart( const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates )
 	{
-		const int fps = 100;
-		for( int j = 0; j <= fps; ++j ) {
+		const int framesPerStep = 100;
+		for( int j = 0; j <= framesPerStep; ++j ) {
 			for( int i : numbers ) {
-				cars[i].SetOpacity( 1.0f - float( j ) / fps );
+				cars[i].SetOpacity( 1.0f - float( j ) / framesPerStep );
 			}
-			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / fps ) );
+			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / framesPerStep ) );
 		}
-		for( int i : numbers ) {
-			cars[i].Move( newCoordinates[i] );
+		for( int i = 0; i < numbers.size(); ++i ) {
+			cars[numbers[i]].Move( newCoordinates[i] );
 		}
-		for( int j = 0; j <= fps; ++j ) {
+		for( int j = 0; j <= framesPerStep; ++j ) {
 			for( int i : numbers ) {
-				cars[i].SetOpacity( float( j ) / fps );
+				cars[i].SetOpacity( float( j ) / framesPerStep );
 			}
-			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / fps ) );
+			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / framesPerStep ) );
 		}
 	}
 
 	void CDrawing::DeleteCars( const std::vector<int>& numbers )
 	{
-		const int fps = 100;
-		for( int j = 0; j <= fps; ++j ) {
+		const int framesPerStep = 100;
+		for( int j = 0; j <= framesPerStep; ++j ) {
 			for( int i : numbers ) {
-				cars[i].SetOpacity( 1.0f - float( j ) / fps );
+				cars[i].SetOpacity( 1.0f - float( j ) / framesPerStep );
 			}
-			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / fps ) );
+			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / framesPerStep ) );
 		}
 		for( int i : numbers ) {
 			cars[i].Crash();
