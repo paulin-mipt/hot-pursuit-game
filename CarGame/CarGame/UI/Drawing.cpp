@@ -124,6 +124,9 @@ namespace UI {
 		}
 		lock.unlock();
 		const int fps = 100;
+		for (int i : numbers ) {
+			cars[i].Rotate( oldCoordinates[i].x, oldCoordinates[i].y, newCoordinates[i].x, newCoordinates[i].y );
+		}
 		for( int j = 0; j <= fps; ++j ) {
 			for( int i : numbers ) {
 				cars[i].Move( UI::CCoordinates(

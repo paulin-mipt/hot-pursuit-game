@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 
 #include "UIManager.h"
 #include "UI/Drawing.h"
@@ -27,7 +27,7 @@ void CUIManager::InitMap( const Core::CMap& map, const std::vector<Core::CPlayer
 	std::vector<UI::CCar> cars;
 	for( int i = 0; i < players.size(); ++i ) {
 		auto playerCoordinates = players[i].GetPosition();
-		cars.push_back( UI::CCar( UI::CCoordinates( playerCoordinates.x, playerCoordinates.y, PI / 2, PI / 2 ), UI::Color( i % 4 ) ) );
+		cars.push_back( UI::CCar( UI::CCoordinates( playerCoordinates.x, playerCoordinates.y, PI / 2 ), UI::Color( i % 4 ) ) );
 	}
 
 	UI::CDrawing::Start();
@@ -51,7 +51,7 @@ void CUIManager::ShowCollisions( const std::set<Core::CPlayer>& collidedPlayers 
 	std::vector<UI::CCoordinates> coordinates;
 	for( auto player : collidedPlayers ) {
 		numbers.push_back( player.GetNumber() );
-		coordinates.push_back( UI::CCoordinates( player.GetInitialPosition().x, player.GetInitialPosition().y, PI / 2, PI / 2 ) );
+		coordinates.push_back( UI::CCoordinates( player.GetInitialPosition().x, player.GetInitialPosition().y, PI / 2 ) );
 	}
 	UI::CDrawing::MoveCarsToStart( numbers, coordinates );
 }

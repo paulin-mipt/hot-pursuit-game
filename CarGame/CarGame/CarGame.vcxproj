@@ -153,7 +153,7 @@
     <ClCompile Include="Core\Map.cpp" />
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="Core\Reader.cpp" />
-    <ClCompile Include="mainCore.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI\Car.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />

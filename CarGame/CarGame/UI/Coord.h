@@ -6,13 +6,11 @@ namespace UI {
 		float x;
 		float y;
 		float angle;
-		float helpAngle;
 
-		CCoordinates( float _x, float _y, float _angle = 0, float _helpAngle = 0 ) :
+		CCoordinates( float _x, float _y, float _angle = 0 ) :
 			x( _x ),
 			y( _y ),
-			angle( _angle ),
-			helpAngle( _helpAngle )
+			angle( _angle )
 		{}
 	};
 

@@ -1,6 +1,7 @@
 ﻿#include <vector>
 
 #include "UI/Car.h"
+#include <iostream>
 
 namespace UI {
 	namespace {
@@ -70,40 +71,43 @@ namespace UI {
 
 	void CCar::Draw( float cellSize, CWindowCoordinates indent, CSize mapSize )
 	{
-		if ( crashed ) {
+		if( crashed ) {
 			return;
 		}
 		glEnable( GL_TEXTURE_2D );
 		glBindTexture( GL_TEXTURE_2D, texture );
 		glTexEnvf( GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-		float angle = 0.0;
+
 		CWindowCoordinates cord = transateToWcoord( coords.x, coords.y, cellSize, indent, mapSize );
 		float left = cord.x;
 		float right = cord.x + cellSize;
 		float bottom = cord.y - cellSize / 4;
 		float top = cord.y - 3 * cellSize / 4;
+
 		glDepthMask( GL_FALSE );
 		glEnable( GL_BLEND );
 		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-		
-		glBegin( GL_POLYGON );
-		glColor4f( 1, 1, 1, alpha );
-		float Ax = left,
-			Ay = bottom,
-			Bx = right,
-			By = bottom,
-			Cx = right,
-			Cy = top,
-			Dx = left,
-			Dy = top;
 
-		float centerX = Dx - (Dx - Bx) / 2,
-			centerY = Dy - (Dy - By) / 2;
-		rotateCar( Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, centerX, centerY, angle );
-		glTexCoord2f( 0.0f, 0.0f ); glVertex3f( Ax, Ay, 0.0f );
-		glTexCoord2f( 1.0f, 0.0f ); glVertex3f( Bx, By, 0.0f );
-		glTexCoord2f( 1.0f, 1.0f ); glVertex3f( Cx, Cy, 0.0f );
-		glTexCoord2f( 0.0f, 1.0f ); glVertex3f( Dx, Dy, 0.0f );
+		glBegin( GL_POLYGON );
+		{
+			glColor4f( 1, 1, 1, alpha );
+			float Ax = left,
+				Ay = bottom,
+				Bx = right,
+				By = bottom,
+				Cx = right,
+				Cy = top,
+				Dx = left,
+				Dy = top;
+
+			float centerX = Dx - (Dx - Bx) / 2,
+				centerY = Dy - (Dy - By) / 2;
+			rotateCar( Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, centerX, centerY, coords.angle );
+			glTexCoord2f( 0.0f, 0.0f ); glVertex3f( Ax, Ay, 0.0f );
+			glTexCoord2f( 1.0f, 0.0f ); glVertex3f( Bx, By, 0.0f );
+			glTexCoord2f( 1.0f, 1.0f ); glVertex3f( Cx, Cy, 0.0f );
+			glTexCoord2f( 0.0f, 1.0f ); glVertex3f( Dx, Dy, 0.0f );
+		}
 		glEnd();
 		glDisable( GL_BLEND );
 		glDepthMask( GL_TRUE );
@@ -113,8 +117,6 @@ namespace UI {
 	{
 		coords.x = coordinates.x;
 		coords.y = coordinates.y;
-		coords.angle = coordinates.angle;
-		coords.helpAngle = coordinates.helpAngle;
 	}
 
 	void CCar::Crash()
@@ -127,47 +129,23 @@ namespace UI {
 		alpha = opacity;
 	}
 
-	//	CWindowCoordinates CCar::move( float cellSize, CWindowCoordinates indent, float &angle )
-//	{
-//		throw std::runtime_error( "CCar::move not implemented" );
-////		if( current_step + 1 < coords.size() ) {
-////			if( stepIteration < framesPerStep ) {
-////				stepIteration++;
-////			} else {
-////				current_step++;
-////				stepIteration = 0;
-////			}
-////		}
-////
-////		if( current_step + 1 < coords.size() ) {
-////			float coord_x = coords[current_step + 1].x - coords[current_step].x;
-////			float coord_y = coords[current_step + 1].y - coords[current_step].y;
-////			float dx = (coord_x) / framesPerStep;
-////			float dy = (coord_y) / framesPerStep;
-////			float x = coords[current_step].x + stepIteration * dx;
-////			float y = coords[current_step].y + stepIteration * dy;
-////
-////			angle = abs( 2.0*coords[current_step].helpAngle - coords[current_step].angle );
-////			return transateToWcoord( x, y, cell_size, indent );
-////		} else {
-////			CCoordinates last = coords.back();
-////			return transateToWcoord( last.x, last.y, cell_size, indent );
-////		}
-//		return CWindowCoordinates( 0, 0 );
-//	}
-
-//	void CCar::CalculateAngles()
-//	{
-//		throw std::runtime_error( "CCar::CalculateAngles not implemented" );
-//		for( int i = 1; i < coords.size(); ++i ) {
-//			coords[i - 1].angle = find_angle( coords[i].x - coords[i - 1].x, coords[i].y - coords[i - 1].y );
-//			if( coords[i].y - coords[i - 1].y < 0 ) {
-//				coords[i - 1].helpAngle = PI;
-//			}
-//		}
-//		coords[coords.size() - 1].angle = coords[coords.size() - 2].angle;
-//		coords[coords.size() - 1].helpAngle = coords[coords.size() - 2].helpAngle;
-//	}
+	void CCar::Rotate( float x1, float y1, float x2, float y2 )
+	{
+		if( x1 == x2 && y1 == y2 ) {
+			return;
+		}
+		double cos = (x2 - x1) / std::sqrt( (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) );
+		double sin = -(y2 - y1) / std::sqrt( (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) ); // минус из-за обратных координат в glut
+		if( cos < 0 && sin < 0 ) {
+			coords.angle = PI * 2 - std::acos( cos );
+		} else if( cos < 0 && sin >= 0 ) {
+			coords.angle = std::acos( cos );
+		} else if( cos >= 0 && sin < 0 ) {
+			coords.angle = PI * 2 - std::acos( cos );
+		} else {
+			coords.angle = std::acos( cos );
+		}
+	}
 
 	CWindowCoordinates CCar::transateToWcoord( float x, float y, float cellSize, CWindowCoordinates indent, CSize mapSize ) const
 	{
