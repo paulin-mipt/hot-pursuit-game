@@ -67,10 +67,15 @@ namespace Core {
 		{
 			CCoordinates normalVectorCoordinates( map.GetFinishLine().second.x - map.GetFinishLine().first.x,
 				map.GetFinishLine().second.y - map.GetFinishLine().first.y );
-			if ( area( map.GetFinishLine().first, playersCoordinates, map.GetFinishLine().second )
-				* area( map.GetFinishLine().first, normalVectorCoordinates, map.GetFinishLine().second ) > 0 )
+			if (area(map.GetFinishLine().first, playersCoordinates, map.GetFinishLine().second)
+				* area(map.GetFinishLine().first, normalVectorCoordinates, map.GetFinishLine().second) > 0)
 				return 1;
-			else return -1;
+			else if (area(map.GetFinishLine().first, playersCoordinates, map.GetFinishLine().second) == 0
+				&& area(map.GetFinishLine().first, playersPreviousCoordinates, map.GetFinishLine().second)
+				* area(map.GetFinishLine().first, normalVectorCoordinates, map.GetFinishLine().second) < 0)
+				return 1;
+				else
+					return -1;
 		}
 		else return 0;
 	}
