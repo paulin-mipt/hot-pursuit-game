@@ -39,16 +39,16 @@ namespace Core {
 		}
 	}
 
-	CGame::CGame( const CMap& newMap, size_t playersNumber, const CUIManager& _manager ) :
+	CGame::CGame( const CMap& newMap, std::vector<PlayersTypes> playersTypes, const CUIManager& _manager ) :
 		map( newMap ),
 		numOfDeadPlayers( 0 ),
 		manager( _manager )
 	{
-		if( playersNumber > map.GetStartPoints().size() ) {
+		if( playersTypes.size() > map.GetStartPoints().size() ) {
 			throw std::invalid_argument( std::string( "Too many players. This map is for " ) + std::to_string( map.GetStartPoints().size() ) + " players or less." );
 		}
-		for( int i = 0; i < playersNumber; ++i ) {
-			players.push_back( CPlayer( map.GetStartPoints()[i], i ) );
+		for( int i = 0; i < playersTypes.size(); ++i ) {
+			players.push_back( CPlayer( map.GetStartPoints()[i], i, playersTypes[i] ) );
 		}
 	}
 
@@ -157,7 +157,16 @@ namespace Core {
 
 	void CGame::turnOfPlayer( CPlayer& player )
 	{
-		int direction = manager.GetDirection();
+		int direction;
+		switch ( player.GetType() )
+		{
+			case USER: direction = manager.GetDirection();
+				break;
+//			case AI: direction = ;
+//				break;
+			default:
+				throw std::runtime_error( "Invalid type of player. Please, don't cheat." );
+		}
 		if( player.DirectionIsValid( Direction( direction ), map.GetSize() ) ) {
 			player.Move( Direction( direction ) );
 			return;
@@ -177,7 +186,7 @@ namespace Core {
 			for( size_t i = 0; i < players.size(); ++i ) {
 				// в далёком будущем здесь будет посылаться сообщение UI, чтобы он отрисовал возможные ходы, выделил ходящего игрока и т.д., но лекторы об этом знать не должны
 				if( players[i].IsAlive() ) {
-					turnOfPlayer( players[i] ); // AI: Если будет AI, здесь он запускается (перед этим, занести его в players[])
+					turnOfPlayer( players[i] );
 				}
 			}
 

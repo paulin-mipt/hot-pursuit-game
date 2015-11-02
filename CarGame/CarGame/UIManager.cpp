@@ -76,11 +76,30 @@ void CUIManager::ShowWinner( const Core::CPlayer* winner ) const
 	UI::CDrawing::Stop();
 }
 
-size_t CUIManager::GetPlayersCount() const
+std::vector<PlayersTypes> CUIManager::GetPlayersInfo() const
 {
-	size_t result;
+	size_t numberOfPlayers;
+
 	std::cout << "Input players count..." << std::endl;
-	std::cin >> result;
+	std::cin >> numberOfPlayers;
+
+	std::vector<PlayersTypes> result(numberOfPlayers);
+	for ( int i = 0; i < numberOfPlayers; ++i )
+	{
+		std::cout << "Input type of " << i + 1 << " player..." << std::endl;
+		size_t currentType;
+		std::cin >> currentType;
+		switch ( currentType ) {
+			case 1: result[i] = USER;
+				break;
+			case 2: result[i] = AI;
+				break;
+			default:
+				throw std::invalid_argument( "Invalid type of player " + std::to_string( i ) + ". Available only: 1 for User and 2 for AI." );
+		}
+
+	}
+
 	return result;
 }
 
