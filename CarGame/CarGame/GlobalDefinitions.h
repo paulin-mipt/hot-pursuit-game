@@ -5,6 +5,10 @@
 
 const std::string RESOURCE_DIRECTORY = ".\\Resources\\";
 
+enum PlayersTypes {
+	USER = 1, AI = 2
+};
+
 namespace Core {
 	enum Cell {
 		ROAD = 0, FOREST = 1, CAR = 2
