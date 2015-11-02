@@ -1,11 +1,31 @@
 #include <string>
 #include <iostream>
 #include <thread>
+#include <windows.h>
+#include <memory>
 
 #include "Core/Reader.h"
 #include "Core/Game.h"
 #include "GlobalDefinitions.h"
 #include "UI/Drawing.h"
+#include "IPlayerState.h"
+#include "IMap.h"
+
+typedef int(__cdecl *STRATEGY_PROC)(IMap &map, std::vector<IPlayerState> &playerStateList, int currentPlayer);
+typedef IPlayerState*(__cdecl *PLAYER_STATE_FACTORY_PROC)(int x, int y, int xVelocity, int yVelocity);
+typedef IMap*(__cdecl *MAP_FACTORY_PROC)();
+
+void initializeAI( std::vector< std::vector< size_t > > map, int startX, int startY, int finishX, int finishY )
+{
+	HINSTANCE hinstLib = LoadLibrary(TEXT("StrategyDLL.dll"));
+	STRATEGY_PROC StrategyFunc = (STRATEGY_PROC)GetProcAddress(hinstLib, "StrategyFunc");
+	PLAYER_STATE_FACTORY_PROC GetPlayerState = (PLAYER_STATE_FACTORY_PROC)GetProcAddress(hinstLib, "GetPlayerState");
+	MAP_FACTORY_PROC GetMap = (MAP_FACTORY_PROC)GetProcAddress(hinstLib, "GetMap");
+
+	std::shared_ptr<IMap> mapPtr(GetMap());
+	mapPtr->initializationMap( map );
+	mapPtr->setFinishLine( startX, startY, finishX, finishY );
+}
 
 int main( int argc, char* argv[] )
 {
