@@ -39,18 +39,12 @@ namespace Core {
 		}
 	}
 
-	CGame::CGame( const CMap& newMap, std::vector<PlayersTypes> playersTypes, const CUIManager& _manager ) :
+	CGame::CGame( const CMap& newMap, const std::vector<CPlayer>& playersInfo, const CUIManager& _manager ) :
 		map( newMap ),
 		numOfDeadPlayers( 0 ),
-		manager( _manager )
-	{
-		if( playersTypes.size() > map.GetStartPoints().size() ) {
-			throw std::invalid_argument( std::string( "Too many players. This map is for " ) + std::to_string( map.GetStartPoints().size() ) + " players or less." );
-		}
-		for( int i = 0; i < playersTypes.size(); ++i ) {
-			players.push_back( CPlayer( map.GetStartPoints()[i], i, playersTypes[i] ) );
-		}
-	}
+		manager( _manager ),
+		players( playersInfo )
+	{}
 
 	int CGame::finishLineIntersectsWithPlayer( const CPlayer& player ) const
 	{

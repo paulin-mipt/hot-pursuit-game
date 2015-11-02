@@ -9,7 +9,7 @@
 namespace Core {
 	class CGame {
 	public:
-		CGame( const CMap& map, std::vector<PlayersTypes> playersTypes, const CUIManager& _manager );
+		CGame( const CMap& map, const std::vector<CPlayer>& playersInfo, const CUIManager& _manager );
 
 		void Start();
 

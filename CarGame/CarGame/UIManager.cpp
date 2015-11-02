@@ -76,34 +76,35 @@ void CUIManager::ShowWinner( const Core::CPlayer* winner ) const
 	UI::CDrawing::Stop();
 }
 
-std::vector<PlayersTypes> CUIManager::GetPlayersInfo() const
+std::vector<Core::CPlayer> CUIManager::GetPlayersInfo( const std::vector<Core::CCoordinates>& coordinates ) const
 {
-	size_t numberOfPlayers;
-
-	std::cout << "Input players count..." << std::endl;
-	std::cin >> numberOfPlayers;
-
-	std::vector<PlayersTypes> result(numberOfPlayers);
-	for ( int i = 0; i < numberOfPlayers; ++i )
-	{
+	std::vector<Core::CPlayer> result;
+	int playerNumber = 0;
+	for( int i = 0; i < coordinates.size(); ++i ) {
 		std::cout << "Input type of " << i + 1 << " player..." << std::endl;
 		size_t currentType;
-		std::cin >> currentType;
-		switch ( currentType ) {
-			case 1: result[i] = USER;
-				break;
-			case 2: result[i] = AI;
-				break;
-			default:
-				throw std::invalid_argument( "Invalid type of player " + std::to_string( i ) + ". Available only: 1 for User and 2 for AI." );
-		}
-
+		do {
+			std::cin >> currentType;
+			switch( currentType ) {
+				case 0:
+					break;
+				case 1:
+					result.push_back( Core::CPlayer( coordinates[i], playerNumber++, USER ) );
+					break;
+				case 2:
+					result.push_back( Core::CPlayer( coordinates[i], playerNumber++, AI ) );
+					break;
+				default:
+					std::cout << "incorrect number. try again, input only 0, 1 or 2";
+					break;
+			}
+		} while( currentType != 0 && currentType != 1 && currentType != 2 );
 	}
 
 	return result;
 }
 
-size_t CUIManager::GetMapNumber() const
+size_t CUIManager::GetMapName() const
 {
 	size_t result;
 	std::cout << "Input map number..." << std::endl;

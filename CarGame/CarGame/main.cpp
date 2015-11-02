@@ -14,9 +14,9 @@ int main( int argc, char* argv[] )
 	CReader reader;
 	try {
 		CUIManager manager;
-		size_t mapNumber = manager.GetMapNumber();
+		size_t mapNumber = manager.GetMapName();
 		CMap map = reader.ReadMap( RESOURCE_DIRECTORY + "Maps\\map" + std::to_string( mapNumber ) + ".txt" );
-		std::vector<PlayersTypes> playersInfo = manager.GetPlayersInfo();
+		std::vector<CPlayer> playersInfo = manager.GetPlayersInfo( map.GetStartPoints() );
 		CGame game( map, playersInfo, manager );
 		std::thread t( std::bind( UI::CDrawing::Draw, argc, argv ) );
 		game.Start();
