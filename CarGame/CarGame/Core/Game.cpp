@@ -162,7 +162,7 @@ namespace Core {
 		{
 			case USER: direction = manager.GetDirection();
 				break;
-//			case AI: direction = ;
+//			case AI: direction = StrategyFunc( *mapPtr, , player.GetNumber() );
 //				break;
 			default:
 				throw std::runtime_error( "Invalid type of player. Please, don't cheat." );
