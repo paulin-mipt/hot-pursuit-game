@@ -13,6 +13,6 @@ public:
 	void ShowCollisions( const std::set<Core::CPlayer>& collidedPlayers ) const;
 	void ShowCrashes( const std::set<Core::CPlayer>& crashedPlayers ) const;
 	void ShowWinner( const Core::CPlayer* winner ) const;
-	size_t GetPlayersCount() const;
+	std::vector<PlayersTypes> GetPlayersInfo() const;
 	size_t GetMapNumber() const;
 };

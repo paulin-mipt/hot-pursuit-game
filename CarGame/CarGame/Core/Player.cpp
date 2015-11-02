@@ -1,14 +1,15 @@
 ﻿#include "Core/Player.h"
 
 namespace Core {
-	CPlayer::CPlayer( const CCoordinates& coordinates, size_t playerNumber ) :
+	CPlayer::CPlayer( const CCoordinates& coordinates, size_t playerNumber, PlayersTypes playerType ) :
 		position( coordinates ),
 		inertia( 0, 0 ),
 		initialPosition( coordinates ),
 		previousPosition( coordinates ),
 		isAlive( true ),
 		isCheating( false ),
-		number( playerNumber )
+		number( playerNumber ),
+		type( playerType )
 	{}
 
 	void CPlayer::GoToStart()
@@ -84,6 +85,11 @@ namespace Core {
 	size_t CPlayer::GetNumber() const
 	{
 		return number;
+	}
+
+	PlayersTypes CPlayer::GetType() const
+	{
+		return type;
 	}
 
 	void CPlayer::Die()

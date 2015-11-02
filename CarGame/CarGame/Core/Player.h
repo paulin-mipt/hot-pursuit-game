@@ -11,7 +11,7 @@ namespace Core {
 
 	class CPlayer {
 	public:
-		CPlayer( const CCoordinates& coordinates, size_t playerNumber );
+		CPlayer( const CCoordinates& coordinates, size_t playerNumber, PlayersTypes playerType );
 
 		void Die();
 		void GoToStart();
@@ -25,6 +25,7 @@ namespace Core {
 		CCoordinates GetPreviousPosition() const;
 		CCoordinates GetInitialPosition() const;
 		size_t GetNumber() const;
+		PlayersTypes GetType() const;
 		bool IsAlive() const;
 		bool IsCheating() const;
 
@@ -37,6 +38,7 @@ namespace Core {
 		bool isAlive;
 		bool isCheating;
 		size_t number;
+		PlayersTypes type;
 
 		CCoordinates convertFromDirectionCode( Direction directionCode ) const;
 	};
