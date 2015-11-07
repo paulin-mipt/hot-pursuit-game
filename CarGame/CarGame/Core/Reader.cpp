@@ -14,7 +14,7 @@ namespace Core {
 
 		std::ifstream in( path );
 		if( !in ) {
-			throw std::runtime_error( std::string( "Can't open file " ) + path );
+			throw std::runtime_error( std::string( "Can't open file" ) );
 		}
 
 		int n, m;

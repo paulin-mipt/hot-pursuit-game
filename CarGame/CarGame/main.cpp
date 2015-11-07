@@ -6,7 +6,9 @@
 #include "Core/Game.h"
 #include "GlobalDefinitions.h"
 #include "UI/Drawing.h"
-#include "UI/MainWindow.h"
+#include "UI/MainMenuWindow.h"
+#include "UI/GameResultWindow.h"
+#include "UI/MapSettingsWindow.h"
 
 //int main( int argc, char* argv[] )
 //{
@@ -22,6 +24,10 @@
 //		std::thread t( std::bind( UI::CDrawing::Draw, argc, argv ) );
 //		game.Start();
 //
+//		glutHideWindow();
+//		std::this_thread::sleep_for( std::chrono::milliseconds( 1000 ) );
+//		glutShowWindow();
+//		std::this_thread::sleep_for( std::chrono::milliseconds( 1000 ) );
 //		glutDestroyWindow( UI::CDrawing::GetWindow() );
 //		t.join();
 //	} catch( std::exception const &e ) {
@@ -33,10 +39,10 @@
 
 int __stdcall wWinMain( HINSTANCE hInst, HINSTANCE /*hPrevInst*/, LPWSTR commandLine, int nCmdShow )
 {
-	UI::CMainMenuWindow window;
-	window.RegisterClass( hInst );
-	window.Create();
-	window.Show( nCmdShow );
+	UI::CMainMenuWindow mainWindow( hInst );
+	UI::CMainMenuWindow::RegisterClass( hInst );
+	mainWindow.Create();
+	mainWindow.Show( nCmdShow );
 
 	//Цикл обработки сообщений
 	MSG msg;

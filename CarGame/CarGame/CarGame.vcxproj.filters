@@ -54,10 +54,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UI\MainWindow.cpp">
+    <ClCompile Include="UI\MapSettingsWindow.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI\MapSettingsWindow.cpp">
+    <ClCompile Include="UI\MainMenuWindow.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\GameResultWindow.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,13 +95,16 @@
     <ClInclude Include="UI\Map.h">
       <Filter>Source Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UI\MainWindow.h">
-      <Filter>Source Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI\MapSettingsWindow.h">
+      <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\MainMenuWindow.h">
+      <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\GameResultWindow.h">
       <Filter>Source Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

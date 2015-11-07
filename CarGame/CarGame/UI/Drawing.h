@@ -13,10 +13,11 @@
 namespace UI {
 	class CDrawing {
 	public:
-		static void Init( const CMap &mapData, const std::vector<CCar> &carsData );
-
-		static void Drop();
-		static void Draw( int argc, char** argv );
+		static void Init( int argc, char** argv );
+		static void Finish();
+		static void InitGame( const CMap &mapData, const std::vector<CCar> &carsData );
+		static void DropGame();
+		
 		static void keyboardFunction( unsigned char key, int x, int y );
 
 		static void MoveCars( const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates );
@@ -25,13 +26,17 @@ namespace UI {
 
 		static void Start();
 		static void Stop();
-		static bool Started();
+//		static bool Started();
 
 		static std::string GetWindowName();
 		static int GetWindow();
 
 		static void DropKey();
 		static int GetKey();
+
+		static void ShowWindow();
+		static void HideWindow();
+
 	private:
 		static void display();
 		static void reshape( int width, int height );
@@ -41,6 +46,8 @@ namespace UI {
 
 		static bool initialized;
 		static bool started;
+		static bool finished;
+		static bool loaded;
 		static CMap map;
 		static std::vector<CCar> cars;
 		static std::mutex mutex;

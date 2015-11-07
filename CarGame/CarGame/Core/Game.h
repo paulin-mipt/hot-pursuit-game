@@ -9,7 +9,7 @@
 namespace Core {
 	class CGame {
 	public:
-		CGame( const CMap& map, const std::vector<CPlayer>& playersInfo, const CUIManager& _manager );
+		CGame( const CMap& map, const std::vector<CPlayer>& playersInfo, const CUIManager* _manager );
 
 		void Start();
 
@@ -21,7 +21,7 @@ namespace Core {
 		std::set<CPlayer> collidedPlayers;
 		// все игроки, которые во что-то въехали
 		std::set<CPlayer> crashedPlayers;
-		CUIManager manager;
+		const CUIManager* manager;
 
 		const CPlayer* handleFinishLineIntersections();
 		// -1 - если пересекли финишную черту в неправильную сторону, 0 - не пересекли, 1 - в правильную сторону

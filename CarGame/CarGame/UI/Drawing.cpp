@@ -11,12 +11,38 @@ namespace UI {
 	std::vector<CCar> CDrawing::cars;
 	bool CDrawing::initialized = false;
 	bool CDrawing::started = false;
+	bool CDrawing::finished = false;
+	bool CDrawing::loaded = false;
 	std::mutex CDrawing::mutex;
 	std::string CDrawing::windowName = "Rock'n'Roll Race";
 	int CDrawing::window;
 	int CDrawing::key;
 
-	void CDrawing::Init( const CMap &mapData, const std::vector<CCar> &carsData )
+	void CDrawing::Init( int argc, char** argv )
+	{
+		glutInit( &argc, argv );
+		glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA );
+		glutInitWindowSize( 800, 600 );
+		std::unique_lock<std::mutex> lock( mutex );
+		window = glutCreateWindow( "CarGame - Graphics" );
+		lock.unlock();
+
+		glutTimerFunc( 1, timer, 0 );
+		glutReshapeFunc( reshape );
+		glutDisplayFunc( display );
+		glutKeyboardFunc( keyboardFunction );
+
+		glutHideWindow();
+		glutMainLoop();
+	}
+
+	void CDrawing::Finish()
+	{
+		std::unique_lock<std::mutex> lock( mutex );
+		finished = true;
+	}
+
+	void CDrawing::InitGame( const CMap &mapData, const std::vector<CCar> &carsData )
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		if( initialized ) {
@@ -27,15 +53,33 @@ namespace UI {
 		initialized = true;
 	}
 
-	void CDrawing::Drop()
+	void CDrawing::DropGame()
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		initialized = false;
+		started = false;
+		glDeleteTextures( 1, &map.textureRoad );
+		glDeleteTextures( 1, &map.textureBoard );
+		for( auto car : cars ) {
+			glDeleteTextures( 1, &car.texture );
+		}
+		loaded = false;
 	}
 
 	void CDrawing::reshape( int width, int height )
 	{
 		std::unique_lock<std::mutex> lock( mutex );
+//		if( finished ) {
+////			glutLeaveMainLoop();
+//		}
+		if( !started ) {
+			return;
+		}
+		if( !loaded ) {
+			load();
+			loaded = true;
+		}
+
 		glViewport( 0, 0, width, height ); // set view block
 
 		glMatrixMode( GL_PROJECTION );
@@ -50,9 +94,9 @@ namespace UI {
 	void CDrawing::timer( int value )
 	{
 		std::unique_lock<std::mutex> lock( mutex );
-		if( !started ) {
-			return;
-		}
+//		if( finished ) {
+////			glutLeaveMainLoop();
+//		}
 		glutPostRedisplay();
 		glutTimerFunc( 1, timer, 0 );
 	}
@@ -80,9 +124,29 @@ namespace UI {
 		return key;
 	}
 
+	void CDrawing::ShowWindow()
+	{
+		glutShowWindow();
+	}
+
+	void CDrawing::HideWindow()
+	{
+		glutHideWindow();
+	}
+
 	void CDrawing::display()
 	{
 		std::unique_lock<std::mutex> lock( mutex );
+//		if (finished ) {
+////			glutLeaveMainLoop();
+//		}
+		if( !started ) {
+			return;
+		}
+		if ( !loaded ) {
+			load();
+			loaded = true;
+		}
 		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
 
@@ -181,17 +245,22 @@ namespace UI {
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		started = false;
+		glDeleteTextures( 1, &map.textureRoad );
+		glDeleteTextures( 1, &map.textureBoard );
+		for( auto car : cars ) {
+			glDeleteTextures( 1, &car.texture );
+		}
+		loaded = false;
 	}
 
-	bool CDrawing::Started()
-	{
-		std::unique_lock<std::mutex> lock( mutex );
-		return started;
-	}
+//	bool CDrawing::Started()
+//	{
+//		std::unique_lock<std::mutex> lock( mutex );
+//		return started;
+//	}
 
 	void CDrawing::load()
 	{
-		std::unique_lock<std::mutex> lock( mutex );
 		//load textures for map
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
@@ -216,28 +285,6 @@ namespace UI {
 			}
 			loadTexture( carFilename.c_str(), cars[i].texture );
 		}
-	}
-
-	void CDrawing::Draw( int argc, char** argv )
-	{
-		glutInit( &argc, argv );
-		glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA );
-		glutInitWindowSize( 800, 600 );
-		while( !Started() ) {
-			std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
-		}
-		std::unique_lock<std::mutex> lock( mutex );
-		window = glutCreateWindow( "Rock'n'Roll Race" );
-		lock.unlock();
-
-		load();
-
-		glutTimerFunc( 1, timer, 0 );
-		glutReshapeFunc( reshape );
-		glutDisplayFunc( display );
-		glutKeyboardFunc( keyboardFunction );
-
-		glutMainLoop();
 	}
 
 	void CDrawing::keyboardFunction( unsigned char pressedKey, int x, int y )

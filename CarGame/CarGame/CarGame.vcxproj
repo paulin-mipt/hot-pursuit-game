@@ -158,9 +158,10 @@
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI\Car.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
-    <ClCompile Include="UI\MainWindow.cpp" />
+    <ClCompile Include="UI\MainMenuWindow.cpp" />
     <ClCompile Include="UI\Map.cpp" />
     <ClCompile Include="UI\MapSettingsWindow.cpp" />
+    <ClCompile Include="UI\GameResultWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Game.h" />
@@ -173,9 +174,10 @@
     <ClInclude Include="UI\Car.h" />
     <ClInclude Include="UI\Coord.h" />
     <ClInclude Include="UI\Drawing.h" />
-    <ClInclude Include="UI\MainWindow.h" />
+    <ClInclude Include="UI\MainMenuWindow.h" />
     <ClInclude Include="UI\Map.h" />
     <ClInclude Include="UI\MapSettingsWindow.h" />
+    <ClInclude Include="UI\GameResultWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Resources\Images\car_blue.png" />

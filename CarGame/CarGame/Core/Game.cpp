@@ -15,6 +15,8 @@ namespace Core {
 			if( thirdPoint > forthPoint ) {
 				std::swap( thirdPoint, forthPoint );
 			}
+#undef max
+#undef min
 			return std::max( firstPoint, thirdPoint ) <= std::min( secondPoint, forthPoint );
 		}
 
@@ -39,7 +41,7 @@ namespace Core {
 		}
 	}
 
-	CGame::CGame( const CMap& newMap, const std::vector<CPlayer>& playersInfo, const CUIManager& _manager ) :
+	CGame::CGame( const CMap& newMap, const std::vector<CPlayer>& playersInfo, const CUIManager* _manager ) :
 		map( newMap ),
 		numOfDeadPlayers( 0 ),
 		manager( _manager ),
@@ -154,7 +156,7 @@ namespace Core {
 		int direction;
 		switch ( player.GetType() )
 		{
-			case USER: direction = manager.GetDirection();
+			case USER: direction = manager->GetDirection();
 				break;
 //			case AI: direction = ;
 //				break;
@@ -174,7 +176,7 @@ namespace Core {
 	{
 		std::cout << "Game has been started." << std::endl;
 		const CPlayer* winner = nullptr;
-		manager.InitMap( map, players );
+		manager->InitMap( map, players );
 
 		do {
 			for( size_t i = 0; i < players.size(); ++i ) {
@@ -184,7 +186,7 @@ namespace Core {
 				}
 			}
 
-			manager.Move( players );
+			manager->Move( players );
 
 			findCollisions();
 			findCrashes();
@@ -202,10 +204,10 @@ namespace Core {
 				players[crashedPlayer.GetNumber()].Die();
 			}
 			if( !collidedPlayers.empty() ) {
-				manager.ShowCollisions( collidedPlayers );
+				manager->ShowCollisions( collidedPlayers );
 			}
 			if( !crashedPlayers.empty() ) {
-				manager.ShowCrashes( crashedPlayers );
+				manager->ShowCrashes( crashedPlayers );
 			}
 
 			numOfDeadPlayers += crashedPlayers.size();
@@ -222,6 +224,7 @@ namespace Core {
 
 	void CGame::finish( const CPlayer* winnerPtr )
 	{
-		manager.ShowWinner( winnerPtr );
+		manager->FinishGame();
+		manager->ShowGameResult( winnerPtr );
 	}
 }

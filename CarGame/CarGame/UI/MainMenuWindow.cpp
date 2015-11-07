@@ -1,17 +1,13 @@
 #include <string>
 #include <thread>
 
-#include "resource.h"
-
 #include "UIManager.h"
 #include "Core/Reader.h"
 #include "Core/Game.h"
-#include "UI/MainWindow.h"
+#include "UI/MainMenuWindow.h"
 #include "UI/Drawing.h"
 
 const wchar_t* const UI::CMainMenuWindow::className = L"CMainWindow";
-const int UI::CMainMenuWindow::MAIN_MENU_BUTTON_NEW_GAME = 1;
-const int UI::CMainMenuWindow::MAIN_MENU_BUTTON_EXIT = 2;
 
 bool UI::CMainMenuWindow::RegisterClass( HINSTANCE hInst )
 {
@@ -32,53 +28,52 @@ bool UI::CMainMenuWindow::RegisterClass( HINSTANCE hInst )
 	return !RegisterClassEx( &tag );
 }
 
-UI::CMainMenuWindow::CMainMenuWindow() :
+UI::CMainMenuWindow::CMainMenuWindow( HINSTANCE hInst ) :
 	handle( nullptr ),
 	newGameButton( nullptr ),
-	exitGameButton( nullptr )
+	exitGameButton( nullptr ),
+	manager( this, hInst )
 {}
 
 bool UI::CMainMenuWindow::Create()
 {
-	std::wstring windowName( L"Main menu - Car Game 2015" );
-	handle = CreateWindow( className, windowName.c_str(), WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+	handle = CreateWindow( className, L"Main menu - Car Game 2015", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		100, 100, 300, 300, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
 	newGameButton = CreateWindow( L"BUTTON", L"New game", WS_VISIBLE | WS_CHILD, 75, 100, 150, 30,
-		handle, HMENU(MAIN_MENU_BUTTON_NEW_GAME), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
+		handle, HMENU(BUTTON_NEW_GAME), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 	exitGameButton = CreateWindow( L"BUTTON", L"Exit game", WS_VISIBLE | WS_CHILD, 75, 150, 150, 30,
-		handle, HMENU(MAIN_MENU_BUTTON_EXIT), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
+		handle, HMENU(BUTTON_EXIT), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 
 	return handle != nullptr;
 }
 
 void UI::CMainMenuWindow::Destroy()
 {
+	manager.FinishUIThread();
+	glutDestroyWindow( UI::CDrawing::GetWindow() );
+	manager.GetUIThread()->join();
 	::PostQuitMessage( 0 );
 }
 
 void UI::CMainMenuWindow::Show( int cmdShow )
 {
-	ShowWindow( handle, cmdShow );
+	::ShowWindow( handle, cmdShow );
 }
 
 void UI::CMainMenuWindow::Play()
 {
-	Core::CReader reader;
-	try {
-		CUIManager manager;
-		size_t mapNumber = manager.GetMapName();
-		Core::CMap map = reader.ReadMap( RESOURCE_DIRECTORY + "Maps\\map" + std::to_string( mapNumber ) + ".txt" );
-		std::vector<Core::CPlayer> playersInfo = manager.GetPlayersInfo( map.GetStartPoints() );
-		Core::CGame game( map, playersInfo, manager );
-		std::thread t( std::bind( UI::CDrawing::Draw, 0, nullptr ) );
-		game.Start();
+	manager.SwitchToSettings();
+}
 
-		glutDestroyWindow( UI::CDrawing::GetWindow() );
-		t.join();
-	} catch( std::exception& e ) {
-//		std::cerr << e.what() << std::endl;
-	}
+void UI::CMainMenuWindow::MakeVisible() const
+{
+	::ShowWindow( handle, SW_SHOW );
+}
+
+void UI::CMainMenuWindow::MakeInvisible() const
+{
+	::ShowWindow( handle, SW_HIDE );
 }
 
 LRESULT UI::CMainMenuWindow::windowProc( HWND handle, UINT message, WPARAM wParam, LPARAM lParam )
@@ -97,10 +92,10 @@ LRESULT UI::CMainMenuWindow::windowProc( HWND handle, UINT message, WPARAM wPara
 			return 0;
 
 		case WM_COMMAND:
-			if( LOWORD( wParam ) == MAIN_MENU_BUTTON_NEW_GAME ) {
-
+			if( LOWORD( wParam ) == wnd->BUTTON_NEW_GAME ) {
+				wnd->Play();
 			}
-			if( LOWORD( wParam ) == MAIN_MENU_BUTTON_EXIT ) {
+			if( LOWORD( wParam ) == wnd->BUTTON_EXIT ) {
 				::SendMessage( wnd->handle, WM_DESTROY, wParam, lParam );
 			}
 			return 0;
