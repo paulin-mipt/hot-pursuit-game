@@ -35,6 +35,8 @@ public:
 	std::thread* GetUIThread();
 	void FinishGame() const;
 	void FinishUIThread() const;
+	void MarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves) const;
+	void UnMarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves) const;
 
 private:
 	UI::CMainMenuWindow* mainMenuWindow;

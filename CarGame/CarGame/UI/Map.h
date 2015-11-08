@@ -20,7 +20,14 @@ namespace UI {
 
 		GLuint textureBoard;
 		GLuint textureRoad;
+
+		GLuint textureActiveBoard;
+		GLuint textureActiveRoad;
+
 		GLuint textureMap;
+
+		void MarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves);
+		void UnMarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves);
 
 	private:
 		std::vector<std::vector<int>> map;

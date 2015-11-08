@@ -56,6 +56,21 @@ namespace Core {
 		}
 	}
 
+	std::vector<CCoordinates>  CPlayer::PossibleMoves(const CSize& size)
+	{
+		std::vector<CCoordinates> moves;
+		for (int i = -1; i <= 1; ++i) {
+			for (int j = -1; j <= 1; ++j) {
+				CCoordinates direction(i, j);
+				if (DirectionIsValid(direction, size))
+				{
+					CCoordinates coord(position.x + inertia.x + direction.x, position.y + inertia.y + direction.y);
+					moves.push_back(coord);
+				}
+			}
+		}
+		return moves;
+	}
 	void CPlayer::Move( Direction direction_code )
 	{
 		CCoordinates direction = convertFromDirectionCode( direction_code );
@@ -100,6 +115,11 @@ namespace Core {
 	bool CPlayer::DirectionIsValid( Direction directionCode, const CSize& size ) const
 	{
 		CCoordinates direction = convertFromDirectionCode( directionCode );
+		return 0 <= (direction + position + inertia).x && (direction + position + inertia).x <= size.first - 1 &&
+			0 <= (direction + position + inertia).y && (direction + position + inertia).y <= size.second - 1;
+	}
+	bool CPlayer::DirectionIsValid(CCoordinates direction, const CSize& size) const
+	{
 		return 0 <= (direction + position + inertia).x && (direction + position + inertia).x <= size.first - 1 &&
 			0 <= (direction + position + inertia).y && (direction + position + inertia).y <= size.second - 1;
 	}

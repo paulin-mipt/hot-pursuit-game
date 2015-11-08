@@ -152,9 +152,16 @@ namespace Core {
 	void CGame::turnOfPlayer( CPlayer& player )
 	{
 		int direction;
+		std::vector<CCoordinates> possibleMoves;
 		switch ( player.GetType() )
 		{
-			case USER: direction = manager->GetDirection();
+			case USER: 
+				//вывести возможные ходы
+				possibleMoves = player.PossibleMoves(map.GetSize());
+				manager->MarkPossibleMoves(possibleMoves);
+				//manager-->possibleMoves
+				direction = manager->GetDirection();
+				manager->UnMarkPossibleMoves(possibleMoves);
 				break;
 //			case AI: direction = ;
 //				break;
@@ -177,7 +184,7 @@ namespace Core {
 
 		do {
 			for( size_t i = 0; i < players.size(); ++i ) {
-				// в далёком будущем здесь будет посылаться сообщение UI, чтобы он отрисовал возможные ходы, выделил ходящего игрока и т.д., но лекторы об этом знать не должны
+				
 				if( players[i].IsAlive() ) {
 					turnOfPlayer( players[i] );
 				}

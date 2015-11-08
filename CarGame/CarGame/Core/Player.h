@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "GlobalDefinitions.h"
+#include <vector>
 
 namespace Core {
 	enum Direction {
@@ -20,6 +21,7 @@ namespace Core {
 
 		void Move( Direction direction );
 		bool DirectionIsValid( Direction direction, const CSize& size ) const;
+		bool DirectionIsValid( CCoordinates direction, const CSize& size) const;
 		
 		CCoordinates GetPosition() const;
 		CCoordinates GetPreviousPosition() const;
@@ -30,6 +32,8 @@ namespace Core {
 		bool IsCheating() const;
 
 		bool operator< ( const CPlayer& player ) const;
+
+		std::vector<CCoordinates> PossibleMoves(const CSize& size);
 	private:
 		CCoordinates position;
 		CCoordinates inertia;
