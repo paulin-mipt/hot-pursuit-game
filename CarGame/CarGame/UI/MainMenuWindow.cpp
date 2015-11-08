@@ -4,8 +4,6 @@
 #include "resource.h"
 
 #include "UIManager.h"
-#include "Core/Reader.h"
-#include "Core/Game.h"
 #include "UI/MainMenuWindow.h"
 #include "UI/Drawing.h"
 
@@ -80,7 +78,7 @@ void UI::CMainMenuWindow::MakeInvisible() const
 
 LRESULT UI::CMainMenuWindow::windowProc( HWND handle, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	CMainMenuWindow* wnd = nullptr;
+	CMainMenuWindow* wnd;
 	if( message == WM_NCCREATE ) {
 		wnd = static_cast<CMainMenuWindow*>(LPCREATESTRUCT( lParam )->lpCreateParams);
 		::SetWindowLong( handle, GWL_USERDATA, LONG( LPCREATESTRUCT( lParam )->lpCreateParams ) );

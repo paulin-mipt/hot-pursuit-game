@@ -137,34 +137,3 @@ void CUIManager::FinishUIThread() const
 {
 	UI::CDrawing::Finish();
 }
-
-//std::vector<Core::CPlayer> CUIManager::GetPlayersInfo( const std::vector<Core::CCoordinates>& coordinates )
-//{
-//	int playerNumber = 0;
-//	std::vector<UI::CMapSettingsWindow::CPositionInfo> positions = mapSettingsWindow.GetPositionsInfo();
-//	std::vector<Core::CPlayer> result;
-//	for( int i = 0; i < positions.size(); ++i ) {
-//		if( positions[i].playerType == L"User" ) {
-//			result.push_back( Core::CPlayer( coordinates[i], playerNumber++, USER ) );
-//		} else if (positions[i].playerType == L"Computer") {
-//			result.push_back( Core::CPlayer( coordinates[i], playerNumber++, AI ) );
-//		}
-//	}
-//	return result;
-//}
-
-//std::string CUIManager::GetMapName()
-//{
-//	SwitchToSettings();
-//	return "";
-////	while ( mapSettingsWindow.GetState() == UI::CMapSettingsWindow::OPEN ) {
-//////		std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
-////	}
-////	if ( mapSettingsWindow.GetState() == UI::CMapSettingsWindow::OK ) {
-////		return mapSettingsWindow.GetMapName();
-////	}
-////	if (mapSettingsWindow.GetState() == UI::CMapSettingsWindow::CANCEL ) {
-////		return "";
-////	}
-////	throw std::runtime_error("Cannot get map name - settings window is closed");
-//}

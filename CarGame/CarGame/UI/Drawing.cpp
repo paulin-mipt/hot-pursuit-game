@@ -92,9 +92,6 @@ namespace UI {
 	void CDrawing::display()
 	{
 		std::unique_lock<std::mutex> lock( mutex );
-//		if (finished ) {
-////			glutLeaveMainLoop();
-//		}
 		if( !started ) {
 			return;
 		}
@@ -114,11 +111,6 @@ namespace UI {
 		if( mapReloaded ) {
 			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
 		}
-	}
-
-	std::string CDrawing::GetWindowName()
-	{
-		return windowName;
 	}
 
 	int CDrawing::GetWindow()
@@ -240,12 +232,6 @@ namespace UI {
 		}
 		loaded = false;
 	}
-
-//	bool CDrawing::Started()
-//	{
-//		std::unique_lock<std::mutex> lock( mutex );
-//		return started;
-//	}
 
 	void CDrawing::load()
 	{

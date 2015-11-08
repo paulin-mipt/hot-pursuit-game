@@ -1,7 +1,5 @@
 ﻿#include <vector>
 #include <algorithm>
-#include <iostream>
-#include <thread>
 
 #include "Core/Game.h"
 
@@ -44,8 +42,8 @@ namespace Core {
 	CGame::CGame( const CMap& newMap, const std::vector<CPlayer>& playersInfo, const CUIManager* _manager ) :
 		map( newMap ),
 		numOfDeadPlayers( 0 ),
-		manager( _manager ),
-		players( playersInfo )
+		players( playersInfo ),
+		manager( _manager )
 	{}
 
 	int CGame::finishLineIntersectsWithPlayer( const CPlayer& player ) const
@@ -174,7 +172,6 @@ namespace Core {
 
 	void CGame::Start()
 	{
-		std::cout << "Game has been started." << std::endl;
 		const CPlayer* winner = nullptr;
 		manager->InitMap( map, players );
 

@@ -12,7 +12,7 @@ namespace UI {
 		CGameResultWindow( CUIManager* manager );
 
 		bool Create();
-		void Destroy();
+		void Destroy() const;
 
 		void MakeVisible() const;
 		void MakeInvisible() const;

@@ -26,9 +26,7 @@ namespace UI {
 
 		static void Start();
 		static void Stop();
-//		static bool Started();
 
-		static std::string GetWindowName();
 		static int GetWindow();
 
 		static void DropKey();

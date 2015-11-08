@@ -13,11 +13,11 @@ namespace UI {
 		CMapSettingsWindow( CUIManager* manager );
 
 		bool Create();
-		void Destroy();
+		void Destroy() const;
 
 		void StartGame();
-		void BackToMenu();
-		std::string GetMapName();
+		void BackToMenu() const;
+		std::string GetMapName() const;
 		std::vector<Core::CPlayer> GetPlayersInfo( const std::vector<Core::CCoordinates>& coordinates );
 		
 		void MakeVisible() const;

@@ -4,8 +4,6 @@
 
 #include "UIManager.h"
 #include "GlobalDefinitions.h"
-#include "Core/Map.h"
-#include "Core/Player.h"
 #include "Core/Reader.h"
 #include "Core/Game.h"
 #include "UI/MapSettingsWindow.h"
@@ -65,7 +63,7 @@ bool UI::CMapSettingsWindow::Create()
 	return handle != nullptr;
 }
 
-void UI::CMapSettingsWindow::Destroy()
+void UI::CMapSettingsWindow::Destroy() const
 {
 	manager->FinishUIThread();
 	glutDestroyWindow( UI::CDrawing::GetWindow() );
@@ -89,12 +87,12 @@ void UI::CMapSettingsWindow::StartGame()
 	}
 }
 
-void UI::CMapSettingsWindow::BackToMenu()
+void UI::CMapSettingsWindow::BackToMenu() const
 {
 	manager->SwitchToMainMenu();
 }
 
-std::string UI::CMapSettingsWindow::GetMapName()
+std::string UI::CMapSettingsWindow::GetMapName() const
 {
 	const size_t MAX_LENGTH = 1024;
 	std::shared_ptr<wchar_t> editText = std::shared_ptr<wchar_t>( new wchar_t[MAX_LENGTH] );
@@ -136,7 +134,7 @@ void UI::CMapSettingsWindow::MakeInvisible() const
 
 LRESULT UI::CMapSettingsWindow::windowProc( HWND handle, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	CMapSettingsWindow* wnd = nullptr;
+	CMapSettingsWindow* wnd;
 	if( message == WM_NCCREATE ) {
 		wnd = static_cast<CMapSettingsWindow*>(LPCREATESTRUCT( lParam )->lpCreateParams);
 		::SetWindowLong( handle, GWL_USERDATA, LONG( LPCREATESTRUCT( lParam )->lpCreateParams ) );

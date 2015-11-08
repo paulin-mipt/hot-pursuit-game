@@ -54,7 +54,7 @@ bool UI::CGameResultWindow::Create()
 	return handle != nullptr;
 }
 
-void UI::CGameResultWindow::Destroy()
+void UI::CGameResultWindow::Destroy() const
 {
 	manager->FinishUIThread();
 	glutDestroyWindow( UI::CDrawing::GetWindow() );
@@ -83,7 +83,7 @@ void UI::CGameResultWindow::SetWinner( const Core::CPlayer* winner ) const
 
 LRESULT UI::CGameResultWindow::windowProc( HWND handle, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	CGameResultWindow* wnd = nullptr;
+	CGameResultWindow* wnd;
 	if( message == WM_NCCREATE ) {
 		wnd = static_cast<CGameResultWindow*>(LPCREATESTRUCT( lParam )->lpCreateParams);
 		::SetWindowLong( handle, GWL_USERDATA, LONG( LPCREATESTRUCT( lParam )->lpCreateParams ) );

@@ -1,7 +1,6 @@
 ﻿#include <vector>
 
 #include "UI/Car.h"
-#include <iostream>
 
 namespace UI {
 	namespace {
@@ -19,8 +18,8 @@ namespace UI {
 	CCar::CCar( CCoordinates startCoordinates, Color carColor ) :
 		coords( startCoordinates ),
 		color( carColor ),
-		crashed( false ),
-		alpha( 1.0f )
+		alpha( 1.0f ),
+		crashed( false )
 	{}
 
 	Color CCar::GetColor() const
