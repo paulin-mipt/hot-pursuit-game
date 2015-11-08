@@ -25,6 +25,7 @@ namespace UI {
 		glutInitWindowSize( 800, 600 );
 		std::unique_lock<std::mutex> lock( mutex );
 		window = glutCreateWindow( windowName.c_str() );
+		glutHideWindow();
 		lock.unlock();
 
 		glutTimerFunc( 1, timer, 0 );
@@ -32,7 +33,6 @@ namespace UI {
 		glutDisplayFunc( display );
 		glutKeyboardFunc( keyboardFunction );
 
-		glutHideWindow();
 		glutMainLoop();
 	}
 
@@ -66,10 +66,6 @@ namespace UI {
 		if( !started ) {
 			return;
 		}
-		if( !loaded ) {
-			load();
-			loaded = true;
-		}
 
 		glViewport( 0, 0, width, height ); // set view block
 
@@ -99,6 +95,7 @@ namespace UI {
 			load();
 			loaded = true;
 		}
+
 		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
 

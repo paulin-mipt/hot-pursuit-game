@@ -19,12 +19,11 @@ namespace UI {
 		map( map_data ),
 		cellSize( 0 ),
 		indent( 0, 0 ),
-		needReload( 0 )
+		needReload( true )
 	{
 		glGenTextures( 1, &textureMap );
 		glGenTextures( 1, &textureBoard );
 		glGenTextures( 1, &textureRoad );
-		needReload = true;
 	}
 
 	void CMap::Calculate()
