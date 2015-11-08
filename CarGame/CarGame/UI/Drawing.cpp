@@ -14,7 +14,7 @@ namespace UI {
 	bool CDrawing::finished = false;
 	bool CDrawing::loaded = false;
 	std::mutex CDrawing::mutex;
-	std::string CDrawing::windowName = "Rock'n'Roll Race";
+	std::string CDrawing::windowName = "AK-Car Game";
 	int CDrawing::window;
 	int CDrawing::key;
 
@@ -24,7 +24,7 @@ namespace UI {
 		glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA );
 		glutInitWindowSize( 800, 600 );
 		std::unique_lock<std::mutex> lock( mutex );
-		window = glutCreateWindow( "CarGame - Graphics" );
+		window = glutCreateWindow( windowName.c_str() );
 		lock.unlock();
 
 		glutTimerFunc( 1, timer, 0 );
@@ -58,20 +58,11 @@ namespace UI {
 		std::unique_lock<std::mutex> lock( mutex );
 		initialized = false;
 		started = false;
-		glDeleteTextures( 1, &map.textureRoad );
-		glDeleteTextures( 1, &map.textureBoard );
-		for( auto car : cars ) {
-			glDeleteTextures( 1, &car.texture );
-		}
-		loaded = false;
 	}
 
 	void CDrawing::reshape( int width, int height )
 	{
 		std::unique_lock<std::mutex> lock( mutex );
-//		if( finished ) {
-////			glutLeaveMainLoop();
-//		}
 		if( !started ) {
 			return;
 		}
@@ -94,11 +85,35 @@ namespace UI {
 	void CDrawing::timer( int value )
 	{
 		std::unique_lock<std::mutex> lock( mutex );
-//		if( finished ) {
-////			glutLeaveMainLoop();
-//		}
 		glutPostRedisplay();
 		glutTimerFunc( 1, timer, 0 );
+	}
+
+	void CDrawing::display()
+	{
+		std::unique_lock<std::mutex> lock( mutex );
+//		if (finished ) {
+////			glutLeaveMainLoop();
+//		}
+		if( !started ) {
+			return;
+		}
+		if ( !loaded ) {
+			load();
+			loaded = true;
+		}
+		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
+
+		bool mapReloaded = !map.NeedToReload();
+		map.Draw(); // Draw the map
+		for( size_t i = 0; i < cars.size(); i++ ) {
+			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
+		}
+		glFlush(); // flush changes
+		if( mapReloaded ) {
+			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
+		}
 	}
 
 	std::string CDrawing::GetWindowName()
@@ -132,33 +147,6 @@ namespace UI {
 	void CDrawing::HideWindow()
 	{
 		glutHideWindow();
-	}
-
-	void CDrawing::display()
-	{
-		std::unique_lock<std::mutex> lock( mutex );
-//		if (finished ) {
-////			glutLeaveMainLoop();
-//		}
-		if( !started ) {
-			return;
-		}
-		if ( !loaded ) {
-			load();
-			loaded = true;
-		}
-		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
-
-		bool mapReloaded = !map.NeedToReload();
-		map.Draw(); // Draw the map
-		for( size_t i = 0; i < cars.size(); i++ ) {
-			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
-		}
-		glFlush(); // flush changes
-		if( mapReloaded ) {
-			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
-		}
 	}
 
 	// load image from file to texture

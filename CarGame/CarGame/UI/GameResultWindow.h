@@ -2,29 +2,37 @@
 
 #include <Windows.h>
 
-#include "resource.h"
+class CUIManager;
 
 namespace UI {
 	class CGameResultWindow {
 	public:
 		static bool RegisterClass( HINSTANCE hInst );
 
-		CGameResultWindow();
+		CGameResultWindow( CUIManager* manager );
 
 		bool Create();
-//		void Destroy();
-//
-//		void Show( int cmdShow );
-//		void StartGame();
+		void Destroy();
 
 		void MakeVisible() const;
 		void MakeInvisible() const;
+		void SetWinner( const Core::CPlayer* winner ) const;
 
 	private:
 		HWND handle;
+		HWND toMainMenuButton;
+		HWND toSettingsButton;
+		HWND exitButton;
+		HWND resultMessage;
+
+		CUIManager* manager;
 
 		static const wchar_t* const className;
 
-//		static LRESULT __stdcall windowProc( HWND handle, UINT message, WPARAM wParam, LPARAM lParam );
+		const int BUTTON_MAIN_MENU = 1;
+		const int BUTTON_SETTINGS = 2;
+		const int BUTTON_EXIT = 3;
+
+		static LRESULT __stdcall windowProc( HWND handle, UINT message, WPARAM wParam, LPARAM lParam );
 	};
 }

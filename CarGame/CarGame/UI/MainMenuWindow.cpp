@@ -1,6 +1,8 @@
 #include <string>
 #include <thread>
 
+#include "resource.h"
+
 #include "UIManager.h"
 #include "Core/Reader.h"
 #include "Core/Game.h"
@@ -18,7 +20,7 @@ bool UI::CMainMenuWindow::RegisterClass( HINSTANCE hInst )
 	tag.cbClsExtra = 0;
 	tag.cbWndExtra = 0;
 	tag.hCursor = LoadCursor( nullptr, IDC_ARROW );
-	tag.hbrBackground = HBRUSH( GetStockObject( BLACK_BRUSH ) );
+	tag.hbrBackground = HBRUSH( GetStockObject( LTGRAY_BRUSH ) );
 	tag.lpszMenuName = nullptr;
 	tag.lpszClassName = className;
 	tag.hInstance = ::GetModuleHandle( nullptr );
@@ -37,7 +39,7 @@ UI::CMainMenuWindow::CMainMenuWindow( HINSTANCE hInst ) :
 
 bool UI::CMainMenuWindow::Create()
 {
-	handle = CreateWindow( className, L"Main menu - Car Game 2015", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+	handle = CreateWindow( className, L"Main menu - AK-Car Game", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		100, 100, 300, 300, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
 	newGameButton = CreateWindow( L"BUTTON", L"New game", WS_VISIBLE | WS_CHILD, 75, 100, 150, 30,
@@ -94,8 +96,7 @@ LRESULT UI::CMainMenuWindow::windowProc( HWND handle, UINT message, WPARAM wPara
 		case WM_COMMAND:
 			if( LOWORD( wParam ) == wnd->BUTTON_NEW_GAME ) {
 				wnd->Play();
-			}
-			if( LOWORD( wParam ) == wnd->BUTTON_EXIT ) {
+			} else if( LOWORD( wParam ) == wnd->BUTTON_EXIT ) {
 				::SendMessage( wnd->handle, WM_DESTROY, wParam, lParam );
 			}
 			return 0;

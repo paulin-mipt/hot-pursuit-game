@@ -1,5 +1,7 @@
 #include <string>
 
+#include "resource.h"
+
 #include "UIManager.h"
 #include "GlobalDefinitions.h"
 #include "Core/Map.h"
@@ -20,7 +22,7 @@ bool UI::CMapSettingsWindow::RegisterClass( HINSTANCE hInst )
 	tag.cbClsExtra = 0;
 	tag.cbWndExtra = 0;
 	tag.hCursor = LoadCursor( nullptr, IDC_ARROW );
-	tag.hbrBackground = HBRUSH( GetStockObject( BLACK_BRUSH ) );
+	tag.hbrBackground = HBRUSH( GetStockObject( LTGRAY_BRUSH ) );
 	tag.lpszMenuName = nullptr;
 	tag.lpszClassName = className;
 	tag.hInstance = ::GetModuleHandle( nullptr );
@@ -41,7 +43,7 @@ UI::CMapSettingsWindow::CMapSettingsWindow( CUIManager* _manager ) :
 
 bool UI::CMapSettingsWindow::Create()
 {
-	handle = CreateWindow( className, L"Map settings - Car Game 2015", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+	handle = CreateWindow( className, L"Map settings - AK-Car Game", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		200, 200, 400, 500, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
 	mapNameControl = CreateWindow( L"EDIT", L"map1", WS_VISIBLE | WS_CHILD, 40, 50, 125, 20,
@@ -53,10 +55,11 @@ bool UI::CMapSettingsWindow::Create()
 		::SendMessage( positionOwnerControls[i], CB_ADDSTRING, 0, LPARAM( L"None" ) );
 		::SendMessage( positionOwnerControls[i], CB_ADDSTRING, 0, LPARAM( L"Player" ) );
 		::SendMessage( positionOwnerControls[i], CB_ADDSTRING, 0, LPARAM( L"AI" ) );
+		::SendMessage( positionOwnerControls[i], CB_SELECTSTRING, 0, LPARAM( L"None" ) );
 	}
-	startGameButton = CreateWindow( L"BUTTON", L"Start game", WS_VISIBLE | WS_CHILD, 250, 380, 125, 30,
+	startGameButton = CreateWindow( L"BUTTON", L"Start game", WS_VISIBLE | WS_CHILD, 225, 380, 150, 30,
 		handle, HMENU( BUTTON_START_GAME ), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
-	backToMenuButton = CreateWindow( L"BUTTON", L"Back to main menu", WS_VISIBLE | WS_CHILD, 250, 430, 125, 30,
+	backToMenuButton = CreateWindow( L"BUTTON", L"Back to main menu", WS_VISIBLE | WS_CHILD, 225, 430, 150, 30,
 		handle, HMENU( BUTTON_BACK_TO_MENU ), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 
 	return handle != nullptr;

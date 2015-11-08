@@ -11,13 +11,14 @@
 CUIManager::CUIManager( UI::CMainMenuWindow* _mainMenuWindow, HINSTANCE hInst ) :
 	mainMenuWindow( _mainMenuWindow ),
 	mapSettingsWindow( this ),
+	gameResultWindow( this ),
 	uiThread( std::bind( UI::CDrawing::Init, 0, nullptr ) )
 {
 	UI::CMapSettingsWindow::RegisterClass( hInst );
 	mapSettingsWindow.Create();
-	
-//	UI::CGameResultWindow::RegisterClass( hInst );
-//	gameResultWindow.Create();
+
+	UI::CGameResultWindow::RegisterClass( hInst );
+	gameResultWindow.Create();
 }
 
 int CUIManager::GetDirection() const
@@ -84,21 +85,17 @@ void CUIManager::ShowCrashes( const std::set<Core::CPlayer>& crashedPlayers ) co
 
 void CUIManager::ShowGameResult( const Core::CPlayer* winner ) const
 {
-//	if( winner == nullptr ) {
-//		std::cout << "All players are dead." << std::endl;
-//	} else {
-//		std::cout << "Player number " << winner->GetNumber() + 1 << " is winner! Congratulations!!!" << std::endl;
-//	}
-//	std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
-//	UI::CDrawing::Stop();
-	SwitchToMainMenu();
+	gameResultWindow.SetWinner( winner );
+	std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+	UI::CDrawing::Stop();
+	SwitchToResults();
 }
 
 void CUIManager::SwitchToMainMenu() const
 {
 	mainMenuWindow->MakeVisible();
 	mapSettingsWindow.MakeInvisible();
-//	gameResultWindow.MakeInvisible();
+	gameResultWindow.MakeInvisible();
 	UI::CDrawing::HideWindow();
 }
 
@@ -106,7 +103,7 @@ void CUIManager::SwitchToSettings() const
 {
 	mainMenuWindow->MakeInvisible();
 	mapSettingsWindow.MakeVisible();
-//	gameResultWindow.MakeInvisible();
+	gameResultWindow.MakeInvisible();
 	UI::CDrawing::HideWindow();
 }
 
@@ -114,16 +111,16 @@ void CUIManager::SwitchToGame() const
 {
 	mainMenuWindow->MakeInvisible();
 	mapSettingsWindow.MakeInvisible();
-//	gameResultWindow.MakeInvisible();
+	gameResultWindow.MakeInvisible();
 	UI::CDrawing::ShowWindow();
 }
 
-void CUIManager::SwitchToWinners() const
+void CUIManager::SwitchToResults() const
 {
 	mainMenuWindow->MakeInvisible();
 	mapSettingsWindow.MakeInvisible();
-//	gameResultWindow.MakeVisible();
-//	UI::CDrawing::HideWindow();
+	gameResultWindow.MakeVisible();
+	UI::CDrawing::HideWindow();
 }
 
 std::thread* CUIManager::GetUIThread()

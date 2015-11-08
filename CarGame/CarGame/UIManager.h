@@ -31,7 +31,7 @@ public:
 	void SwitchToMainMenu() const;
 	void SwitchToSettings() const;
 	void SwitchToGame() const;
-	void SwitchToWinners() const;
+	void SwitchToResults() const;
 	std::thread* GetUIThread();
 	void FinishGame() const;
 	void FinishUIThread() const;
