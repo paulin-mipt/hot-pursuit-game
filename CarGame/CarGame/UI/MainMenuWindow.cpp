@@ -37,7 +37,7 @@ UI::CMainMenuWindow::CMainMenuWindow( HINSTANCE hInst ) :
 
 bool UI::CMainMenuWindow::Create()
 {
-	handle = CreateWindow( className, L"Main menu - AK-Car Game", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+	handle = CreateWindow( className, L"Main menu - Rock'n'Roll race", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		100, 100, 300, 300, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
 	newGameButton = CreateWindow( L"BUTTON", L"New game", WS_VISIBLE | WS_CHILD, 75, 100, 150, 30,

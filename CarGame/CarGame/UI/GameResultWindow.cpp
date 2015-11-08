@@ -38,7 +38,7 @@ UI::CGameResultWindow::CGameResultWindow( CUIManager* _manager ) :
 
 bool UI::CGameResultWindow::Create()
 {
-	handle = CreateWindow( className, L"Game result - AK-Car Game", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+	handle = CreateWindow( className, L"Game result - Rock'n'Roll race", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		200, 200, 300, 300, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
 	resultMessage = CreateWindow( L"Static", L"", WS_VISIBLE | WS_CHILD | SS_CENTER, 50, 50, 200, 50,
