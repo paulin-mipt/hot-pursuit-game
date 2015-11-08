@@ -1,6 +1,7 @@
 ﻿#include <memory>
 
 #include "UI/Map.h"
+#include <iostream>
 
 namespace UI {
 	CMap::CMap() :
@@ -59,13 +60,27 @@ namespace UI {
 	void CMap::reload()
 	{
 		int n = map.size(), m = map[0].size();
-		for( int i = 0; i < n; i++ ) {
-			for( int j = 0; j < m; j++ ) {
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
 				glEnable( GL_TEXTURE_2D );
-				if( map[i][j] == 1 ) {
+
+				switch (map[i][j])
+				{
+				case 1:
 					glBindTexture( GL_TEXTURE_2D, textureBoard ); // load a texture of board (forest)
-				} else {
+					break;
+				case 0:
 					glBindTexture( GL_TEXTURE_2D, textureRoad ); // load a texture of road
+					break;
+				case 6:
+					glBindTexture( GL_TEXTURE_2D, textureActiveBoard ); // load an active texture of board(forest)
+					break;
+				case 5:
+					glBindTexture( GL_TEXTURE_2D, textureActiveRoad ); // load an active texture of road
+					break;
+				default:
+					throw std::runtime_error( "Wrong nuber of texture" );
+					break;
 				}
 				//calculate coordinates
 				float left = j * cellSize + indent.x;
@@ -84,6 +99,25 @@ namespace UI {
 		glutSwapBuffers();
 		saveTexture(); // save the whole window with map to texture
 		needReload = false;
+	}
+
+	void CMap::MarkPossibleMoves( const std::vector<Core::CCoordinates>& possibleMoves )
+	{
+		for (auto move : possibleMoves)
+		{
+			//потом нужно будет изменить на константу
+			map[move.y][move.x] += 5;
+		}
+		needReload = true;
+	}
+	void CMap::UnMarkPossibleMoves( const std::vector<Core::CCoordinates>& possibleMoves )
+	{
+		for (auto move : possibleMoves)
+		{
+			//потом нужно будет изменить на константу
+			map[move.y][move.x] -= 5;
+		}
+		needReload = true;
 	}
 
 	void CMap::Draw()

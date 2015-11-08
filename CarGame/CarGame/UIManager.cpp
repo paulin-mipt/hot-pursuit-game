@@ -63,6 +63,16 @@ void CUIManager::Move( const std::vector<Core::CPlayer>& movedPlayers ) const
 	UI::CDrawing::MoveCars( numbers, coordinates );
 }
 
+void CUIManager::MarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves) const
+{
+	UI::CDrawing::MarkPossibleMoves(possibleMoves);
+}
+
+void CUIManager::UnMarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves) const
+{
+	UI::CDrawing::UnMarkPossibleMoves(possibleMoves);
+}
+
 void CUIManager::ShowCollisions( const std::set<Core::CPlayer>& collidedPlayers ) const
 {
 	std::vector<int> numbers;

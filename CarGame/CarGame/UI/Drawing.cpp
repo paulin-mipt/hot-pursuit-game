@@ -105,6 +105,7 @@ namespace UI {
 			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
 		}
 		glFlush(); // flush changes
+		//glutSwapBuffers();
 		if( mapReloaded ) {
 			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
 		}
@@ -136,6 +137,17 @@ namespace UI {
 	void CDrawing::HideWindow()
 	{
 		glutHideWindow();
+	}
+
+	void CDrawing::MarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves)
+	{
+		std::unique_lock<std::mutex> lock(mutex);
+		map.MarkPossibleMoves(possibleMoves);
+	}
+	void CDrawing::UnMarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves)
+	{
+		std::unique_lock<std::mutex> lock(mutex);
+		map.UnMarkPossibleMoves(possibleMoves);
 	}
 
 	// load image from file to texture
@@ -233,26 +245,42 @@ namespace UI {
 	void CDrawing::load()
 	{
 		//load textures for map
-		loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road
-		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
-																							//load textures for cars (depends on color)
+		//loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road
+		//loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
+		std::string resourceFilename;
+		resourceFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\road.png";
+		loadTexture(resourceFilename.c_str(), map.textureRoad);
+		resourceFilename = "D:\\hot-pursuit-game\\CarGame\\\Debug\\Resources\\Images\\forest.png";
+		loadTexture(resourceFilename.c_str(), map.textureBoard);
+		
+		resourceFilename = "D:\\hot-pursuit-game\\CarGame\\\Debug\\Resources\\Images\\forest_active.png";
+		loadTexture(resourceFilename.c_str(), map.textureActiveBoard);
+		resourceFilename = "D:\\hot-pursuit-game\\CarGame\\\Debug\\Resources\\Images\\road_active.png";
+		loadTexture(resourceFilename.c_str(), map.textureActiveRoad);
+
+		//load textures for cars (depends on color)
 		std::string carFilename;
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			switch( cars[i].GetColor() ) {
 				case RED:
-					carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";
+					//carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";
+					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_red.png";
 					break;
 				case BLUE:
-					carFilename = RESOURCE_DIRECTORY + "Images\\car_blue.png";
+					//carFilename = RESOURCE_DIRECTORY + "Images\\car_blue.png";
+					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_blue.png";
 					break;
 				case GREEN:
-					carFilename = RESOURCE_DIRECTORY + "Images\\car_green.png";
+					//carFilename = RESOURCE_DIRECTORY + "Images\\car_green.png";
+					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_green.png";
 					break;
 				case ORANGE:
-					carFilename = RESOURCE_DIRECTORY + "Images\\car_orange.png";
+					//carFilename = RESOURCE_DIRECTORY + "Images\\car_orange.png";
+					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_orange.png";
 					break;
 				default:
-					carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";
+					//carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";
+					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_red.png";
 			}
 			loadTexture( carFilename.c_str(), cars[i].texture );
 		}

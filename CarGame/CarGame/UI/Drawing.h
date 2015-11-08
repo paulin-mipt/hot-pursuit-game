@@ -35,6 +35,9 @@ namespace UI {
 		static void ShowWindow();
 		static void HideWindow();
 
+		static void MarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves);
+		static void UnMarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves);
+
 	private:
 		static void display();
 		static void reshape( int width, int height );
