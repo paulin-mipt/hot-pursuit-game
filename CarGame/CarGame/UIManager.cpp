@@ -38,7 +38,7 @@ int CUIManager::GetDirection( const std::vector<Core::CCoordinates>& possibleMov
 	return key;
 }
 
-void CUIManager::InitMap( const Core::CMap& map, const std::vector<Core::CPlayer>& players ) const
+void CUIManager::InitMap( const Core::CMap& map, const std::vector<Core::CPlayer>& players, const Core::CLine& finish ) const
 {
 	Core::CField field = map.GetField();
 	std::vector<std::vector<int>> newField;
@@ -55,7 +55,7 @@ void CUIManager::InitMap( const Core::CMap& map, const std::vector<Core::CPlayer
 		cars.push_back( UI::CCar( UI::CCoordinates( playerCoordinates.x, playerCoordinates.y, PI / 2 ), UI::Color( i % 4 ) ) );
 	}
 
-	UI::CDrawing::InitGame( UI::CMap( newField ), cars );
+	UI::CDrawing::InitGame( UI::CMap( newField ), cars, finish );
 	UI::CDrawing::Start();
 }
 

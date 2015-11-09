@@ -16,6 +16,7 @@ namespace UI {
 	bool CDrawing::justStartedFlag = false;
 	std::mutex CDrawing::mutex;
 	std::string CDrawing::windowName = "Rock'n'Roll race";
+	std::pair<CCoordinates, CCoordinates> CDrawing::finishLine = std::pair<CCoordinates, CCoordinates>( CCoordinates( 0, 0 ), CCoordinates( 0, 0 ) );
 	int CDrawing::window;
 	int CDrawing::key;
 	Core::CCoordinates CDrawing::mouse;
@@ -45,7 +46,7 @@ namespace UI {
 		finished = true;
 	}
 
-	void CDrawing::InitGame( const CMap &mapData, const std::vector<CCar> &carsData )
+	void CDrawing::InitGame( const CMap &mapData, const std::vector<CCar> &carsData, const Core::CLine& finish )
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		if( initialized ) {
@@ -55,6 +56,10 @@ namespace UI {
 		cars = carsData;
 		initialized = true;
 		justStartedFlag = true;
+		finishLine.first.x = finish.first.x;
+		finishLine.first.y = finish.first.y;
+		finishLine.second.x = finish.second.x;
+		finishLine.second.y = finish.second.y;
 	}
 
 	void CDrawing::DropGame()
@@ -89,6 +94,20 @@ namespace UI {
 		glutTimerFunc( 1, timer, 0 );
 	}
 
+	void CDrawing::drawFinishLine()
+	{
+		glLineWidth( 3 );
+
+		glBegin( GL_LINES );
+		{
+			auto point1 = transateToWcoord( finishLine.first.x, finishLine.first.y, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			auto point2 = transateToWcoord( finishLine.second.x, finishLine.second.y, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			glVertex2f( point1.x, point1.y );
+			glVertex2f( point2.x, point2.y );
+		}
+		glEnd();
+	}
+
 	void CDrawing::display()
 	{
 		std::unique_lock<std::mutex> lock( mutex );
@@ -121,6 +140,7 @@ namespace UI {
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
 		}
+		drawFinishLine();
 		glFlush(); // flush changes
 		if( mapReloaded ) {
 			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers

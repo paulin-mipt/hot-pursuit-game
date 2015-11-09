@@ -157,6 +157,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI\Car.cpp" />
+    <ClCompile Include="UI\Coord.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
     <ClCompile Include="UI\MainMenuWindow.cpp" />
     <ClCompile Include="UI\Map.cpp" />

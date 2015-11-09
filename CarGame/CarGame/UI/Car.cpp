@@ -77,11 +77,11 @@ namespace UI {
 		glBindTexture( GL_TEXTURE_2D, texture );
 		glTexEnvf( GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
-		CWindowCoordinates cord = transateToWcoord( coords.x, coords.y, cellSize, indent, mapSize );
-		float left = cord.x;
-		float right = cord.x + cellSize;
-		float bottom = cord.y - cellSize / 4;
-		float top = cord.y - 3 * cellSize / 4;
+		CWindowCoordinates coord = transateToWcoord( coords.x, coords.y, cellSize, indent, mapSize );
+		float left = coord.x;
+		float right = coord.x + cellSize;
+		float bottom = coord.y - cellSize / 4;
+		float top = coord.y - 3 * cellSize / 4;
 
 		glDepthMask( GL_FALSE );
 		glEnable( GL_BLEND );
@@ -144,13 +144,5 @@ namespace UI {
 		} else {
 			coords.angle = std::acos( cos );
 		}
-	}
-
-	CWindowCoordinates CCar::transateToWcoord( float x, float y, float cellSize, CWindowCoordinates indent, CSize mapSize ) const
-	{
-		CWindowCoordinates wcoord( 0, 0 );
-		wcoord.x = x * cellSize + indent.x;
-		wcoord.y = (mapSize.second - y) * cellSize + indent.y;
-		return wcoord;
 	}
 }

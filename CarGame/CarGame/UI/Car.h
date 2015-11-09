@@ -30,7 +30,6 @@ namespace UI {
 		GLuint texture;
 
 	private:
-		CWindowCoordinates transateToWcoord( float x, float y, float cellSize, CWindowCoordinates indent, CSize mapSize ) const;
 		void rotate( float &x, float &y, float angle ) const;
 		void rotateCar( float &Ax, float &Ay, float &Bx, float &By, float &Cx, float &Cy, float &Dx, float &Dy, float centerX, float centerY, float angle ) const;
 
