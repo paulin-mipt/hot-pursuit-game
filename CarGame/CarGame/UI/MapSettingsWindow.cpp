@@ -76,8 +76,7 @@ void UI::CMapSettingsWindow::StartGame()
 	try {
 		Core::CReader reader;
 		std::string mapName = GetMapName();
-		//Core::CMap map = reader.ReadMap( RESOURCE_DIRECTORY + "Maps\\" + mapName + ".txt" );
-		Core::CMap map = reader.ReadMap("D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Maps\\map1.txt");
+		Core::CMap map = reader.ReadMap( RESOURCE_DIRECTORY + "Maps\\" + mapName + ".txt" );
 		std::vector<Core::CPlayer> playersInfo = GetPlayersInfo( map.GetStartPoints() );
 		Core::CGame game( map, playersInfo, manager );
 		manager->SwitchToGame();

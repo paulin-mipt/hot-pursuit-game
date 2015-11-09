@@ -24,6 +24,7 @@ namespace Core {
 		bool DirectionIsValid( CCoordinates direction, const CSize& size) const;
 		
 		CCoordinates GetPosition() const;
+		CCoordinates GetInertia() const;
 		CCoordinates GetPreviousPosition() const;
 		CCoordinates GetInitialPosition() const;
 		size_t GetNumber() const;

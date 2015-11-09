@@ -28,6 +28,7 @@ namespace UI {
 		needReload = true;
 	}
 
+	
 	void CMap::Calculate()
 	{
 		int n = map.size(), m = map[0].size();
@@ -104,7 +105,7 @@ namespace UI {
 
 	void CMap::MarkPossibleMoves( const std::vector<Core::CCoordinates>& possibleMoves )
 	{
-		for (auto move : possibleMoves)
+		for (auto move : possibleMoves) 
 		{
 			//потом нужно будет изменить на константу
 			map[move.y][move.x] += 5;

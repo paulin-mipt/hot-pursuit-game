@@ -17,6 +17,7 @@ namespace UI {
 	std::string CDrawing::windowName = "AK-Car Game";
 	int CDrawing::window;
 	int CDrawing::key;
+	Core::CCoordinates CDrawing::mouse;
 
 	void CDrawing::Init( int argc, char** argv )
 	{
@@ -31,6 +32,7 @@ namespace UI {
 		glutReshapeFunc( reshape );
 		glutDisplayFunc( display );
 		glutKeyboardFunc( keyboardFunction );
+		glutMouseFunc( mouseFunction );
 
 		glutHideWindow();
 		glutMainLoop();
@@ -126,10 +128,31 @@ namespace UI {
 		key = -1;
 	}
 
+	void CDrawing::DropMouse()
+	{
+		std::unique_lock<std::mutex> lock( mutex );
+		mouse.x = -1;
+		mouse.y = -1;
+	}
+
 	int CDrawing::GetKey()
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		return key;
+	}
+
+	Core::CCoordinates CDrawing::GetMouse( const std::vector<Core::CCoordinates>& possibleMoves )
+	{
+		std::unique_lock<std::mutex> lock( mutex );
+		for (auto move : possibleMoves)
+		{
+			if (mouse == move) 
+			{
+				return mouse;
+			}
+		}
+		mouse = Core::CCoordinates( -1, -1 );
+		return mouse;
 	}
 
 	void CDrawing::ShowWindow()
@@ -248,42 +271,29 @@ namespace UI {
 	void CDrawing::load()
 	{
 		//load textures for map
-		//loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road
-		//loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
-		std::string resourceFilename;
-		resourceFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\road.png";
-		loadTexture(resourceFilename.c_str(), map.textureRoad);
-		resourceFilename = "D:\\hot-pursuit-game\\CarGame\\\Debug\\Resources\\Images\\forest.png";
-		loadTexture(resourceFilename.c_str(), map.textureBoard);
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\road_active.png").c_str(), map.textureActiveRoad ); // active road
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest_active.png").c_str(), map.textureActiveBoard ); // active board
 		
-		resourceFilename = "D:\\hot-pursuit-game\\CarGame\\\Debug\\Resources\\Images\\forest_active.png";
-		loadTexture(resourceFilename.c_str(), map.textureActiveBoard);
-		resourceFilename = "D:\\hot-pursuit-game\\CarGame\\\Debug\\Resources\\Images\\road_active.png";
-		loadTexture(resourceFilename.c_str(), map.textureActiveRoad);
-
 		//load textures for cars (depends on color)
 		std::string carFilename;
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			switch( cars[i].GetColor() ) {
 				case RED:
-					//carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";
-					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_red.png";
+					carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";					
 					break;
 				case BLUE:
-					//carFilename = RESOURCE_DIRECTORY + "Images\\car_blue.png";
-					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_blue.png";
+					carFilename = RESOURCE_DIRECTORY + "Images\\car_blue.png";					
 					break;
 				case GREEN:
-					//carFilename = RESOURCE_DIRECTORY + "Images\\car_green.png";
-					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_green.png";
+					carFilename = RESOURCE_DIRECTORY + "Images\\car_green.png";
 					break;
 				case ORANGE:
-					//carFilename = RESOURCE_DIRECTORY + "Images\\car_orange.png";
-					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_orange.png";
+					carFilename = RESOURCE_DIRECTORY + "Images\\car_orange.png";
 					break;
 				default:
-					//carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";
-					carFilename = "D:\\hot-pursuit-game\\CarGame\\Debug\\Resources\\Images\\car_red.png";
+					carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";
 			}
 			loadTexture( carFilename.c_str(), cars[i].texture );
 		}
@@ -321,6 +331,30 @@ namespace UI {
 				break;
 			default:
 				key = -1;
+		}
+	}
+
+	Core::CCoordinates CDrawing::translateToCoord( int x, int y, float cellSize )
+	{
+		int newx = (int)x / cellSize;
+		int newy = (int)y / cellSize;
+		return Core::CCoordinates( newx, newy );
+	}
+	
+	void CDrawing::mouseFunction( int button, int state, int x, int y )
+	{
+		if ( button == GLUT_LEFT_BUTTON ) {
+			UI::CWindowCoordinates indent = map.GetIndent();
+			CSize s = map.GetSize();
+			if ((x < indent.x) || (x > s.first * map.GetCellSize()) || (y < indent.y) || (x > s.second * map.GetCellSize())) {
+				mouse = Core::CCoordinates( -1, -1 );
+			}
+			else {
+				mouse = translateToCoord( x - indent.x, y - indent.y, map.GetCellSize() );
+			}
+		}
+		else {
+			mouse = Core::CCoordinates( -1, 1 );
 		}
 	}
 }
