@@ -173,20 +173,18 @@ namespace Core {
 				break;
 			case AI:
 			{
-				if ( !hInstanceDLLLibrary ) hInstanceDLLLibrary = LoadLibrary( TEXT("StrategyDLL.dll") );
-				STRATEGY_PROC StrategyFunc = ( STRATEGY_PROC )GetProcAddress( hInstanceDLLLibrary, "StrategyFunc" );
-				PLAYER_STATE_FACTORY_PROC GetPlayerState = ( PLAYER_STATE_FACTORY_PROC )GetProcAddress( hInstanceDLLLibrary, "GetPlayerState" );
-				MAP_FACTORY_PROC GetMap = ( MAP_FACTORY_PROC )GetProcAddress( hInstanceDLLLibrary, "GetMap" );
+				if( !hInstanceDLLLibrary ) hInstanceDLLLibrary = LoadLibrary( TEXT( "StrategyDLL.dll" ) );
+				STRATEGY_PROC StrategyFunc = (STRATEGY_PROC)GetProcAddress( hInstanceDLLLibrary, "StrategyFunc" );
+				PLAYER_STATE_FACTORY_PROC GetPlayerState = (PLAYER_STATE_FACTORY_PROC)GetProcAddress( hInstanceDLLLibrary, "GetPlayerState" );
+				MAP_FACTORY_PROC GetMap = (MAP_FACTORY_PROC)GetProcAddress( hInstanceDLLLibrary, "GetMap" );
 				// Map map;
 
 				CField field = map.GetField();
 				CSize sizemap = map.GetSize();
 				std::vector< std::vector< int > > mapForAI( field.size() );
 
-				for ( int i = 0; i < sizemap.first; ++i )
-				{
-					for ( int j = 0; j < sizemap.second; ++j )
-					{
+				for( int i = 0; i < sizemap.first; ++i ) {
+					for( int j = 0; j < sizemap.second; ++j ) {
 						mapForAI[i].push_back( field[i][j] );
 					}
 				}
@@ -199,6 +197,7 @@ namespace Core {
 				for ( int i = 0; i < players.size(); ++i )
 				{
 					if ( !players[i].IsAlive ) continue;
+
 					CCoordinates currentPosition = players[i].GetPosition();
 					CCoordinates previuosPosition = players[i].GetPreviousPosition();
 
@@ -210,7 +209,6 @@ namespace Core {
 				}
 
 				direction = StrategyFunc( *mapPtr, playerStates, player.GetNumber() );
-
 				break;
 			}
 			default:
