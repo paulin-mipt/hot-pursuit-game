@@ -27,6 +27,7 @@ namespace UI {
 		glGenTextures( 1, &textureRoad );
 	}
 
+	
 	void CMap::Calculate()
 	{
 		int n = map.size(), m = map[0].size();

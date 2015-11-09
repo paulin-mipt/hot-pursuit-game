@@ -17,7 +17,7 @@ bool UI::CGameResultWindow::RegisterClass( HINSTANCE hInst )
 	tag.cbClsExtra = 0;
 	tag.cbWndExtra = 0;
 	tag.hCursor = LoadCursor( nullptr, IDC_ARROW );
-	tag.hbrBackground = HBRUSH( GetStockObject( LTGRAY_BRUSH ) );
+	tag.hbrBackground = HBRUSH( GetStockObject( BLACK_BRUSH ) );
 	tag.lpszMenuName = nullptr;
 	tag.lpszClassName = className;
 	tag.hInstance = ::GetModuleHandle( nullptr );

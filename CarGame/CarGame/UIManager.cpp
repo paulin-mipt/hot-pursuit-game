@@ -21,17 +21,24 @@ CUIManager::CUIManager( UI::CMainMenuWindow* _mainMenuWindow, HINSTANCE hInst ) 
 	gameResultWindow.Create();
 }
 
-int CUIManager::GetDirection() const
+int CUIManager::GetDirection( const std::vector<Core::CCoordinates>& possibleMoves, Core::CCoordinates inertia, Core::CCoordinates position ) const
 {
 	UI::CDrawing::DropKey();
 	int key;
-	while( (key = UI::CDrawing::GetKey()) == -1 ) {
+
+	UI::CDrawing::DropMouse();
+	Core::CCoordinates mouse;
+	while( ((key = UI::CDrawing::GetKey()) == -1 ) && ((mouse = UI::CDrawing::GetMouse(possibleMoves)) == Core::CCoordinates(-1, -1)) ) {
 		std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+	}
+	if (key == -1) {
+		Core::CCoordinates direction = mouse - inertia - position;
+		key = 5 + direction.x + 3 * (-direction.y);
 	}
 	return key;
 }
 
-void CUIManager::InitMap( const Core::CMap& map, const std::vector<Core::CPlayer>& players ) const
+void CUIManager::InitMap( const Core::CMap& map, const std::vector<Core::CPlayer>& players, const Core::CLine& finish ) const
 {
 	Core::CField field = map.GetField();
 	std::vector<std::vector<int>> newField;
@@ -48,7 +55,7 @@ void CUIManager::InitMap( const Core::CMap& map, const std::vector<Core::CPlayer
 		cars.push_back( UI::CCar( UI::CCoordinates( playerCoordinates.x, playerCoordinates.y, PI / 2 ), UI::Color( i % 4 ) ) );
 	}
 
-	UI::CDrawing::InitGame( UI::CMap( newField ), cars );
+	UI::CDrawing::InitGame( UI::CMap( newField ), cars, finish );
 	UI::CDrawing::Start();
 }
 

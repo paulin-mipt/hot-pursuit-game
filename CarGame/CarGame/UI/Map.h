@@ -13,6 +13,7 @@ namespace UI {
 		void Calculate();
 		void Draw();
 		float GetCellSize() const;
+		
 		CWindowCoordinates GetIndent() const;
 		CSize GetSize() const;
 

@@ -13,10 +13,13 @@ namespace UI {
 	bool CDrawing::started = false;
 	bool CDrawing::finished = false;
 	bool CDrawing::loaded = false;
+	bool CDrawing::justStartedFlag = false;
 	std::mutex CDrawing::mutex;
 	std::string CDrawing::windowName = "Rock'n'Roll race";
+	std::pair<CCoordinates, CCoordinates> CDrawing::finishLine = std::pair<CCoordinates, CCoordinates>( CCoordinates( 0, 0 ), CCoordinates( 0, 0 ) );
 	int CDrawing::window;
 	int CDrawing::key;
+	Core::CCoordinates CDrawing::mouse;
 
 	void CDrawing::Init( int argc, char** argv )
 	{
@@ -32,6 +35,7 @@ namespace UI {
 		glutReshapeFunc( reshape );
 		glutDisplayFunc( display );
 		glutKeyboardFunc( keyboardFunction );
+		glutMouseFunc( mouseFunction );
 
 		glutMainLoop();
 	}
@@ -42,7 +46,7 @@ namespace UI {
 		finished = true;
 	}
 
-	void CDrawing::InitGame( const CMap &mapData, const std::vector<CCar> &carsData )
+	void CDrawing::InitGame( const CMap &mapData, const std::vector<CCar> &carsData, const Core::CLine& finish )
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		if( initialized ) {
@@ -51,6 +55,11 @@ namespace UI {
 		map = mapData;
 		cars = carsData;
 		initialized = true;
+		justStartedFlag = true;
+		finishLine.first.x = finish.first.x;
+		finishLine.first.y = finish.first.y;
+		finishLine.second.x = finish.second.x;
+		finishLine.second.y = finish.second.y;
 	}
 
 	void CDrawing::DropGame()
@@ -85,6 +94,20 @@ namespace UI {
 		glutTimerFunc( 1, timer, 0 );
 	}
 
+	void CDrawing::drawFinishLine()
+	{
+		glLineWidth( 3 );
+
+		glBegin( GL_LINES );
+		{
+			auto point1 = transateToWcoord( finishLine.first.x, finishLine.first.y, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			auto point2 = transateToWcoord( finishLine.second.x, finishLine.second.y, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			glVertex2f( point1.x, point1.y );
+			glVertex2f( point2.x, point2.y );
+		}
+		glEnd();
+	}
+
 	void CDrawing::display()
 	{
 		std::unique_lock<std::mutex> lock( mutex );
@@ -95,6 +118,19 @@ namespace UI {
 			load();
 			loaded = true;
 		}
+		if ( justStartedFlag ) {
+			glViewport( 0, 0, 800, 600 ); // set view block
+
+			glMatrixMode( GL_PROJECTION );
+			glLoadIdentity();
+			gluOrtho2D( 0, 800, 0, 600 ); // set coordinates 
+
+			glMatrixMode( GL_MODELVIEW );
+			glLoadIdentity();
+			map.Calculate(); // recalculate map
+			glutShowWindow();
+			justStartedFlag = false;
+		}
 
 		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
@@ -104,8 +140,8 @@ namespace UI {
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
 		}
+		drawFinishLine();
 		glFlush(); // flush changes
-		//glutSwapBuffers();
 		if( mapReloaded ) {
 			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
 		}
@@ -123,10 +159,31 @@ namespace UI {
 		key = -1;
 	}
 
+	void CDrawing::DropMouse()
+	{
+		std::unique_lock<std::mutex> lock( mutex );
+		mouse.x = -1;
+		mouse.y = -1;
+	}
+
 	int CDrawing::GetKey()
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		return key;
+	}
+
+	Core::CCoordinates CDrawing::GetMouse( const std::vector<Core::CCoordinates>& possibleMoves )
+	{
+		std::unique_lock<std::mutex> lock( mutex );
+		for (auto move : possibleMoves)
+		{
+			if (mouse == move) 
+			{
+				return mouse;
+			}
+		}
+		mouse = Core::CCoordinates( -1, -1 );
+		return mouse;
 	}
 
 	void CDrawing::ShowWindow()
@@ -306,6 +363,30 @@ namespace UI {
 				break;
 			default:
 				key = -1;
+		}
+	}
+
+	Core::CCoordinates CDrawing::translateToCoord( int x, int y, float cellSize )
+	{
+		int newx = (int)x / cellSize;
+		int newy = (int)y / cellSize;
+		return Core::CCoordinates( newx, newy );
+	}
+	
+	void CDrawing::mouseFunction( int button, int state, int x, int y )
+	{
+		if ( button == GLUT_LEFT_BUTTON ) {
+			UI::CWindowCoordinates indent = map.GetIndent();
+			CSize s = map.GetSize();
+			if ((x < indent.x) || (x > s.first * map.GetCellSize()) || (y < indent.y) || (x > s.second * map.GetCellSize())) {
+				mouse = Core::CCoordinates( -1, -1 );
+			}
+			else {
+				mouse = translateToCoord( x - indent.x, y - indent.y, map.GetCellSize() );
+			}
+		}
+		else {
+			mouse = Core::CCoordinates( -1, 1 );
 		}
 	}
 }

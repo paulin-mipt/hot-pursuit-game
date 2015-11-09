@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "GlobalDefinitions.h"
+
 namespace UI {
 	// координаты в игре
 	struct CCoordinates {
@@ -18,9 +20,11 @@ namespace UI {
 	struct CWindowCoordinates {
 		float x;
 		float y;
-		CWindowCoordinates( float _x, float _y ) :
+		CWindowCoordinates( float _x = 0, float _y = 0 ) :
 			x( _x ),
 			y( _y )
-		{}
+		{}		
 	};
+
+	CWindowCoordinates transateToWcoord( float x, float y, float cellSize, CWindowCoordinates indent, CSize mapSize );
 }

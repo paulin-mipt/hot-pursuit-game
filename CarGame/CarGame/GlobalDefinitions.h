@@ -17,7 +17,7 @@ namespace Core {
 	};
 
 	struct CCoordinates {
-		CCoordinates( int newX, int newY ) :
+		CCoordinates( int newX = 0, int newY = 0) :
 			x( newX ),
 			y( newY )
 		{}
@@ -30,6 +30,18 @@ namespace Core {
 		CCoordinates operator + ( const CCoordinates &point ) const
 		{
 			return CCoordinates( this->x + point.x, this->y + point.y );
+		}
+
+		CCoordinates operator - ( const CCoordinates &point ) const
+		{
+			return CCoordinates( this->x - point.x, this->y - point.y );
+		}
+		
+		CCoordinates& operator = ( CCoordinates right ) 
+		{
+			this->x = right.x;
+			this->y = right.y;
+			return *this;
 		}
 
 		int x;
