@@ -41,10 +41,10 @@ UI::CMapSettingsWindow::CMapSettingsWindow( CUIManager* _manager ) :
 
 bool UI::CMapSettingsWindow::Create()
 {
-	handle = CreateWindow( className, L"Map settings - AK-Car Game", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+	handle = CreateWindow( className, L"Map settings - Rock'n'Roll race", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		200, 200, 400, 500, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
-	mapNameControl = CreateWindow( L"EDIT", L"map1", WS_VISIBLE | WS_CHILD, 40, 50, 125, 20,
+	mapNameControl = CreateWindow( L"EDIT", L"Map name", WS_VISIBLE | WS_CHILD, 40, 50, 125, 20,
 		handle, nullptr, HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 	for( int i = 0; i < positionOwnerControls.size(); ++i ) {
 		positionOwnerControls[i] = CreateWindow( L"COMBOBOX", (std::wstring( L"Position " ) + std::to_wstring( i + 1 )).c_str(),
@@ -82,8 +82,12 @@ void UI::CMapSettingsWindow::StartGame()
 		manager->SwitchToGame();
 		game.Start();
 	} catch( std::exception& e ) {
-		::MessageBeep( SOUND_SYSTEM_BEEP );
-		::PostQuitMessage( 1 );
+		if( std::string( "Can't open file" ) == e.what() ) {
+			::MessageBox( handle, L"Map not found", L"You're doing it wrong", MB_ICONHAND );
+		} else {
+			::MessageBeep( SOUND_SYSTEM_BEEP );
+			::PostQuitMessage( 1 );
+		}
 	}
 }
 

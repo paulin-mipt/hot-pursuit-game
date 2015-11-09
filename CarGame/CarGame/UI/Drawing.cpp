@@ -14,7 +14,7 @@ namespace UI {
 	bool CDrawing::finished = false;
 	bool CDrawing::loaded = false;
 	std::mutex CDrawing::mutex;
-	std::string CDrawing::windowName = "AK-Car Game";
+	std::string CDrawing::windowName = "Rock'n'Roll race";
 	int CDrawing::window;
 	int CDrawing::key;
 	Core::CCoordinates CDrawing::mouse;
@@ -26,6 +26,7 @@ namespace UI {
 		glutInitWindowSize( 800, 600 );
 		std::unique_lock<std::mutex> lock( mutex );
 		window = glutCreateWindow( windowName.c_str() );
+		glutHideWindow();
 		lock.unlock();
 
 		glutTimerFunc( 1, timer, 0 );
@@ -34,7 +35,6 @@ namespace UI {
 		glutKeyboardFunc( keyboardFunction );
 		glutMouseFunc( mouseFunction );
 
-		glutHideWindow();
 		glutMainLoop();
 	}
 
@@ -68,10 +68,6 @@ namespace UI {
 		if( !started ) {
 			return;
 		}
-		if( !loaded ) {
-			load();
-			loaded = true;
-		}
 
 		glViewport( 0, 0, width, height ); // set view block
 
@@ -97,10 +93,11 @@ namespace UI {
 		if( !started ) {
 			return;
 		}
-		if ( !loaded ) {
+		if( !loaded ) {
 			load();
 			loaded = true;
 		}
+
 		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
 
@@ -165,15 +162,16 @@ namespace UI {
 		glutHideWindow();
 	}
 
-	void CDrawing::MarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves)
+	void CDrawing::MarkPossibleMoves( const std::vector<Core::CCoordinates>& possibleMoves )
 	{
-		std::unique_lock<std::mutex> lock(mutex);
-		map.MarkPossibleMoves(possibleMoves);
+		std::unique_lock<std::mutex> lock( mutex );
+		map.MarkPossibleMoves( possibleMoves );
 	}
-	void CDrawing::UnMarkPossibleMoves(const std::vector<Core::CCoordinates>& possibleMoves)
+
+	void CDrawing::UnMarkPossibleMoves( const std::vector<Core::CCoordinates>& possibleMoves )
 	{
-		std::unique_lock<std::mutex> lock(mutex);
-		map.UnMarkPossibleMoves(possibleMoves);
+		std::unique_lock<std::mutex> lock( mutex );
+		map.UnMarkPossibleMoves( possibleMoves );
 	}
 
 	// load image from file to texture
@@ -273,18 +271,18 @@ namespace UI {
 		//load textures for map
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
-		loadTexture( (RESOURCE_DIRECTORY + "Images\\road_active.png").c_str(), map.textureActiveRoad ); // active road
-		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest_active.png").c_str(), map.textureActiveBoard ); // active board
-		
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\roadActive.png").c_str(), map.textureActiveRoad ); // road active
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\forestActive.png").c_str(), map.textureActiveBoard ); // board active
+
 		//load textures for cars (depends on color)
 		std::string carFilename;
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			switch( cars[i].GetColor() ) {
 				case RED:
-					carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";					
+					carFilename = RESOURCE_DIRECTORY + "Images\\car_red.png";
 					break;
 				case BLUE:
-					carFilename = RESOURCE_DIRECTORY + "Images\\car_blue.png";					
+					carFilename = RESOURCE_DIRECTORY + "Images\\car_blue.png";
 					break;
 				case GREEN:
 					carFilename = RESOURCE_DIRECTORY + "Images\\car_green.png";

@@ -35,6 +35,8 @@ namespace UI {
 		float cellSize;
 		CWindowCoordinates indent;
 		bool needReload;
+		
+		const static int TEXTURE_COUNT = 5;
 
 		void saveTexture();
 		void reload();
