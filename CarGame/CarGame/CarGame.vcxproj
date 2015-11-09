@@ -76,6 +76,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)\..\Externals\FreeGLUT\include;$(SolutionDir)\..\Externals\SOIL\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\..\Externals\FreeGLUT\lib;$(SolutionDir)\..\Externals\SOIL\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -169,6 +170,8 @@
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="Core\Reader.h" />
     <ClInclude Include="GlobalDefinitions.h" />
+    <ClInclude Include="IMap.h" />
+    <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI\Car.h" />

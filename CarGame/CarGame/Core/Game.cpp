@@ -2,6 +2,19 @@
 #include <algorithm>
 
 #include "Core/Game.h"
+#include "AI/IPlayerState.h"
+#include "AI/IMap.h"
+
+HINSTANCE hInstanceDLLLibrary = NULL;
+
+typedef int(__cdecl *STRATEGY_PROC)(const IMap &_map, const std::vector<std::shared_ptr<IPlayerState>> &_playerStates, int curPlayerPosition);
+typedef IPlayerState*(__cdecl *PLAYER_STATE_FACTORY_PROC)(int x, int y, int xVelocity, int yVelocity);
+
+typedef IMap*(__cdecl *MAP_DEFAULT_FACTORY_PROC)();
+typedef IMap*(__cdecl *MAP_FACTORY_PROC)(const std::vector< std::vector < int > > &inputCells,
+	const std::pair< int, int > &_leftFinishPoint,
+	const std::pair< int, int > &_rightFinishPoint);
+
 
 namespace Core {
 	namespace {
@@ -163,8 +176,47 @@ namespace Core {
 				direction = manager->GetDirection();
 				manager->UnMarkPossibleMoves(possibleMoves);
 				break;
-//			case AI: direction = ;
-//				break;
+			case AI:
+			{
+				if ( !hInstanceDLLLibrary ) hInstanceDLLLibrary = LoadLibrary( TEXT("StrategyDLL.dll") );
+				STRATEGY_PROC StrategyFunc = ( STRATEGY_PROC )GetProcAddress( hInstanceDLLLibrary, "StrategyFunc" );
+				PLAYER_STATE_FACTORY_PROC GetPlayerState = ( PLAYER_STATE_FACTORY_PROC )GetProcAddress( hInstanceDLLLibrary, "GetPlayerState" );
+				MAP_FACTORY_PROC GetMap = ( MAP_FACTORY_PROC )GetProcAddress( hInstanceDLLLibrary, "GetMap" );
+				// Map map;
+
+				CField field = map.GetField();
+				CSize sizemap = map.GetSize();
+				std::vector< std::vector< int > > mapForAI( field.size() );
+
+				for ( int i = 0; i < sizemap.first; ++i )
+				{
+					for ( int j = 0; j < sizemap.second; ++j )
+					{
+						mapForAI[i].push_back( field[i][j] );
+					}
+				}
+				CCoordinates firstFinishPoint = map.GetFinishLine().first;
+				CCoordinates secondFinishPoint = map.GetFinishLine().second;
+
+				std::shared_ptr< IMap > mapPtr( GetMap( mapForAI, std::make_pair( firstFinishPoint.x, firstFinishPoint.y ), std::make_pair( secondFinishPoint.x, secondFinishPoint.y ) ) );
+				std::vector< std::shared_ptr< IPlayerState > > playerStates;
+
+				for ( int i = 0; i < players.size(); ++i )
+				{
+					CCoordinates currentPosition = players[i].GetPosition();
+					CCoordinates previuosPosition = players[i].GetPreviousPosition();
+
+					int xVelocity = currentPosition.x - previuosPosition.x;
+					int yVelocity = currentPosition.y - previuosPosition.y;
+
+					std::shared_ptr<IPlayerState> playerStatePtr( GetPlayerState( currentPosition.x, currentPosition.y, xVelocity, yVelocity ) );
+					playerStates.push_back( playerStatePtr );
+				}
+
+				direction = StrategyFunc( *mapPtr, playerStates, player.GetNumber() );
+
+				break;
+			}
 			default:
 				throw std::runtime_error( "Invalid type of player. Please, don't cheat." );
 		}

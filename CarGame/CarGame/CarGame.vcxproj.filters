@@ -25,6 +25,9 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{7b64674d-37c6-4b78-9a82-f98c107d038a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{0ee9a8db-d337-4dca-b3c7-d7e0da63e076}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Game.cpp">
@@ -95,9 +98,6 @@
     <ClInclude Include="UI\Map.h">
       <Filter>Source Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UI\MapSettingsWindow.h">
       <Filter>Source Files\UI</Filter>
     </ClInclude>
@@ -106,6 +106,15 @@
     </ClInclude>
     <ClInclude Include="UI\GameResultWindow.h">
       <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="IMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IPlayerState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

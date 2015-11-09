@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <Windows.h>
 
 const std::string RESOURCE_DIRECTORY = ".\\Resources\\";
 
@@ -10,6 +11,7 @@ enum PlayersTypes {
 };
 
 namespace Core {
+
 	enum Cell {
 		ROAD = 0, FOREST = 1, CAR = 2
 	};
