@@ -196,7 +196,7 @@ namespace Core {
 
 				for ( int i = 0; i < players.size(); ++i )
 				{
-					if ( !players[i].IsAlive ) continue;
+					if ( !players[i].IsAlive() ) continue;
 
 					CCoordinates currentPosition = players[i].GetPosition();
 					CCoordinates previuosPosition = players[i].GetPreviousPosition();
@@ -208,7 +208,7 @@ namespace Core {
 					playerStates.push_back( playerStatePtr );
 				}
 
-				direction = StrategyFunc( *mapPtr, playerStates, player.GetNumber() );
+				direction = 1;//StrategyFunc( *mapPtr, playerStates, player.GetNumber() );
 				break;
 			}
 			default:
