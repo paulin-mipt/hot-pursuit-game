@@ -181,10 +181,10 @@ namespace Core {
 
 				CField field = map.GetField();
 				CSize sizemap = map.GetSize();
-				std::vector< std::vector< int > > mapForAI( field.size() );
+				std::vector< std::vector< int > > mapForAI( sizemap.second );
 
-				for( int i = 0; i < sizemap.first; ++i ) {
-					for( int j = 0; j < sizemap.second; ++j ) {
+				for( int i = 0; i < sizemap.second; ++i ) {
+					for( int j = 0; j < sizemap.first; ++j ) {
 						mapForAI[i].push_back( field[i][j] );
 					}
 				}
@@ -208,7 +208,7 @@ namespace Core {
 					playerStates.push_back( playerStatePtr );
 				}
 
-				direction = 1;//StrategyFunc( *mapPtr, playerStates, player.GetNumber() );
+				direction = StrategyFunc( *mapPtr, playerStates, player.GetNumber() );
 				break;
 			}
 			default:
