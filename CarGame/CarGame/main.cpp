@@ -1,4 +1,4 @@
-#include "Core/Game.h"
+п»ї#include "Core/Game.h"
 #include "UI/MainMenuWindow.h"
 
 int __stdcall wWinMain( HINSTANCE hInst, HINSTANCE /*hPrevInst*/, LPWSTR commandLine, int nCmdShow )
@@ -8,7 +8,7 @@ int __stdcall wWinMain( HINSTANCE hInst, HINSTANCE /*hPrevInst*/, LPWSTR command
 	mainWindow.Create();
 	mainWindow.Show( nCmdShow );
 
-	//Цикл обработки сообщений
+	// Р¦РёРєР» РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№
 	MSG msg;
 	BOOL getMessageResult = 0;
 	while( (getMessageResult = ::GetMessage( &msg, nullptr, 0, 0 )) != 0 ) {
