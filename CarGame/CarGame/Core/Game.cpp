@@ -198,6 +198,7 @@ namespace Core {
 
 				for ( int i = 0; i < players.size(); ++i )
 				{
+					if ( !players[i].IsAlive ) continue;
 					CCoordinates currentPosition = players[i].GetPosition();
 					CCoordinates previuosPosition = players[i].GetPreviousPosition();
 
