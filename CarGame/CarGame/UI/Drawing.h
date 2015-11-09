@@ -49,6 +49,7 @@ namespace UI {
 		static bool started;
 		static bool finished;
 		static bool loaded;
+		static bool justStartedFlag;
 		static CMap map;
 		static std::vector<CCar> cars;
 		static std::mutex mutex;

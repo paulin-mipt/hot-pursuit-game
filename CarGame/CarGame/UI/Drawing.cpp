@@ -13,6 +13,7 @@ namespace UI {
 	bool CDrawing::started = false;
 	bool CDrawing::finished = false;
 	bool CDrawing::loaded = false;
+	bool CDrawing::justStartedFlag = false;
 	std::mutex CDrawing::mutex;
 	std::string CDrawing::windowName = "Rock'n'Roll race";
 	int CDrawing::window;
@@ -51,6 +52,7 @@ namespace UI {
 		map = mapData;
 		cars = carsData;
 		initialized = true;
+		justStartedFlag = true;
 	}
 
 	void CDrawing::DropGame()
@@ -95,6 +97,19 @@ namespace UI {
 			load();
 			loaded = true;
 		}
+		if ( justStartedFlag ) {
+			glViewport( 0, 0, 800, 600 ); // set view block
+
+			glMatrixMode( GL_PROJECTION );
+			glLoadIdentity();
+			gluOrtho2D( 0, 800, 0, 600 ); // set coordinates 
+
+			glMatrixMode( GL_MODELVIEW );
+			glLoadIdentity();
+			map.Calculate(); // recalculate map
+			glutShowWindow();
+			justStartedFlag = false;
+		}
 
 		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
@@ -105,7 +120,6 @@ namespace UI {
 			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
 		}
 		glFlush(); // flush changes
-		//glutSwapBuffers();
 		if( mapReloaded ) {
 			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
 		}
