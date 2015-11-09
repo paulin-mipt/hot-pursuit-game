@@ -97,6 +97,11 @@ namespace Core {
 		return position;
 	}
 
+	CCoordinates CPlayer::GetInertia() const
+	{
+		return inertia;
+	}
+
 	size_t CPlayer::GetNumber() const
 	{
 		return number;

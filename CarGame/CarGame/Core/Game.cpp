@@ -160,7 +160,7 @@ namespace Core {
 				possibleMoves = player.PossibleMoves(map.GetSize());
 				manager->MarkPossibleMoves(possibleMoves);
 				//manager-->possibleMoves
-				direction = manager->GetDirection();
+				direction = manager->GetDirection(possibleMoves, player.GetInertia(), player.GetPosition());
 				manager->UnMarkPossibleMoves(possibleMoves);
 				break;
 //			case AI: direction = ;

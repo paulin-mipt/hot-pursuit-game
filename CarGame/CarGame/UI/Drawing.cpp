@@ -18,6 +18,7 @@ namespace UI {
 	std::string CDrawing::windowName = "Rock'n'Roll race";
 	int CDrawing::window;
 	int CDrawing::key;
+	Core::CCoordinates CDrawing::mouse;
 
 	void CDrawing::Init( int argc, char** argv )
 	{
@@ -33,6 +34,7 @@ namespace UI {
 		glutReshapeFunc( reshape );
 		glutDisplayFunc( display );
 		glutKeyboardFunc( keyboardFunction );
+		glutMouseFunc( mouseFunction );
 
 		glutMainLoop();
 	}
@@ -137,10 +139,31 @@ namespace UI {
 		key = -1;
 	}
 
+	void CDrawing::DropMouse()
+	{
+		std::unique_lock<std::mutex> lock( mutex );
+		mouse.x = -1;
+		mouse.y = -1;
+	}
+
 	int CDrawing::GetKey()
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		return key;
+	}
+
+	Core::CCoordinates CDrawing::GetMouse( const std::vector<Core::CCoordinates>& possibleMoves )
+	{
+		std::unique_lock<std::mutex> lock( mutex );
+		for (auto move : possibleMoves)
+		{
+			if (mouse == move) 
+			{
+				return mouse;
+			}
+		}
+		mouse = Core::CCoordinates( -1, -1 );
+		return mouse;
 	}
 
 	void CDrawing::ShowWindow()
@@ -320,6 +343,30 @@ namespace UI {
 				break;
 			default:
 				key = -1;
+		}
+	}
+
+	Core::CCoordinates CDrawing::translateToCoord( int x, int y, float cellSize )
+	{
+		int newx = (int)x / cellSize;
+		int newy = (int)y / cellSize;
+		return Core::CCoordinates( newx, newy );
+	}
+	
+	void CDrawing::mouseFunction( int button, int state, int x, int y )
+	{
+		if ( button == GLUT_LEFT_BUTTON ) {
+			UI::CWindowCoordinates indent = map.GetIndent();
+			CSize s = map.GetSize();
+			if ((x < indent.x) || (x > s.first * map.GetCellSize()) || (y < indent.y) || (x > s.second * map.GetCellSize())) {
+				mouse = Core::CCoordinates( -1, -1 );
+			}
+			else {
+				mouse = translateToCoord( x - indent.x, y - indent.y, map.GetCellSize() );
+			}
+		}
+		else {
+			mouse = Core::CCoordinates( -1, 1 );
 		}
 	}
 }
