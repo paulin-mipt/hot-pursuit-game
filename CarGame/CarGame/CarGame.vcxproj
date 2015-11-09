@@ -190,6 +190,7 @@
     <Image Include="MainIcon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\..\Resources\Maps\dm4.txt" />
     <Text Include="..\..\Resources\Maps\map1.txt" />
     <Text Include="..\..\Resources\Maps\map2.txt" />
   </ItemGroup>

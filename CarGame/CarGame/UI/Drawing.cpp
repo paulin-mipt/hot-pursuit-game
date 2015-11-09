@@ -100,8 +100,8 @@ namespace UI {
 
 		glBegin( GL_LINES );
 		{
-			auto point1 = transateToWcoord( finishLine.first.x, finishLine.first.y, map.GetCellSize(), map.GetIndent(), map.GetSize() );
-			auto point2 = transateToWcoord( finishLine.second.x, finishLine.second.y, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			auto point1 = transateToWcoord( finishLine.first.x + 0.5, finishLine.first.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			auto point2 = transateToWcoord( finishLine.second.x + 0.5, finishLine.second.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			glVertex2f( point1.x, point1.y );
 			glVertex2f( point2.x, point2.y );
 		}

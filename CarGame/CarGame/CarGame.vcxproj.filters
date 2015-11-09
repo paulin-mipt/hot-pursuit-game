@@ -141,6 +141,9 @@
     <Text Include="..\..\Resources\Maps\map2.txt">
       <Filter>Resource Files\Maps</Filter>
     </Text>
+    <Text Include="..\..\Resources\Maps\dm4.txt">
+      <Filter>Resource Files\Maps</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CarGame.rc">
