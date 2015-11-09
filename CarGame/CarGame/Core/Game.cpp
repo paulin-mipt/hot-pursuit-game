@@ -26,9 +26,7 @@ namespace Core {
 			if( thirdPoint > forthPoint ) {
 				std::swap( thirdPoint, forthPoint );
 			}
-#undef max
-#undef min
-			return std::max( firstPoint, thirdPoint ) <= std::min( secondPoint, forthPoint );
+			return max( firstPoint, thirdPoint ) <= min( secondPoint, forthPoint );
 		}
 
 		int area( const CCoordinates& firstPoint, const CCoordinates& secondPoint, const CCoordinates& thirdPoint )
@@ -106,10 +104,10 @@ namespace Core {
 		CCoordinates playersPreviousCoordinates = player.GetPreviousPosition();
 		CCoordinates playersCoordinates = player.GetPosition();
 
-		int minX = std::min( playersPreviousCoordinates.x, playersCoordinates.x ),
-			maxX = std::max( playersPreviousCoordinates.x, playersCoordinates.x ),
-			minY = std::min( playersPreviousCoordinates.y, playersCoordinates.y ),
-			maxY = std::max( playersPreviousCoordinates.y, playersCoordinates.y );
+		int minX = min( playersPreviousCoordinates.x, playersCoordinates.x ),
+			maxX = max( playersPreviousCoordinates.x, playersCoordinates.x ),
+			minY = min( playersPreviousCoordinates.y, playersCoordinates.y ),
+			maxY = max( playersPreviousCoordinates.y, playersCoordinates.y );
 
 		CCoordinates realCoordinates( playersCoordinates.x * 10 + 5, playersCoordinates.y * 10 + 5 ),
 			realPreviousCoordinates( playersPreviousCoordinates.x * 10 + 5, playersPreviousCoordinates.y * 10 + 5 );
