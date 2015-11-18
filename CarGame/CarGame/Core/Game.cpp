@@ -181,10 +181,10 @@ namespace Core {
 
 				CField field = map.GetField();
 				CSize sizemap = map.GetSize();
-				std::vector< std::vector< int > > mapForAI( field.size() );
+				std::vector< std::vector< int > > mapForAI( sizemap.second );
 
-				for( int i = 0; i < sizemap.first; ++i ) {
-					for( int j = 0; j < sizemap.second; ++j ) {
+				for( int i = 0; i < sizemap.second; ++i ) {
+					for( int j = 0; j < sizemap.first; ++j ) {
 						mapForAI[i].push_back( field[i][j] );
 					}
 				}
@@ -194,7 +194,10 @@ namespace Core {
 				std::shared_ptr< IMap > mapPtr( GetMap( mapForAI, std::make_pair( firstFinishPoint.x, firstFinishPoint.y ), std::make_pair( secondFinishPoint.x, secondFinishPoint.y ) ) );
 				std::vector< std::shared_ptr< IPlayerState > > playerStates;
 
-				for( int i = 0; i < players.size(); ++i ) {
+				for ( int i = 0; i < players.size(); ++i )
+				{
+					if ( !players[i].IsAlive() ) continue;
+
 					CCoordinates currentPosition = players[i].GetPosition();
 					CCoordinates previuosPosition = players[i].GetPreviousPosition();
 
