@@ -227,7 +227,6 @@ namespace Core {
 
 		do {
 			for( size_t i = 0; i < players.size(); ++i ) {
-				
 				if( players[i].IsAlive() ) {
 					turnOfPlayer( players[i] );
 				}
