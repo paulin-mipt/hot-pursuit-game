@@ -2,10 +2,11 @@
 #include <algorithm>
 
 #include "Core/Game.h"
+#include "Core/GameMode.h"
 #include "AI/IPlayerState.h"
 #include "AI/IMap.h"
 
-HINSTANCE hInstanceDLLLibrary = NULL;
+HINSTANCE hInstanceDLLLibrary = nullptr;
 
 typedef int(__cdecl *STRATEGY_PROC)(const IMap &_map, const std::vector<std::shared_ptr<IPlayerState>> &_playerStates, int curPlayerPosition);
 typedef IPlayerState*(__cdecl *PLAYER_STATE_FACTORY_PROC)(int x, int y, int xVelocity, int yVelocity);
@@ -52,7 +53,6 @@ namespace Core {
 
 	CGame::CGame( const CMap& newMap, const std::vector<CPlayer>& playersInfo, const CUIManager* _manager ) :
 		map( newMap ),
-		numOfDeadPlayers( 0 ),
 		players( playersInfo ),
 		manager( _manager )
 	{}
@@ -82,21 +82,11 @@ namespace Core {
 		return 0;
 	}
 
-	const CPlayer* CGame::handleFinishLineIntersections()
+	void CGame::handleFinishLineIntersections()
 	{
 		for( int i = 0; i < players.size(); ++i ) {
-			if( finishLineIntersectsWithPlayer( players[i] ) == -1 ) {
-				players[i].StartCheating();
-			}
-			if( finishLineIntersectsWithPlayer( players[i] ) == 1 ) {
-				if (players[i].IsCheating() ) {
-					players[i].StopCheating();
-				} else {
-					return &players[i];
-				}
-			}
+			players[i].IncreaseLaps( finishLineIntersectsWithPlayer( players[i] ) );
 		}
-		return nullptr;
 	}
 
 	bool CGame::playerOutOfTrack( const CPlayer& player ) const
@@ -133,31 +123,48 @@ namespace Core {
 		return false;
 	}
 
-	void CGame::findCollisions()
+	void CGame::findCollisions( std::set<CPlayer*>& crashedPlayers )
 	{
 		for( size_t i = 0; i < players.size(); ++i ) {
-			for( size_t j = i + 1; j < players.size(); ++j ) {
-				if ( players[i].GetPosition() == players[j].GetPosition() && players[i].IsAlive() && players[j].IsAlive() ) {
-					collidedPlayers.insert( players[i] );
-					collidedPlayers.insert( players[j] );
-				}
-			}
+			findCollisionsForPlayer( i, crashedPlayers );
 		}
 	}
 
-	void CGame::findCrashes()
+	void CGame::findCollisionsForPlayer( int playerId, std::set<CPlayer*>& crashedPlayers )
 	{
-		for( auto player : players ) {
-			if( !player.IsAlive() ) {
-				continue;
-			}
-			if( playerOutOfTrack( player ) && player.IsAlive() ) {
-				crashedPlayers.insert( player );
+		for( size_t j = playerId + 1; j < players.size(); ++j ) {
+			if( players[playerId].GetPosition() == players[j].GetPosition() && players[playerId].IsAlive() && players[j].IsAlive() ) {
+				crashedPlayers.insert( &players[playerId] );
+				crashedPlayers.insert( &players[j] );
 			}
 		}
 	}
 
-	void CGame::turnOfPlayer( CPlayer& player )
+	void CGame::findCrashes( std::set<CPlayer*>& crashedPlayers )
+	{
+		for( int i = 0; i < players.size(); ++i ) {
+			findCrashesForPlayer( players[i], crashedPlayers );
+		}
+	}
+
+	void CGame::findCrashesForPlayer( CPlayer& player, std::set<CPlayer*>& crashedPlayers ) const
+	{
+		if( player.IsAlive() && playerOutOfTrack( player ) ) {
+			crashedPlayers.insert( &player );
+		}
+	}
+
+	void CGame::findWinners( std::vector<CPlayer>& winners ) const
+	{
+		int lapCount = CGameMode::GetLapCount();
+		for( auto player : players ) {
+			if( player.GetLaps() >= lapCount ) {
+				winners.push_back( player );
+			}
+		}
+	}
+
+	void CGame::turnOfPlayer( CPlayer& player, std::set<CPlayer*>& crashedPlayers )
 	{
 		int direction;
 		std::vector<CCoordinates> possibleMoves;
@@ -220,60 +227,75 @@ namespace Core {
 		}
 		player.Move( Direction( direction ) );
 		player.Die();
-		crashedPlayers.insert( player );
+		crashedPlayers.insert( &player );
+	}
+
+	void CGame::handleCrashes( const std::set<CPlayer*>& crashedPlayers, int& deadPlayersCount ) const
+	{
+		auto penalty = CGameMode::GetDeathPenalty();
+		if( penalty == CGameMode::DESTROY ) {
+			for( auto player : crashedPlayers ) {
+				player->Die();
+				++deadPlayersCount;
+			}
+			manager->ShowCrashes( crashedPlayers );
+		} else if( penalty == CGameMode::TO_START ) {
+			for( auto player : crashedPlayers ) {
+				player->GoToStart();
+			}
+			manager->ShowCrashesAndRespawn( crashedPlayers );
+		} else if( penalty == CGameMode::STOP ) {
+			for( auto player : crashedPlayers ) {
+				player->SetInertia( CCoordinates() );
+				// здесь вкрутить пропуск хода
+			}
+		}
 	}
 
 	void CGame::Start()
 	{
-		const CPlayer* winner = nullptr;
+		std::vector<CPlayer> winners;
+		int deadPlayersCount = 0;
 		manager->InitMap( map, players, map.GetFinishLine() );
+		std::set<CPlayer*> crashedPlayers;
 
 		do {
-			for( size_t i = 0; i < players.size(); ++i ) {
-				if( players[i].IsAlive() ) {
-					turnOfPlayer( players[i] );
+			if( CGameMode::GetMovementMode() == CGameMode::CONCURRENT ) {
+				for( size_t i = 0; i < players.size(); ++i ) {
+					if( players[i].IsAlive() ) {
+						turnOfPlayer( players[i], crashedPlayers );
+					}
+				}
+				manager->Move( players );
+
+				findCollisions( crashedPlayers );
+				findCrashes( crashedPlayers );
+				handleCrashes( crashedPlayers, deadPlayersCount );
+				crashedPlayers.clear();
+			} else if( CGameMode::GetMovementMode() == CGameMode::SEQUENTIAL ) {
+				for( size_t i = 0; i < players.size(); ++i ) {
+					if( players[i].IsAlive() ) {
+						turnOfPlayer( players[i], crashedPlayers );
+						manager->Move( {players[i]} );
+					}
+
+					findCollisionsForPlayer( i, crashedPlayers );
+					findCrashesForPlayer( players[i], crashedPlayers );
+					handleCrashes( crashedPlayers, deadPlayersCount );
+					crashedPlayers.clear();
 				}
 			}
 
-			manager->Move( players );
+			handleFinishLineIntersections();
+			findWinners( winners );
+		} while( winners.size() == 0 && deadPlayersCount < players.size() );
 
-			findCollisions();
-			findCrashes();
-
-			for( auto crashedPlayer : crashedPlayers ) {
-				auto it = collidedPlayers.find( crashedPlayer );
-				if( it != collidedPlayers.end() ) {
-					collidedPlayers.erase( it );
-				}
-			}
-			for( auto collidedPlayer : collidedPlayers ) {
-				players[collidedPlayer.GetNumber()].GoToStart();
-			}
-			for( auto crashedPlayer : crashedPlayers ) {
-				players[crashedPlayer.GetNumber()].Die();
-			}
-			if( !collidedPlayers.empty() ) {
-				manager->ShowCollisions( collidedPlayers );
-			}
-			if( !crashedPlayers.empty() ) {
-				manager->ShowCrashes( crashedPlayers );
-			}
-
-			numOfDeadPlayers += crashedPlayers.size();
-			if( numOfDeadPlayers == players.size() ) {
-				break;
-			}
-
-			collidedPlayers.clear();
-			crashedPlayers.clear();
-		} while( (winner = handleFinishLineIntersections()) == nullptr );
-
-		finish( winner );
+		finish( winners );
 	}
 
-	void CGame::finish( const CPlayer* winnerPtr )
+	void CGame::finish(  const std::vector<CPlayer>& winners ) const
 	{
 		manager->FinishGame();
-		manager->ShowGameResult( winnerPtr );
+		manager->ShowGameResult( winners );
 	}
 }

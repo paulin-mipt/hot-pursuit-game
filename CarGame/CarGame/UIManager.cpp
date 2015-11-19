@@ -80,29 +80,29 @@ void CUIManager::UnMarkPossibleMoves(const std::vector<Core::CCoordinates>& poss
 	UI::CDrawing::UnMarkPossibleMoves(possibleMoves);
 }
 
-void CUIManager::ShowCollisions( const std::set<Core::CPlayer>& collidedPlayers ) const
+void CUIManager::ShowCrashesAndRespawn( const std::set<Core::CPlayer*>& collidedPlayers ) const
 {
 	std::vector<int> numbers;
 	std::vector<UI::CCoordinates> coordinates;
 	for( auto player : collidedPlayers ) {
-		numbers.push_back( player.GetNumber() );
-		coordinates.push_back( UI::CCoordinates( player.GetInitialPosition().x, player.GetInitialPosition().y, PI / 2 ) );
+		numbers.push_back( player->GetNumber() );
+		coordinates.push_back( UI::CCoordinates( player->GetInitialPosition().x, player->GetInitialPosition().y, PI / 2 ) );
 	}
 	UI::CDrawing::MoveCarsToStart( numbers, coordinates );
 }
 
-void CUIManager::ShowCrashes( const std::set<Core::CPlayer>& crashedPlayers ) const
+void CUIManager::ShowCrashes( const std::set<Core::CPlayer*>& crashedPlayers ) const
 {
 	std::vector<int> numbers;
 	for( auto player : crashedPlayers ) {
-		numbers.push_back( player.GetNumber() );
+		numbers.push_back( player->GetNumber() );
 	}
 	UI::CDrawing::DeleteCars( numbers );
 }
 
-void CUIManager::ShowGameResult( const Core::CPlayer* winner ) const
+void CUIManager::ShowGameResult( const std::vector<Core::CPlayer>& winners ) const
 {
-	gameResultWindow.SetWinner( winner );
+	gameResultWindow.SetWinners( winners );
 	std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
 	UI::CDrawing::Stop();
 	SwitchToResults();

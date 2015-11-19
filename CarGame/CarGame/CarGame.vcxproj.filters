@@ -69,6 +69,9 @@
     <ClCompile Include="UI\Coord.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Core\GameMode.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalDefinitions.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="IPlayerState.h">
       <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GameMode.h">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

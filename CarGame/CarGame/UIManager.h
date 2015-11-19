@@ -25,9 +25,9 @@ public:
 	int GetDirection( const std::vector<Core::CCoordinates>& possibleMoves, Core::CCoordinates inertia, Core::CCoordinates position ) const;
 	void InitMap( const Core::CMap& map, const std::vector<Core::CPlayer>& players, const Core::CLine& finish ) const;
 	void Move( const std::vector<Core::CPlayer>& movedPlayers ) const;
-	void ShowCollisions( const std::set<Core::CPlayer>& collidedPlayers ) const;
-	void ShowCrashes( const std::set<Core::CPlayer>& crashedPlayers ) const;
-	void ShowGameResult( const Core::CPlayer* winner ) const;
+	void ShowCrashesAndRespawn( const std::set<Core::CPlayer*>& collidedPlayers ) const;
+	void ShowCrashes( const std::set<Core::CPlayer*>& crashedPlayers ) const;
+	void ShowGameResult( const std::vector<Core::CPlayer>& winners ) const;
 	void SwitchToMainMenu() const;
 	void SwitchToSettings() const;
 	void SwitchToGame() const;

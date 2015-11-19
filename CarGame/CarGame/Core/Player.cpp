@@ -7,7 +7,7 @@ namespace Core {
 		initialPosition( coordinates ),
 		previousPosition( coordinates ),
 		isAlive( true ),
-		isCheating( false ),
+		lapCount( 0 ),
 		number( playerNumber ),
 		type( playerType )
 	{}
@@ -20,14 +20,14 @@ namespace Core {
 		this->inertia.y = 0;
 	}
 
-	void CPlayer::StartCheating()
+	void CPlayer::DecreaseLaps( int count )
 	{
-		isCheating = true;
+		IncreaseLaps( -count );
 	}
 
-	void CPlayer::StopCheating()
+	void CPlayer::IncreaseLaps( int count)
 	{
-		isCheating = false;
+		lapCount += count;
 	}
 
 	CCoordinates CPlayer::convertFromDirectionCode( Direction directionCode ) const
@@ -71,6 +71,12 @@ namespace Core {
 		}
 		return moves;
 	}
+
+	void CPlayer::SetInertia( CCoordinates newInertia )
+	{
+		inertia = newInertia;
+	}
+
 	void CPlayer::Move( Direction direction_code )
 	{
 		CCoordinates direction = convertFromDirectionCode( direction_code );
@@ -134,9 +140,9 @@ namespace Core {
 		return isAlive;
 	}
 
-	bool CPlayer::IsCheating() const
+	int CPlayer::GetLaps() const
 	{
-		return isCheating;
+		return lapCount;
 	}
 
 	bool CPlayer::operator< ( const CPlayer& player ) const

@@ -16,7 +16,7 @@ namespace UI {
 
 		void MakeVisible() const;
 		void MakeInvisible() const;
-		void SetWinner( const Core::CPlayer* winner ) const;
+		void SetWinners( const std::vector<Core::CPlayer>& winners ) const;
 
 	private:
 		HWND handle;
