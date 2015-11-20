@@ -8,14 +8,14 @@
 
 HINSTANCE hInstanceDLLLibrary = nullptr;
 
-typedef int(__cdecl *STRATEGY_PROC)(const IMap &_map, const std::vector<std::shared_ptr<IPlayerState>> &_playerStates, int curPlayerPosition);
+typedef int( __cdecl *STRATEGY_PROC )(const std::vector< std::vector < int > > &inputCells,
+	const std::pair< int, int > &_leftFinishPoint,
+	const std::pair< int, int > &_rightFinishPoint, 
+	const std::vector<std::shared_ptr<IPlayerState>> &_playerStates, int curPlayerPosition);
+
 typedef IPlayerState*(__cdecl *PLAYER_STATE_FACTORY_PROC)(int x, int y, int xVelocity, int yVelocity);
 
 typedef IMap*(__cdecl *MAP_DEFAULT_FACTORY_PROC)();
-typedef IMap*(__cdecl *MAP_FACTORY_PROC)(const std::vector< std::vector < int > > &inputCells,
-	const std::pair< int, int > &_leftFinishPoint,
-	const std::pair< int, int > &_rightFinishPoint);
-
 
 namespace Core {
 	namespace {
@@ -180,10 +180,9 @@ namespace Core {
 				break;
 			case AI:
 			{
-				if( !hInstanceDLLLibrary ) hInstanceDLLLibrary = LoadLibrary( TEXT( "StrategyDLL.dll" ) );
+				if( !hInstanceDLLLibrary ) hInstanceDLLLibrary = LoadLibrary( TEXT( "Strategy.dll" ) );
 				STRATEGY_PROC StrategyFunc = (STRATEGY_PROC)GetProcAddress( hInstanceDLLLibrary, "StrategyFunc" );
 				PLAYER_STATE_FACTORY_PROC GetPlayerState = (PLAYER_STATE_FACTORY_PROC)GetProcAddress( hInstanceDLLLibrary, "GetPlayerState" );
-				MAP_FACTORY_PROC GetMap = (MAP_FACTORY_PROC)GetProcAddress( hInstanceDLLLibrary, "GetMap" );
 				// Map map;
 
 				CField field = map.GetField();
@@ -198,7 +197,6 @@ namespace Core {
 				CCoordinates firstFinishPoint = map.GetFinishLine().first;
 				CCoordinates secondFinishPoint = map.GetFinishLine().second;
 
-				std::shared_ptr< IMap > mapPtr( GetMap( mapForAI, std::make_pair( firstFinishPoint.x, firstFinishPoint.y ), std::make_pair( secondFinishPoint.x, secondFinishPoint.y ) ) );
 				std::vector< std::shared_ptr< IPlayerState > > playerStates;
 
 				for ( int i = 0; i < players.size(); ++i )
@@ -215,7 +213,8 @@ namespace Core {
 					playerStates.push_back( playerStatePtr );
 				}
 
-				direction = StrategyFunc( *mapPtr, playerStates, player.GetNumber() );
+				direction = StrategyFunc( mapForAI, std::make_pair( firstFinishPoint.x, firstFinishPoint.y ), 
+					std::make_pair( secondFinishPoint.x, secondFinishPoint.y ), playerStates, player.GetNumber() );
 				break;
 			}
 			default:

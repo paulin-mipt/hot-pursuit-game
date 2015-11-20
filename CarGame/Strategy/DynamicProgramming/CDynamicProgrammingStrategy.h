@@ -6,10 +6,10 @@
 #define AI_ABBYY_CDYNAMICPROGRAMMINGSTRATEGY_H
 
 
-#include "CPlayerState.hpp"
-#include "CMap.hpp"
+#include "../CPlayerState.hpp"
+#include "../CMap.hpp"
 #include "CStateArray.h"
-#include "CStrategy.h"
+#include "../CStrategy.h"
 #include <vector>
 #include <queue>
 #include <stack>

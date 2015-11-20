@@ -8,7 +8,7 @@
 #include <vector>
 #include <cmath>
 #include <utility>
-#include "CPlayerState.hpp"
+#include "../CPlayerState.hpp"
 
 
 class CStateArray {
