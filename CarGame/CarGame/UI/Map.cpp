@@ -61,9 +61,9 @@ namespace UI {
 	void CMap::reload()
 	{
 		int n = map.size(), m = map[0].size();
+		glEnable( GL_TEXTURE_2D );
 		for( int i = 0; i < n; i++ ) {
 			for( int j = 0; j < m; j++ ) {
-				glEnable( GL_TEXTURE_2D );
 
 				switch( map[i][j] ) {
 					case 1:
@@ -88,13 +88,16 @@ namespace UI {
 				float top = (n - (i + 1)) * cellSize + indent.y;
 				//Draw a cell with texture (board or road)
 				glBegin( GL_POLYGON );
-				glTexCoord2f( 0.0f, 0.0f ); glVertex3f( left, bottom, 0.0f );
-				glTexCoord2f( 1.0f, 0.0f ); glVertex3f( right, bottom, 0.0f );
-				glTexCoord2f( 1.0f, 1.0f ); glVertex3f( right, top, 0.0f );
-				glTexCoord2f( 0.0f, 1.0f ); glVertex3f( left, top, 0.0f );
+				{
+					glTexCoord2f( 0.0f, 0.0f ); glVertex3f( left, bottom, 0.0f );
+					glTexCoord2f( 1.0f, 0.0f ); glVertex3f( right, bottom, 0.0f );
+					glTexCoord2f( 1.0f, 1.0f ); glVertex3f( right, top, 0.0f );
+					glTexCoord2f( 0.0f, 1.0f ); glVertex3f( left, top, 0.0f );
+				}
 				glEnd();
 			}
 		}
+		glDisable( GL_TEXTURE_2D );
 		glutSwapBuffers();
 		saveTexture(); // save the whole window with map to texture
 		needReload = false;
@@ -132,11 +135,14 @@ namespace UI {
 		glBindTexture( GL_TEXTURE_2D, textureMap );
 		// Draw a polygon of window size with texture
 		glBegin( GL_POLYGON );
-		glTexCoord2f( 0.0f, 0.0f ); glVertex3f( 0, 0, 0.0f );
-		glTexCoord2f( 1.0f, 0.0f ); glVertex3f( width, 0, 0.0f );
-		glTexCoord2f( 1.0f, 1.0f ); glVertex3f( width, height, 0.0f );
-		glTexCoord2f( 0.0f, 1.0f ); glVertex3f( 0, height, 0.0f );
+		{
+			glTexCoord2f( 0.0f, 0.0f ); glVertex3f( 0, 0, 0.0f );
+			glTexCoord2f( 1.0f, 0.0f ); glVertex3f( width, 0, 0.0f );
+			glTexCoord2f( 1.0f, 1.0f ); glVertex3f( width, height, 0.0f );
+			glTexCoord2f( 0.0f, 1.0f ); glVertex3f( 0, height, 0.0f );
+		}
 		glEnd();
+		glDisable( GL_TEXTURE_2D );
 	}
 
 	float CMap::GetCellSize() const

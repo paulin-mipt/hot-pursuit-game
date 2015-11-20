@@ -97,9 +97,9 @@ namespace UI {
 	void CDrawing::drawFinishLine()
 	{
 		glLineWidth( 3 );
-
 		glBegin( GL_LINES );
 		{
+			glColor3b( 0, 0, 0 );
 			auto point1 = transateToWcoord( finishLine.first.x + 0.5, finishLine.first.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			auto point2 = transateToWcoord( finishLine.second.x + 0.5, finishLine.second.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			glVertex2f( point1.x, point1.y );
@@ -137,10 +137,10 @@ namespace UI {
 
 		bool mapReloaded = !map.NeedToReload();
 		map.Draw(); // Draw the map
+		drawFinishLine();
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
 		}
-		drawFinishLine();
 		glFlush(); // flush changes
 		if( mapReloaded ) {
 			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
