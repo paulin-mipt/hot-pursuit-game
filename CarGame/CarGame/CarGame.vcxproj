@@ -162,7 +162,6 @@
     <ClCompile Include="MapRedactor\CCommandHandler.cpp" />
     <ClCompile Include="MapRedactor\CMap.cpp" />
     <ClCompile Include="MapRedactor\CWindow.cpp" />
-    <ClCompile Include="MapRedactor\Race.cpp" />
     <ClCompile Include="MapRedactor\Ribbon.cpp" />
     <ClCompile Include="MapRedactor\stdafx.cpp" />
     <ClCompile Include="UIManager.cpp" />
@@ -238,7 +237,6 @@
     <ResourceCompile Include="MapRedactor\toolbar.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MapRedactor\Race.vcxproj" />
     <None Include="MapRedactor\README.md" />
     <None Include="MapRedactor\toolbar.bml" />
   </ItemGroup>

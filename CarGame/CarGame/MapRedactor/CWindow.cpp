@@ -91,7 +91,7 @@ void CWindow::Show( int cmdShow )
 void CWindow::OnDestroy()
 {
     DestroyRibbon();
-    ::PostQuitMessage( 0 );
+    DestroyWindow(handle);
 }
 
 UINT32 getRibbonHeight()

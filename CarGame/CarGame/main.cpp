@@ -1,9 +1,18 @@
 ﻿#include "Core/Game.h"
 #include "UI/MainMenuWindow.h"
+#include "MapRedactor/stdafx.h"
+#include "MapRedactor\CWindow.h"
 
-int __stdcall wWinMain( HINSTANCE hInst, HINSTANCE /*hPrevInst*/, LPWSTR commandLine, int nCmdShow )
+CComModule _Module;
+CWindow MainMapRedactorWindow;
+
+int __stdcall wWinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR commandLine, int nCmdShow )
 {
-	UI::CMainMenuWindow mainWindow( hInst );
+  CoInitialize(NULL);
+  UNREFERENCED_PARAMETER(hPrevInst);
+  UNREFERENCED_PARAMETER(commandLine);
+
+  UI::CMainMenuWindow mainWindow( hInst );
 	UI::CMainMenuWindow::RegisterClass( hInst );
 	mainWindow.Create();
 	mainWindow.Show( nCmdShow );
@@ -21,6 +30,8 @@ int __stdcall wWinMain( HINSTANCE hInst, HINSTANCE /*hPrevInst*/, LPWSTR command
 		::TranslateMessage( &msg );
 		::DispatchMessage( &msg );
 	}
+
+  CoUninitialize();
 
 	return static_cast<int>(msg.wParam);
 }

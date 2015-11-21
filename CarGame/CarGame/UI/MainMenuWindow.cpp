@@ -10,9 +10,8 @@
 
 #include "../MapRedactor/CWindow.h"
 
+extern CWindow MainMapRedactorWindow;
 const wchar_t* const UI::CMainMenuWindow::className = L"CMainWindow";
-CComModule _Module;
-CWindow MainWindow;
 
 bool UI::CMainMenuWindow::RegisterClass( HINSTANCE hInst )
 {
@@ -77,11 +76,10 @@ void UI::CMainMenuWindow::Play()
 
 void UI::CMainMenuWindow::CallMapRedactor() 
 {
-
-  MainWindow.RegisterClass();
-  MainWindow.Create();
-  MainWindow.Show(SW_SHOW);
-  MainWindow.UpdateState();
+  MainMapRedactorWindow.RegisterClass();
+  MainMapRedactorWindow.Create();
+  MainMapRedactorWindow.Show(SW_SHOW);
+  MainMapRedactorWindow.UpdateState();
 }
 
 void UI::CMainMenuWindow::MakeVisible() const

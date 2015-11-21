@@ -87,9 +87,6 @@
     <ClCompile Include="MapRedactor\stdafx.cpp">
       <Filter>Source Files\MapRedactor</Filter>
     </ClCompile>
-    <ClCompile Include="MapRedactor\Race.cpp">
-      <Filter>Source Files\MapRedactor</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalDefinitions.h">
@@ -265,9 +262,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MapRedactor\Race.vcxproj">
-      <Filter>Source Files\MapRedactor</Filter>
-    </None>
     <None Include="MapRedactor\README.md">
       <Filter>Source Files\MapRedactor</Filter>
     </None>

@@ -5,7 +5,7 @@
 #include "CWindow.h"
 #include <Commdlg.h>
 
-extern CWindow MainWindow;
+extern CWindow MainMapRedactorWindow;
 
 // Static method to create an instance of the object.
 __checkReturn HRESULT CCommandHandler::CreateInstance( __deref_out IUICommandHandler **ppCommandHandler )
@@ -90,25 +90,25 @@ STDMETHODIMP CCommandHandler::Execute(
 
 	switch ( nCmdID ) {
 	case cmdNewMap:
-		::CreateDialog( GetModuleHandle( 0 ), MAKEINTRESOURCE( IDD_DIALOG1 ), MainWindow.GetHandle(), CWindow::dialogProc );
+		::CreateDialog( GetModuleHandle( 0 ), MAKEINTRESOURCE( IDD_DIALOG1 ), MainMapRedactorWindow.GetHandle(), CWindow::dialogProc );
 		break;
 	case cmdLoadMap:
-		MainWindow.LoadFile();
+		MainMapRedactorWindow.LoadFile();
 		break;
 	case cmdSaveMap:
-		MainWindow.SaveFile();
+		MainMapRedactorWindow.SaveFile();
 		break;
     case cmdRoad:
-        MainWindow.SetBrush( MainWindow.GetBrush() == BRoad ? BNone : BRoad );
+        MainMapRedactorWindow.SetBrush( MainMapRedactorWindow.GetBrush() == BRoad ? BNone : BRoad );
         break;
     case cmdTree:
-        MainWindow.SetBrush( MainWindow.GetBrush() == BTree ? BNone : BTree );
+        MainMapRedactorWindow.SetBrush( MainMapRedactorWindow.GetBrush() == BTree ? BNone : BTree );
         break;
     case cmdWall:
-        MainWindow.SetBrush( MainWindow.GetBrush() == BWall ? BNone : BWall );
+        MainMapRedactorWindow.SetBrush( MainMapRedactorWindow.GetBrush() == BWall ? BNone : BWall );
         break;
     case cmdStart:
-        MainWindow.SetBrush( MainWindow.GetBrush() == BStart ? BNone : BStart );
+        MainMapRedactorWindow.SetBrush( MainMapRedactorWindow.GetBrush() == BStart ? BNone : BStart );
         break;
 	default:
 		break;
