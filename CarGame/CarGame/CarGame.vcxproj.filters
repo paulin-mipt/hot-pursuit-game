@@ -28,6 +28,9 @@
     <Filter Include="Header Files\AI">
       <UniqueIdentifier>{0ee9a8db-d337-4dca-b3c7-d7e0da63e076}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MapRedactor">
+      <UniqueIdentifier>{8ce7ef61-6214-43e6-a451-65bf71451d11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Game.cpp">
@@ -68,6 +71,24 @@
     </ClCompile>
     <ClCompile Include="UI\Coord.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRedactor\CCommandHandler.cpp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRedactor\CMap.cpp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRedactor\CWindow.cpp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRedactor\Ribbon.cpp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRedactor\stdafx.cpp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRedactor\Race.cpp">
+      <Filter>Source Files\MapRedactor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +140,27 @@
     <ClInclude Include="IPlayerState.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
+    <ClInclude Include="MapRedactor\CCommandHandler.h">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRedactor\CMap.h">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRedactor\CWindow.h">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRedactor\resource.h">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRedactor\Ribbon.h">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRedactor\stdafx.h">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRedactor\toolbar.h">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Resources\Images\car_blue.png">
@@ -142,6 +184,63 @@
     <Image Include="MainIcon.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="MapRedactor\icon.ico">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Exit16.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Exit32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\New16.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\New32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Open16.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Open32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Road32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Save16.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Save32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Start.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Start32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Tree.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Tree32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\wall.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Wall32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\ZoomIn32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\ZoomOut32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Road16.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Resources\Maps\map1.txt">
@@ -158,5 +257,27 @@
     <ResourceCompile Include="CarGame.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="MapRedactor\Race.rc">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="MapRedactor\toolbar.rc">
+      <Filter>Source Files\MapRedactor</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MapRedactor\Race.vcxproj">
+      <Filter>Source Files\MapRedactor</Filter>
+    </None>
+    <None Include="MapRedactor\README.md">
+      <Filter>Source Files\MapRedactor</Filter>
+    </None>
+    <None Include="MapRedactor\toolbar.bml">
+      <Filter>Source Files\MapRedactor</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="MapRedactor\toolbar.xml">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

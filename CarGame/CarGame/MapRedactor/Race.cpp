@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "CWindow.h"
-
+/*
 CComModule _Module;
 CWindow MainWindow;
 
@@ -28,3 +28,4 @@ int __stdcall WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmd
 
     return ( int ) msg.wParam;
 }
+*/

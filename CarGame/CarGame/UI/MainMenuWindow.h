@@ -17,6 +17,7 @@ namespace UI {
 
 		void Show( int cmdShow );
 		void Play();
+    void CallMapRedactor();
 
 		void MakeVisible() const;
 		void MakeInvisible() const;
@@ -25,11 +26,14 @@ namespace UI {
 		HWND handle;
 		HWND newGameButton;
 		HWND exitGameButton;
+    HWND newMapButton;
 
 		CUIManager manager;
 
 		const int BUTTON_NEW_GAME = 1;
 		const int BUTTON_EXIT = 2;
+    const int BUTTON_MAP_REDACTOR = 3;
+    const int OVERLAPPED_REDACTOR = 4;
 
 		static const wchar_t* const className;
 		

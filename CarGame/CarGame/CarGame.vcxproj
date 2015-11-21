@@ -77,6 +77,7 @@
     <IncludePath>$(SolutionDir)\..\Externals\FreeGLUT\include;$(SolutionDir)\..\Externals\SOIL\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\..\Externals\FreeGLUT\lib;$(SolutionDir)\..\Externals\SOIL\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -92,6 +93,7 @@
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>false</OptimizeReferences>
     </Link>
     <PostBuildEvent>
       <Command>$(SolutionDir)..\postBuildDebug.cmd</Command>
@@ -103,11 +105,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Externals\FreeGLUT\include\GL;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>..\..\Simple OpenGL library\lib; ..\..\Externals\FreeGLUT\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,6 +159,12 @@
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="Core\Reader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapRedactor\CCommandHandler.cpp" />
+    <ClCompile Include="MapRedactor\CMap.cpp" />
+    <ClCompile Include="MapRedactor\CWindow.cpp" />
+    <ClCompile Include="MapRedactor\Race.cpp" />
+    <ClCompile Include="MapRedactor\Ribbon.cpp" />
+    <ClCompile Include="MapRedactor\stdafx.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI\Car.cpp" />
     <ClCompile Include="UI\Coord.cpp" />
@@ -173,6 +182,13 @@
     <ClInclude Include="GlobalDefinitions.h" />
     <ClInclude Include="IMap.h" />
     <ClInclude Include="IPlayerState.h" />
+    <ClInclude Include="MapRedactor\CCommandHandler.h" />
+    <ClInclude Include="MapRedactor\CMap.h" />
+    <ClInclude Include="MapRedactor\CWindow.h" />
+    <ClInclude Include="MapRedactor\resource.h" />
+    <ClInclude Include="MapRedactor\Ribbon.h" />
+    <ClInclude Include="MapRedactor\stdafx.h" />
+    <ClInclude Include="MapRedactor\toolbar.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI\Car.h" />
@@ -191,6 +207,25 @@
     <Image Include="..\..\Resources\Images\forest.png" />
     <Image Include="..\..\Resources\Images\road.png" />
     <Image Include="MainIcon.ico" />
+    <Image Include="MapRedactor\Exit16.bmp" />
+    <Image Include="MapRedactor\Exit32.bmp" />
+    <Image Include="MapRedactor\icon.ico" />
+    <Image Include="MapRedactor\New16.bmp" />
+    <Image Include="MapRedactor\New32.bmp" />
+    <Image Include="MapRedactor\Open16.bmp" />
+    <Image Include="MapRedactor\Open32.bmp" />
+    <Image Include="MapRedactor\Road16.bmp" />
+    <Image Include="MapRedactor\Road32.bmp" />
+    <Image Include="MapRedactor\Save16.bmp" />
+    <Image Include="MapRedactor\Save32.bmp" />
+    <Image Include="MapRedactor\Start.bmp" />
+    <Image Include="MapRedactor\Start32.bmp" />
+    <Image Include="MapRedactor\Tree.bmp" />
+    <Image Include="MapRedactor\Tree32.bmp" />
+    <Image Include="MapRedactor\wall.bmp" />
+    <Image Include="MapRedactor\Wall32.bmp" />
+    <Image Include="MapRedactor\ZoomIn32.bmp" />
+    <Image Include="MapRedactor\ZoomOut32.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Resources\Maps\dm4.txt" />
@@ -199,6 +234,16 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CarGame.rc" />
+    <ResourceCompile Include="MapRedactor\Race.rc" />
+    <ResourceCompile Include="MapRedactor\toolbar.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MapRedactor\Race.vcxproj" />
+    <None Include="MapRedactor\README.md" />
+    <None Include="MapRedactor\toolbar.bml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="MapRedactor\toolbar.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

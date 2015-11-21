@@ -2,12 +2,17 @@
 #include <thread>
 
 #include "resource.h"
+#include "MapRedactor\stdafx.h"
 
 #include "UIManager.h"
 #include "UI/MainMenuWindow.h"
 #include "UI/Drawing.h"
 
+#include "../MapRedactor/CWindow.h"
+
 const wchar_t* const UI::CMainMenuWindow::className = L"CMainWindow";
+CComModule _Module;
+CWindow MainWindow;
 
 bool UI::CMainMenuWindow::RegisterClass( HINSTANCE hInst )
 {
@@ -30,6 +35,7 @@ bool UI::CMainMenuWindow::RegisterClass( HINSTANCE hInst )
 
 UI::CMainMenuWindow::CMainMenuWindow( HINSTANCE hInst ) :
 	handle( nullptr ),
+  newMapButton( nullptr ),
 	newGameButton( nullptr ),
 	exitGameButton( nullptr ),
 	manager( this, hInst )
@@ -40,6 +46,8 @@ bool UI::CMainMenuWindow::Create()
 	handle = CreateWindow( className, L"Main menu - Rock'n'Roll race", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		100, 100, 300, 300, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
+  newMapButton = CreateWindow(L"BUTTON", L"New map", WS_VISIBLE | WS_CHILD, 75, 50, 150, 30,
+    handle, HMENU(BUTTON_MAP_REDACTOR), HINSTANCE(GetWindowLong(handle, GWL_HINSTANCE)), this);
 	newGameButton = CreateWindow( L"BUTTON", L"New game", WS_VISIBLE | WS_CHILD, 75, 100, 150, 30,
 		handle, HMENU(BUTTON_NEW_GAME), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 	exitGameButton = CreateWindow( L"BUTTON", L"Exit game", WS_VISIBLE | WS_CHILD, 75, 150, 150, 30,
@@ -64,6 +72,16 @@ void UI::CMainMenuWindow::Show( int cmdShow )
 void UI::CMainMenuWindow::Play()
 {
 	manager.SwitchToSettings();
+}
+
+
+void UI::CMainMenuWindow::CallMapRedactor() 
+{
+
+  MainWindow.RegisterClass();
+  MainWindow.Create();
+  MainWindow.Show(SW_SHOW);
+  MainWindow.UpdateState();
 }
 
 void UI::CMainMenuWindow::MakeVisible() const
@@ -92,8 +110,10 @@ LRESULT UI::CMainMenuWindow::windowProc( HWND handle, UINT message, WPARAM wPara
 			return 0;
 
 		case WM_COMMAND:
-			if( LOWORD( wParam ) == wnd->BUTTON_NEW_GAME ) {
-				wnd->Play();
+      if (LOWORD(wParam) == wnd->BUTTON_NEW_GAME) {
+        wnd->Play();
+      } else if ( LOWORD( wParam ) == wnd->BUTTON_MAP_REDACTOR ) {
+        wnd->CallMapRedactor();
 			} else if( LOWORD( wParam ) == wnd->BUTTON_EXIT ) {
 				::SendMessage( wnd->handle, WM_DESTROY, wParam, lParam );
 			}
