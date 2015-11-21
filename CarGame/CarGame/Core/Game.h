@@ -15,23 +15,21 @@ namespace Core {
 
 	private:
 		CMap map;
+		size_t numOfDeadPlayers;
 		std::vector<CPlayer> players;
+		// все игроки, которые врезались друг в друга
+		std::set<CPlayer> collidedPlayers;
+		// все игроки, которые во что-то въехали
+		std::set<CPlayer> crashedPlayers;
 		const CUIManager* manager;
 
-		void handleFinishLineIntersections();
-		// требование к возвращаемому значению:
-		//	-1 - если пересекли финишную черту в неправильную сторону
-		//	0 - не пересекли
-		//	1 - пересекли черту в правильную сторону
+		const CPlayer* handleFinishLineIntersections();
+		// -1 - если пересекли финишную черту в неправильную сторону, 0 - не пересекли, 1 - в правильную сторону
 		int finishLineIntersectsWithPlayer( const CPlayer& player ) const;
-		void turnOfPlayer( CPlayer& player, std::set<CPlayer*>& crashedPlayers );
+		void turnOfPlayer( CPlayer& player );
 		bool playerOutOfTrack( const CPlayer& player ) const;
-		void handleCrashes( const std::set<CPlayer*>& crashedPlayers, int& deadPlayersCount ) const;
-		void findCollisions( std::set<CPlayer*>& crashedPlayers );
-		void findCollisionsForPlayer( int playerId, std::set<CPlayer*>& crashedPlayers );
-		void findCrashes( std::set<CPlayer*>& crashedPlayers );
-		void findCrashesForPlayer( CPlayer& player, std::set<CPlayer*>& crashedPlayers ) const;
-		void findWinners( std::vector<CPlayer>& winners ) const;
-		void finish( const std::vector<CPlayer>& winners ) const;
+		void findCollisions();
+		void findCrashes();
+		void finish( const CPlayer* player = nullptr );
 	};
 }

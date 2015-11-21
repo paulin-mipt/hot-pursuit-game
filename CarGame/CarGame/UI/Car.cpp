@@ -109,7 +109,6 @@ namespace UI {
 		}
 		glEnd();
 		glDisable( GL_BLEND );
-		glDisable( GL_TEXTURE_2D );
 		glDepthMask( GL_TRUE );
 	}
 

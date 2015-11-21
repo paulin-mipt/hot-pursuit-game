@@ -152,7 +152,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Game.cpp" />
-    <ClCompile Include="Core\GameMode.cpp" />
     <ClCompile Include="Core\Map.cpp" />
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="Core\Reader.cpp" />
@@ -168,7 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Game.h" />
-    <ClInclude Include="Core\GameMode.h" />
     <ClInclude Include="Core\Map.h" />
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="Core\Reader.h" />

@@ -72,20 +72,12 @@ void UI::CGameResultWindow::MakeInvisible() const
 	::ShowWindow( handle, SW_HIDE );
 }
 
-void UI::CGameResultWindow::SetWinners( const std::vector<Core::CPlayer>& winners ) const
+void UI::CGameResultWindow::SetWinner( const Core::CPlayer* winner ) const
 {
-	if( winners.size() == 0 ) {
+	if( winner == nullptr ) {
 		::SetWindowText( resultMessage, L"All players are dead." );
-	} else if( winners.size() == 1 ) {
-		::SetWindowText( resultMessage, (std::wstring( L"Player number " ) + std::to_wstring( winners[0].GetNumber() + 1 ) + L" is winner! Congratulations!!!").c_str() );
 	} else {
-		std::wstring text( L"Players " );
-		for( int i = 0; i < winners.size() - 1; ++i ) {
-			text += std::to_wstring( winners[i].GetNumber() + 1 ) + L", ";
-		}
-		text += std::to_wstring( winners.back().GetNumber() + 1 );
-		text += L" are winners! Congratulations!!!";
-		::SetWindowText( resultMessage, text.c_str() );
+		::SetWindowText( resultMessage, (std::wstring( L"Player number " ) + std::to_wstring( winner->GetNumber() + 1 ) + L" is winner!Congratulations!!!").c_str() );
 	}
 }
 

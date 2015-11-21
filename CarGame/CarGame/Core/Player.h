@@ -16,13 +16,13 @@ namespace Core {
 
 		void Die();
 		void GoToStart();
-		void DecreaseLaps( int count = 1 );
-		void IncreaseLaps( int count = 1 );
+		void StartCheating();
+		void StopCheating();
 
 		void Move( Direction direction );
 		bool DirectionIsValid( Direction direction, const CSize& size ) const;
-		bool DirectionIsValid( CCoordinates direction, const CSize& size ) const;
-
+		bool DirectionIsValid( CCoordinates direction, const CSize& size) const;
+		
 		CCoordinates GetPosition() const;
 		CCoordinates GetInertia() const;
 		CCoordinates GetPreviousPosition() const;
@@ -30,20 +30,18 @@ namespace Core {
 		size_t GetNumber() const;
 		PlayersTypes GetType() const;
 		bool IsAlive() const;
-		int GetLaps() const;
+		bool IsCheating() const;
 
 		bool operator< ( const CPlayer& player ) const;
 
-		std::vector<CCoordinates> PossibleMoves( const CSize& size );
-		void SetInertia( CCoordinates newInertia );
-
+		std::vector<CCoordinates> PossibleMoves(const CSize& size);
 	private:
 		CCoordinates position;
 		CCoordinates inertia;
 		CCoordinates initialPosition; // Для возвращения на старт, после столкновения с машиной
 		CCoordinates previousPosition;
 		bool isAlive;
-		int lapCount;
+		bool isCheating;
 		size_t number;
 		PlayersTypes type;
 
