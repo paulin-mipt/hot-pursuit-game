@@ -191,7 +191,16 @@ namespace Core {
 				CCoordinates firstFinishPoint = map.GetFinishLine().first;
 				CCoordinates secondFinishPoint = map.GetFinishLine().second;
 
-				std::shared_ptr< IMap > mapPtr( GetMap( mapForAI, std::make_pair( firstFinishPoint.x, firstFinishPoint.y ), std::make_pair( secondFinishPoint.x, secondFinishPoint.y ) ) );
+				std::shared_ptr< IMap > mapPtr( GetMap( 
+					mapForAI, 
+					std::make_pair( 
+						firstFinishPoint.y, 
+						firstFinishPoint.x ), 
+					std::make_pair( 
+						secondFinishPoint.y, 
+						secondFinishPoint.x ) 
+					) 
+				);
 				std::vector< std::shared_ptr< IPlayerState > > playerStates;
 
 				for ( int i = 0; i < players.size(); ++i )
@@ -204,7 +213,14 @@ namespace Core {
 					int xVelocity = currentPosition.x - previuosPosition.x;
 					int yVelocity = currentPosition.y - previuosPosition.y;
 
-					std::shared_ptr<IPlayerState> playerStatePtr( GetPlayerState( currentPosition.x, currentPosition.y, xVelocity, yVelocity ) );
+					std::shared_ptr<IPlayerState> playerStatePtr( 
+						GetPlayerState( 
+							currentPosition.y, 
+							currentPosition.x, 
+							yVelocity,
+							xVelocity
+						)
+					);
 					playerStates.push_back( playerStatePtr );
 				}
 

@@ -99,6 +99,12 @@
       <Command>$(SolutionDir)..\postBuildDebug.cmd</Command>
       <Message>Copy resources and dlls to output directories.</Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>copy ..\Debug\StrategyDll.dll .</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Копирует StrategyDll.dll</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -138,6 +144,10 @@
     <PostBuildEvent>
       <Message>Copy resources and dlls to output directories.</Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Message>Копирует StrategyDll.dll</Message>
+      <Command>copy ..\Release\StrategyDll.dll .</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
