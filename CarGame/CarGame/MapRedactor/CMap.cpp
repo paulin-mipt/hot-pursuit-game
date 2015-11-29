@@ -56,7 +56,7 @@ void CMap::ClickCell( int i, int j, BType bType )
 
 void CMap::LoadMapFromFile( std::ifstream& fin )
 {
-    fin >> sizeX >> sizeY;
+    fin >> sizeY >> sizeX;
     numbers.resize( sizeY );
     for( int i = 0; i < sizeY; i++ ) {
         numbers[i].resize( sizeX );
@@ -64,31 +64,40 @@ void CMap::LoadMapFromFile( std::ifstream& fin )
             fin >> numbers[i][j];
         }
     }
+
+    startLinePoints.resize(0);
+    std::array<int, 2> point;
+    fin >> point[0] >> point[1];
+    startLinePoints.push_back(point);
+    fin >> point[0] >> point[1];
+    startLinePoints.push_back(point);
 }
 
 
 void CMap::SaveMapToFile( std::ofstream & fout )
 {
-    fout << sizeX << " " << sizeY;
+    fout << sizeY << " " << sizeX;
     fout << std::endl;
 
     for( int i = 0; i < sizeY; i++ ) {
         for( int j = 0; j < sizeX; j++ ) {
-            switch( numbers[i][j] ) {
-                case 0: fout << 1 << " "; break;
-                case 1: fout << 0 << " "; break;
-                case 2: fout << 2 << " "; break;
-                case 3: fout << 3 << " "; break;
-            }
+             fout << numbers[i][j] << " ";
         }
         fout << std::endl;
     }
+
+    std::list<std::array<int, 2>> points = StartLinePoints();
+    fout << points.front()[0] << " " << points.front()[1] << " ";
+    points.pop_front();
+    fout << points.front()[0] << " " << points.front()[1] << std::endl;
+     
 }
 
 
 void CMap::RestartMap()
 {
-	numbers = std::vector< std::vector<int> >( sizeY );
+  startLinePoints.clear(); 
+  numbers = std::vector< std::vector<int> >( sizeY );
 
 	int border = 1; // forest border
 	int roadWidth = 3;

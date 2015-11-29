@@ -32,6 +32,7 @@ public:
     void SetHandle( HWND handle );
     //инициирует перерисовку окна
     void UpdateState();
+    RECT getRectByCoords(int i, int j);
 
     // Static method to create an instance of the object.
     static HRESULT CreateInstance( __deref_out IUIApplication **ppApplication );
