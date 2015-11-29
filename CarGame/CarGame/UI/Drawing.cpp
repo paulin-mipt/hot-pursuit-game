@@ -307,6 +307,7 @@ namespace UI {
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\roadActive.png").c_str(), map.textureActiveRoad ); // road active
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\forestActive.png").c_str(), map.textureActiveBoard ); // board active
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\wall.png").c_str(), map.textureWall ); // road
 
 		//load textures for cars (depends on color)
 		std::string carFilename;

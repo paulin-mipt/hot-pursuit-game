@@ -202,9 +202,6 @@
     <Image Include="MapRedactor\Open32.bmp">
       <Filter>Source Files\MapRedactor</Filter>
     </Image>
-    <Image Include="MapRedactor\Road32.bmp">
-      <Filter>Source Files\MapRedactor</Filter>
-    </Image>
     <Image Include="MapRedactor\Save16.bmp">
       <Filter>Source Files\MapRedactor</Filter>
     </Image>
@@ -215,12 +212,6 @@
       <Filter>Source Files\MapRedactor</Filter>
     </Image>
     <Image Include="MapRedactor\Start32.bmp">
-      <Filter>Source Files\MapRedactor</Filter>
-    </Image>
-    <Image Include="MapRedactor\Tree.bmp">
-      <Filter>Source Files\MapRedactor</Filter>
-    </Image>
-    <Image Include="MapRedactor\Tree32.bmp">
       <Filter>Source Files\MapRedactor</Filter>
     </Image>
     <Image Include="MapRedactor\wall.bmp">
@@ -235,8 +226,17 @@
     <Image Include="MapRedactor\ZoomOut32.bmp">
       <Filter>Source Files\MapRedactor</Filter>
     </Image>
-    <Image Include="MapRedactor\Road16.bmp">
+    <Image Include="MapRedactor\road.bmp">
       <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Road32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="MapRedactor\Tree32.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
+    <Image Include="Resources\Images\wall.png">
+      <Filter>Resource Files\Images</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

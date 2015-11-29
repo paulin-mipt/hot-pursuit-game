@@ -21,6 +21,7 @@ namespace UI {
 
 		GLuint textureBoard;
 		GLuint textureRoad;
+		GLuint textureWall;
 
 		GLuint textureActiveBoard;
 		GLuint textureActiveRoad;

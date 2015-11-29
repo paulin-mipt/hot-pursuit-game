@@ -223,18 +223,18 @@
     <Image Include="MapRedactor\New32.bmp" />
     <Image Include="MapRedactor\Open16.bmp" />
     <Image Include="MapRedactor\Open32.bmp" />
-    <Image Include="MapRedactor\Road16.bmp" />
+    <Image Include="MapRedactor\road.bmp" />
     <Image Include="MapRedactor\Road32.bmp" />
     <Image Include="MapRedactor\Save16.bmp" />
     <Image Include="MapRedactor\Save32.bmp" />
     <Image Include="MapRedactor\Start.bmp" />
     <Image Include="MapRedactor\Start32.bmp" />
-    <Image Include="MapRedactor\Tree.bmp" />
     <Image Include="MapRedactor\Tree32.bmp" />
     <Image Include="MapRedactor\wall.bmp" />
     <Image Include="MapRedactor\Wall32.bmp" />
     <Image Include="MapRedactor\ZoomIn32.bmp" />
     <Image Include="MapRedactor\ZoomOut32.bmp" />
+    <Image Include="Resources\Images\wall.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Resources\Maps\dm4.txt" />
