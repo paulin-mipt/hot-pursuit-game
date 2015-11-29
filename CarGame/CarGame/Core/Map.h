@@ -7,6 +7,7 @@
 namespace Core {
 	class CMap {
 	public:
+		CMap() {}
 		CMap( const CField& newMap, CLine finish, const std::vector<CCoordinates>& startPoints );
 
 		bool IsEmpty( int x, int y ) const;

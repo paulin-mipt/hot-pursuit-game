@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-#include <string>
+#include <Windows.h>
 
 namespace Core {
 	class CMap;
 
 	class CReader {
 	public:
-		CMap ReadMap( const std::string& path );
+		CMap ReadMap( LPWSTR path );
 	};
 }
