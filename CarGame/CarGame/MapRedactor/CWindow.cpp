@@ -35,7 +35,8 @@ bool CWindow::Create()
 
 CWindow::CWindow():
     brush( BNone ), m_cRef( 1 ), m_pCommandHandler( NULL ), lButtonPressed( false ),
-    backgroundBrush( ::CreateSolidBrush( RGB( 0xFF, 0xFF, 0xFF ) ) )
+    backgroundBrush( ::CreateSolidBrush( RGB( 0xFF, 0xFF, 0xFF ) ) ), 
+    startBrush( ::CreateSolidBrush( RGB( 0x0, 0x0, 0x0 ) ) )
 {
     HINSTANCE hInst = ::GetModuleHandle( 0 );
     HBITMAP forest = ::LoadBitmap( hInst, MAKEINTRESOURCE( IDB_FOREST ) );
@@ -172,6 +173,19 @@ void CWindow::OnPaint()
             ::Rectangle( backbuffDC, rect.left, rect.top, rect.right, rect.bottom );
         }
     }
+
+    for (auto point: map.StartLinePoints()) {
+      int i = point[0], j = point[1];
+
+      rect.left = leftMargin + j * cellSize;
+      rect.top = i * cellSize + ribbonHeight;
+      rect.right = leftMargin + (j + 1) * cellSize;
+      rect.bottom = (i + 1) * cellSize + ribbonHeight;
+
+      ::SelectObject( backbuffDC, startBrush );
+      ::Ellipse(backbuffDC, rect.left, rect.top, rect.right, rect.bottom);
+    }
+
     ::BitBlt( hdc, 0, 0, width, height + ribbonHeight, backbuffDC, 0, 0, SRCCOPY );
 
     ::SelectObject( backbuffDC, oldBitmap );

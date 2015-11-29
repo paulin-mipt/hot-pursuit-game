@@ -40,8 +40,16 @@ void CMap::ClickCell( int i, int j, BType bType )
         case BNone:  ClickCell( i, j ); break;
         case BTree:  numbers[i][j] = 0; break;
         case BRoad:  numbers[i][j] = 1; break;
-        case BStart: numbers[i][j] = 2; break;
-        case BWall:  numbers[i][j] = 3; break;
+        case BWall:  numbers[i][j] = 2; break;
+        case BStart:
+          if (startLinePoints.size() < 2) {
+            startLinePoints.push_back(std::array<int, 2> { i, j });
+          } else {
+            startLinePoints.pop_back();
+            startLinePoints.push_front(std::array<int, 2> { i, j });
+          }
+
+          break;
     }
 }
 
@@ -92,7 +100,7 @@ void CMap::RestartMap()
 
 	const int ROAD = 1;
 	const int FOREST = 0;
-	const int WALL = 3;
+	const int WALL = 2;
 
 	for ( int i = 0; i < sizeY; i++ ) {
 		numbers[i].resize( sizeX ); // now forest is everywhere
