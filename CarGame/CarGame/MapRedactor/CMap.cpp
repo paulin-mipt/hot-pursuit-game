@@ -43,12 +43,21 @@ void CMap::ClickCell( int i, int j, BType bType )
         case BWall:  numbers[i][j] = 2; break;
         case BStart:
           if (startLinePoints.size() < 2) {
-            startLinePoints.push_back(std::array<int, 2> { i, j });
+              startLinePoints.push_front(std::array<int, 2> { i, j });
           } else {
-            startLinePoints.pop_back();
-            startLinePoints.push_front(std::array<int, 2> { i, j });
+              startLinePoints.pop_back();
+              startLinePoints.push_front(std::array<int, 2> { i, j });
           }
 
+          // запретить негоризонтальные и пустые стартовые линии
+          if (startLinePoints.size() == 2) {
+              // негоризонтальные
+              if (startLinePoints.front()[0] != startLinePoints.back()[0])
+                  startLinePoints.pop_back();
+              // вырожденные
+              else if (startLinePoints.front()[1] == startLinePoints.back()[1])
+                  startLinePoints.pop_back();
+          }
           break;
     }
 }
