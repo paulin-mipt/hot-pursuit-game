@@ -24,8 +24,8 @@ bool UI::CMapSettingsWindow::RegisterClass( HINSTANCE hInst )
 	tag.lpszMenuName = nullptr;
 	tag.lpszClassName = className;
 	tag.hInstance = ::GetModuleHandle( nullptr );
-	tag.hIcon = reinterpret_cast<HICON> (::LoadImage( hInst, MAKEINTRESOURCE( IDI_MAIN_ICON ), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR ));
-	tag.hIconSm = reinterpret_cast<HICON> (::LoadImage( hInst, MAKEINTRESOURCE( IDI_MAIN_ICON ), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR ));
+	tag.hIcon = reinterpret_cast< HICON > (::LoadImage( hInst, MAKEINTRESOURCE( IDI_MAIN_ICON ), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR ));
+	tag.hIconSm = reinterpret_cast< HICON > (::LoadImage( hInst, MAKEINTRESOURCE( IDI_MAIN_ICON ), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR ));
 
 	return !RegisterClassEx( &tag );
 }
@@ -34,18 +34,22 @@ UI::CMapSettingsWindow::CMapSettingsWindow( CUIManager* _manager ) :
 	handle( nullptr ),
 	startGameButton( nullptr ),
 	backToMenuButton( nullptr ),
-	mapNameControl( nullptr ),
+	chooseMapButton( nullptr ),
 	positionOwnerControls( std::vector<HWND>( 12, nullptr ) ),
-	manager( _manager )
-{}
+	manager( _manager ),
+	map( nullptr )
+{
+}
 
 bool UI::CMapSettingsWindow::Create()
 {
 	handle = CreateWindow( className, L"Map settings - Rock'n'Roll race", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		200, 200, 400, 500, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
-	mapNameControl = CreateWindow( L"EDIT", L"Map name", WS_VISIBLE | WS_CHILD, 40, 50, 125, 20,
-		handle, nullptr, HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
+	//mapNameControl = CreateWindow( L"EDIT", L"Map name", WS_VISIBLE | WS_CHILD, 40, 50, 125, 20,
+	//	handle, nullptr, HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
+	chooseMapButton = CreateWindow( L"BUTTON", L"Choose map", WS_VISIBLE | WS_CHILD, 40, 50, 125, 20,
+		handle, HMENU( BUTTON_CHOOSE_MAP ), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 	for( int i = 0; i < positionOwnerControls.size(); ++i ) {
 		positionOwnerControls[i] = CreateWindow( L"COMBOBOX", (std::wstring( L"Position " ) + std::to_wstring( i + 1 )).c_str(),
 			CBS_DROPDOWNLIST | WS_VISIBLE | WS_CHILD | WS_VSCROLL, 40, 100 + 30 * i, 125, 80,
@@ -74,13 +78,45 @@ void UI::CMapSettingsWindow::Destroy() const
 void UI::CMapSettingsWindow::StartGame()
 {
 	try {
+		//		Core::CMap map = reader.ReadMap( RESOURCE_DIRECTORY + "Maps\\" + mapName + ".txt" );
+		if( map == nullptr ) {
+			::MessageBox( handle, L"No map chosen", L"You're doing it wrong", MB_ICONHAND );
+		} else {
+			std::vector<Core::CPlayer> playersInfo = GetPlayersInfo( map->GetStartPoints() );
+			Core::CGame game( *map, playersInfo, manager );
+			manager->SwitchToGame();
+			game.Start();
+		}
+	} catch( std::exception& e ) {
+		if( std::string( "Can't open file" ) == e.what() ) {
+			::MessageBox( handle, L"Map not found", L"You're doing it wrong", MB_ICONHAND );
+		} else {
+			::MessageBeep( SOUND_SYSTEM_BEEP );
+			::PostQuitMessage( 1 );
+		}
+	}
+}
+
+void UI::CMapSettingsWindow::ChooseMap()
+{
+	try {
 		Core::CReader reader;
-		std::string mapName = GetMapName();
-		Core::CMap map = reader.ReadMap( RESOURCE_DIRECTORY + "Maps\\" + mapName + ".txt" );
-		std::vector<Core::CPlayer> playersInfo = GetPlayersInfo( map.GetStartPoints() );
-		Core::CGame game( map, playersInfo, manager );
-		manager->SwitchToGame();
-		game.Start();
+
+		wchar_t szFilePathName[_MAX_PATH] = L"";
+		OPENFILENAME ofn = { 0 };
+		ofn.lStructSize = sizeof( OPENFILENAME );
+		ofn.hwndOwner = handle;
+		ofn.lpstrFilter = L"Race map files (*.rcmap)\0*.rcmap\0All files (*.*)\0*.*\0";
+		ofn.lpstrFile = szFilePathName;
+		ofn.lpstrDefExt = L"rcmap";
+		ofn.nMaxFile = _MAX_PATH;
+		ofn.lpstrTitle = L"Choose map";
+		ofn.Flags = OFN_READONLY;
+
+		::GetOpenFileName( &ofn );
+
+		map = std::make_shared<Core::CMap>( reader.ReadMap( ofn.lpstrFile ) );
+
 	} catch( std::exception& e ) {
 		if( std::string( "Can't open file" ) == e.what() ) {
 			::MessageBox( handle, L"Map not found", L"You're doing it wrong", MB_ICONHAND );
@@ -96,17 +132,17 @@ void UI::CMapSettingsWindow::BackToMenu() const
 	manager->SwitchToMainMenu();
 }
 
-std::string UI::CMapSettingsWindow::GetMapName() const
-{
-	const size_t MAX_LENGTH = 1024;
-	std::shared_ptr<wchar_t> editText = std::shared_ptr<wchar_t>( new wchar_t[MAX_LENGTH] );
-	::GetWindowText( mapNameControl, editText.get(), MAX_LENGTH );
-	std::string result;
-	for( auto c : std::wstring( editText.get() ) ) {
-		result.push_back( c );
-	}
-	return result;
-}
+//std::string UI::CMapSettingsWindow::GetMapName() const
+//{
+//	const size_t MAX_LENGTH = 1024;
+//	std::shared_ptr<wchar_t> editText = std::shared_ptr<wchar_t>( new wchar_t[MAX_LENGTH] );
+//	::GetWindowText( mapNameControl, editText.get(), MAX_LENGTH );
+//	std::string result;
+//	for( auto c : std::wstring( editText.get() ) ) {
+//		result.push_back( c );
+//	}
+//	return result;
+//}
 
 std::vector<Core::CPlayer> UI::CMapSettingsWindow::GetPlayersInfo( const std::vector<Core::CCoordinates>& coordinates )
 {
@@ -114,7 +150,7 @@ std::vector<Core::CPlayer> UI::CMapSettingsWindow::GetPlayersInfo( const std::ve
 	std::vector<Core::CPlayer> result;
 	const size_t MAX_LENGTH = 1024;
 	std::shared_ptr<wchar_t> text = std::shared_ptr<wchar_t>( new wchar_t[MAX_LENGTH] );
-	for( int i = 0; i < min(12, coordinates.size()); ++i ) {
+	for( int i = 0; i < min( 12, coordinates.size() ); ++i ) {
 		::GetWindowText( positionOwnerControls[i], text.get(), MAX_LENGTH );
 		std::wstring textString( text.get() );
 		if( textString == L"Player" ) {
@@ -123,6 +159,7 @@ std::vector<Core::CPlayer> UI::CMapSettingsWindow::GetPlayersInfo( const std::ve
 			result.push_back( Core::CPlayer( coordinates[i], playerNumber++, AI ) );
 		}
 	}
+	// если 0 игроков, то сообщение об ошибке
 	return result;
 }
 
@@ -140,11 +177,11 @@ LRESULT UI::CMapSettingsWindow::windowProc( HWND handle, UINT message, WPARAM wP
 {
 	CMapSettingsWindow* wnd;
 	if( message == WM_NCCREATE ) {
-		wnd = static_cast<CMapSettingsWindow*>(LPCREATESTRUCT( lParam )->lpCreateParams);
+		wnd = static_cast< CMapSettingsWindow* >(LPCREATESTRUCT( lParam )->lpCreateParams);
 		::SetWindowLong( handle, GWL_USERDATA, LONG( LPCREATESTRUCT( lParam )->lpCreateParams ) );
 		wnd->handle = handle;
 	}
-	wnd = reinterpret_cast<CMapSettingsWindow*>(::GetWindowLong( handle, GWL_USERDATA ));
+	wnd = reinterpret_cast< CMapSettingsWindow* >(::GetWindowLong( handle, GWL_USERDATA ));
 
 	switch( message ) {
 		case WM_DESTROY:
@@ -152,9 +189,11 @@ LRESULT UI::CMapSettingsWindow::windowProc( HWND handle, UINT message, WPARAM wP
 			return 0;
 
 		case WM_COMMAND:
-			if ( wParam == wnd->BUTTON_START_GAME ) {
+			if( wParam == wnd->BUTTON_START_GAME ) {
 				wnd->StartGame();
-			} else if ( wParam == wnd->BUTTON_BACK_TO_MENU ) {
+			} else if( wParam == wnd->BUTTON_CHOOSE_MAP ) {
+				wnd->ChooseMap();
+			} else if( wParam == wnd->BUTTON_BACK_TO_MENU ) {
 				wnd->BackToMenu();
 			}
 			return 0;

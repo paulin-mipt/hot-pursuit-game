@@ -1,7 +1,8 @@
 #pragma once
 
 #include <Windows.h>
-#include <Core/Player.h>
+#include "Core/Player.h"
+#include "Core/Map.h"
 
 class CUIManager;
 
@@ -16,24 +17,28 @@ namespace UI {
 		void Destroy() const;
 
 		void StartGame();
+		void ChooseMap();
 		void BackToMenu() const;
-		std::string GetMapName() const;
+//		std::string GetMapName() const;
 		std::vector<Core::CPlayer> GetPlayersInfo( const std::vector<Core::CCoordinates>& coordinates );
 		
 		void MakeVisible() const;
 		void MakeInvisible() const;
 
 	private:
+		std::shared_ptr<Core::CMap> map;
+
 		HWND handle;
 		HWND startGameButton;
 		HWND backToMenuButton;
-		HWND mapNameControl;
+		HWND chooseMapButton;
 		std::vector<HWND> positionOwnerControls;
 
 		CUIManager* manager;
 
 		const int BUTTON_START_GAME = 1;
 		const int BUTTON_BACK_TO_MENU = 2;
+		const int BUTTON_CHOOSE_MAP = 3;
 
 		static const wchar_t* const className;
 

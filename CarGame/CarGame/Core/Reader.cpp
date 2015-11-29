@@ -7,7 +7,7 @@
 #include "GlobalDefinitions.h"
 
 namespace Core {
-	CMap CReader::ReadMap( const std::string& path )
+	CMap CReader::ReadMap( const LPWSTR path )
 	{
 		CField gameField;
 		std::vector<CCoordinates> startPoints;
