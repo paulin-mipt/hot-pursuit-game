@@ -13,7 +13,7 @@ namespace Core {
 
 	bool CMap::IsEmpty( int x, int y ) const
 	{
-		return map[y][x] != FOREST;
+		return map[y][x] == ROAD;
 	}
 
 	CSize CMap::GetSize() const

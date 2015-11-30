@@ -73,13 +73,16 @@ namespace UI {
 						glBindTexture( GL_TEXTURE_2D, textureRoad ); // load a texture of road
 						break;
 					case 3:
-						glBindTexture( GL_TEXTURE_2D, textureWall ); // load a texture of road
+						glBindTexture( GL_TEXTURE_2D, textureWall ); // load a texture of wall
 						break;
 					case 1 + TEXTURE_COUNT:
 						glBindTexture( GL_TEXTURE_2D, textureActiveBoard ); // load an active texture of board(forest)
 						break;
 					case 0 + TEXTURE_COUNT:
 						glBindTexture( GL_TEXTURE_2D, textureActiveRoad ); // load an active texture of road
+						break;
+					case 3 + TEXTURE_COUNT:
+						glBindTexture( GL_TEXTURE_2D, textureWall ); // load an active texture of wall (now the same)
 						break;
 					default:
 						throw std::runtime_error( "Wrong number of texture" );
