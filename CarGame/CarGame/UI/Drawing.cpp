@@ -17,6 +17,7 @@ namespace UI {
 	std::mutex CDrawing::mutex;
 	std::string CDrawing::windowName = "Rock'n'Roll race";
 	std::pair<CCoordinates, CCoordinates> CDrawing::finishLine = std::pair<CCoordinates, CCoordinates>( CCoordinates( 0, 0 ), CCoordinates( 0, 0 ) );
+	std::pair<CCoordinates, CCoordinates> CDrawing::startLine = std::pair<CCoordinates, CCoordinates>( CCoordinates( 0, 0 ), CCoordinates( 0, 0 ) );
 	int CDrawing::window;
 	int CDrawing::key;
 	Core::CCoordinates CDrawing::mouse;
@@ -46,7 +47,7 @@ namespace UI {
 		finished = true;
 	}
 
-	void CDrawing::InitGame( const CMap &mapData, const std::vector<CCar> &carsData, const Core::CLine& finish )
+	void CDrawing::InitGame( const CMap &mapData, const std::vector<CCar> &carsData, const Core::CLine& start, const Core::CLine& finish )
 	{
 		std::unique_lock<std::mutex> lock( mutex );
 		if( initialized ) {
@@ -56,6 +57,10 @@ namespace UI {
 		cars = carsData;
 		initialized = true;
 		justStartedFlag = true;
+		startLine.first.x = start.first.x;
+		startLine.first.y = start.first.y;
+		startLine.second.x = start.second.x;
+		startLine.second.y = start.second.y;
 		finishLine.first.x = finish.first.x;
 		finishLine.first.y = finish.first.y;
 		finishLine.second.x = finish.second.x;
@@ -94,14 +99,25 @@ namespace UI {
 		glutTimerFunc( 1, timer, 0 );
 	}
 
-	void CDrawing::drawFinishLine()
+	void CDrawing::drawStartAndFinishLines()
 	{
 		glLineWidth( 3 );
-
 		glBegin( GL_LINES );
 		{
+			glColor3f( 0, 0, 0 );
 			auto point1 = transateToWcoord( finishLine.first.x + 0.5, finishLine.first.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			auto point2 = transateToWcoord( finishLine.second.x + 0.5, finishLine.second.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			glVertex2f( point1.x, point1.y );
+			glVertex2f( point2.x, point2.y );
+		}
+		glEnd();
+		
+		glLineWidth( 3 );
+		glBegin( GL_LINES );
+		{
+			glColor3f( 0.2, 0.2, 0.2 );
+			auto point1 = transateToWcoord( startLine.first.x + 0.5, startLine.first.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			auto point2 = transateToWcoord( startLine.second.x + 0.5, startLine.second.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			glVertex2f( point1.x, point1.y );
 			glVertex2f( point2.x, point2.y );
 		}
@@ -137,10 +153,10 @@ namespace UI {
 
 		bool mapReloaded = !map.NeedToReload();
 		map.Draw(); // Draw the map
+		drawStartAndFinishLines();
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
 		}
-		drawFinishLine();
 		glFlush(); // flush changes
 		if( mapReloaded ) {
 			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
@@ -303,11 +319,12 @@ namespace UI {
 	void CDrawing::load()
 	{
 		//load textures for map
+		
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\roadActive.png").c_str(), map.textureActiveRoad ); // road active
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\forestActive.png").c_str(), map.textureActiveBoard ); // board active
-		loadTexture( (RESOURCE_DIRECTORY + "Images\\wall.png").c_str(), map.textureWall ); // road
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\wall.png").c_str(), map.textureWall ); // wall
 
 		//load textures for cars (depends on color)
 		std::string carFilename;
@@ -376,10 +393,10 @@ namespace UI {
 	
 	void CDrawing::mouseFunction( int button, int state, int x, int y )
 	{
-		if ( button == GLUT_LEFT_BUTTON ) {
+		if ( button == GLUT_LEFT_BUTTON && state == GLUT_DOWN ) {
 			UI::CWindowCoordinates indent = map.GetIndent();
 			CSize s = map.GetSize();
-			if ((x < indent.x) || (x > s.first * map.GetCellSize()) || (y < indent.y) || (x > s.second * map.GetCellSize())) {
+			if ((x < indent.x) || (x > s.first * map.GetCellSize() + indent.x) || (y < indent.y) || (y > s.second * map.GetCellSize() + indent.y)) {
 				mouse = Core::CCoordinates( -1, -1 );
 			}
 			else {

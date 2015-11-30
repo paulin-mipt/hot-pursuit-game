@@ -13,7 +13,7 @@ enum PlayersTypes {
 namespace Core {
 
 	enum Cell {
-		ROAD = 1, FOREST = 0, CAR = 3, WALL = 2
+		ROAD = 1, FOREST = 0, WALL = 2
 	};
 
 	struct CCoordinates {

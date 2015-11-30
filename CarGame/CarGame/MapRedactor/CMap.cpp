@@ -38,8 +38,8 @@ void CMap::ClickCell( int i, int j, BType bType )
 {
     switch (bType) {
         case BNone:  ClickCell( i, j ); break;
-        case BTree:  numbers[i][j] = 0; break;
-        case BRoad:  numbers[i][j] = 1; break;
+        case BTree:  numbers[i][j] = 1; break;
+        case BRoad:  numbers[i][j] = 0; break;
         case BWall:  numbers[i][j] = 2; break;
         case BStart:
           if (startLinePoints.size() < 2) {
