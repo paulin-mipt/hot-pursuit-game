@@ -4,7 +4,7 @@
     <Command Name="TabFile" Symbol="cmdTabFile" Id="30000" LabelTitle="Карта" />
     <Command Name="GroupMain" Symbol="cmdGroupMain" Id="30001" LabelTitle="Операции с картой" />
     <Command Name="GroupDraw" Symbol="cmdGroupDraw" Id="30101" LabelTitle="Инструменты рисования" />
-    <Command Name="GroupZoom" Symbol="cmdGroupZoom" Id="30201" LabelTitle="Масштаб" />
+    <!--<Command Name="GroupZoom" Symbol="cmdGroupZoom" Id="30201" LabelTitle="Масштаб" />-->
     <Command Name="SaveMap" Symbol="cmdSaveMap" Id="30002" LabelTitle="Сохранить">
       <Command.TooltipTitle>Сохранить карту</Command.TooltipTitle>
       <Command.TooltipDescription>Сохранить карту в файл</Command.TooltipDescription>
@@ -61,7 +61,7 @@
         <Image Source="Start32.bmp"/>
       </Command.LargeImages>
     </Command>
-    <Command Name="ZoomIn" Symbol="cmdZoomIn" Id="30202" LabelTitle="Приблизить">
+    <!--<Command Name="ZoomIn" Symbol="cmdZoomIn" Id="30202" LabelTitle="Приблизить">
       <Command.TooltipTitle>Увеличить карту</Command.TooltipTitle>
       <Command.LargeImages>
         <Image Source="ZoomIn32.bmp"/>
@@ -72,7 +72,7 @@
       <Command.LargeImages>
         <Image Source="ZoomOut32.bmp"/>
       </Command.LargeImages>
-    </Command>
+    </Command>-->
   </Application.Commands>
 
   <Application.Views>
@@ -111,10 +111,10 @@
             <Button CommandName="Wall" />
             <Button CommandName="Start" />
           </Group>
-          <Group CommandName="GroupZoom" SizeDefinition ="TwoButtons">
+          <!--<Group CommandName="GroupZoom" SizeDefinition ="TwoButtons">
             <Button CommandName="ZoomIn" />
             <Button CommandName="ZoomOut" />
-          </Group>
+          </Group>-->
         </Tab>
       </Ribbon.Tabs>    
     </Ribbon>

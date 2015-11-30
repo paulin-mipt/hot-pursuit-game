@@ -35,17 +35,16 @@ bool CWindow::Create()
 
 CWindow::CWindow():
     brush( BNone ), m_cRef( 1 ), m_pCommandHandler( NULL ), lButtonPressed( false ),
-    backgroundBrush( ::CreateSolidBrush( RGB( 0xFF, 0xFF, 0xFF ) ) )
+    backgroundBrush( ::CreateSolidBrush( RGB( 0xFF, 0xFF, 0xFF ) ) ), 
+    startBrush( ::CreateSolidBrush( RGB( 0x0, 0x0, 0x0 ) ) )
 {
     HINSTANCE hInst = ::GetModuleHandle( 0 );
     HBITMAP forest = ::LoadBitmap( hInst, MAKEINTRESOURCE( IDB_FOREST ) );
     brushes.push_back( ::CreatePatternBrush( forest ) );
     HBITMAP road = ::LoadBitmap( hInst, MAKEINTRESOURCE( IDB_ROAD ) );
     brushes.push_back( ::CreatePatternBrush( road ) );
-    HBITMAP start = ::LoadBitmap( hInst, MAKEINTRESOURCE( IDB_START ) );
-    brushes.push_back( ::CreatePatternBrush( start ) );
-	HBITMAP wall = ::LoadBitmap( hInst, MAKEINTRESOURCE( IDB_WALL ) );
-	brushes.push_back( ::CreatePatternBrush( wall ) );
+	  HBITMAP wall = ::LoadBitmap( hInst, MAKEINTRESOURCE( IDB_WALL ) );
+	  brushes.push_back( ::CreatePatternBrush( wall ) );
 }
 
 CWindow::~CWindow()
@@ -136,6 +135,25 @@ void CWindow::OnSize()
     ::InvalidateRect( handle, &rect, TRUE );
 }
 
+RECT CWindow::getRectByCoords(int i, int j) 
+{
+  RECT mainrect;
+  ::GetClientRect(handle, &mainrect);
+
+  UINT32 ribbonHeight = getRibbonHeight();
+
+  int width = mainrect.right - mainrect.left;
+  int height = mainrect.bottom - mainrect.top - ribbonHeight;
+
+  int leftMargin = (width - cellSize * map.GetX()) / 2;
+
+  RECT rect;
+  rect.left = leftMargin + j * cellSize;
+  rect.top = i * cellSize + ribbonHeight;
+  rect.right = leftMargin + (j + 1) * cellSize;
+  rect.bottom = (i + 1) * cellSize + ribbonHeight;
+  return rect;
+}
 
 void CWindow::OnPaint()
 {
@@ -162,16 +180,36 @@ void CWindow::OnPaint()
 
     for( int i = 0; i < map.GetY(); i++ ) {
         for( int j = 0; j < map.GetX(); j++ ) {
-            RECT rect;
-            rect.left = leftMargin + j * cellSize;
-            rect.top = i * cellSize + ribbonHeight;
-            rect.right = leftMargin + ( j + 1 ) * cellSize;
-            rect.bottom = ( i + 1 ) * cellSize + ribbonHeight;
+            RECT rect = getRectByCoords(i, j);
 
             ::SelectObject( backbuffDC, brushes[map.GetNumbers()[i][j]] );
             ::Rectangle( backbuffDC, rect.left, rect.top, rect.right, rect.bottom );
         }
     }
+
+    for (auto point: map.StartLinePoints()) {
+      int i = point[0], j = point[1];
+      rect = getRectByCoords(i, j);
+
+      ::SelectObject( backbuffDC, startBrush );
+
+      int deltaY = (rect.bottom - rect.top) / 6;
+      int deltaX = (rect.right - rect.left) / 6;
+
+      ::Ellipse(backbuffDC, rect.left + deltaX, rect.top + deltaY, rect.right - deltaX, rect.bottom - deltaY);
+    }
+
+    if (map.StartLinePoints().size() == 2) {
+      ::SelectObject(backbuffDC, startBrush);
+      std::list<std::array<int, 2>> points = map.StartLinePoints();
+      RECT rect1 = getRectByCoords(points.front()[0], points.front()[1]);
+      points.pop_front();
+      RECT rect2 = getRectByCoords(points.front()[0], points.front()[1]);
+
+      ::MoveToEx(backbuffDC, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, NULL);
+      ::LineTo(backbuffDC, (rect2.left + rect2.right) / 2, (rect2.top + rect2.bottom) / 2);
+    }
+
     ::BitBlt( hdc, 0, 0, width, height + ribbonHeight, backbuffDC, 0, 0, SRCCOPY );
 
     ::SelectObject( backbuffDC, oldBitmap );
@@ -230,6 +268,10 @@ void CWindow::LoadFile()
 
 void CWindow::SaveFile()
 {
+    if (map.StartLinePoints().size() < 2) {
+      ::MessageBox( handle,	L"Ошибка: отсутствует стартовая линия на карте!", L"Стартовая линия",	MB_OK );
+      return;
+    }
     wchar_t szFilePathName[_MAX_PATH] = L"";
     OPENFILENAME ofn = { 0 };
     ofn.lStructSize = sizeof( OPENFILENAME );
