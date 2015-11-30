@@ -11,7 +11,7 @@
 Map::Map() : 
 	xSize(DEFAULT_X_SIZE),
 	ySize(DEFAULT_Y_SIZE),
-	cells(DEFAULT_X_SIZE, std::vector< int >(DEFAULT_Y_SIZE, EMPTY_CELL))
+	cells(DEFAULT_X_SIZE, std::vector< int >(DEFAULT_Y_SIZE, ROAD))
 {
 	fillMapWithDefaultData();
 }
@@ -19,7 +19,7 @@ Map::Map() :
 Map::Map(const size_t xSize, const size_t ySize) :
 	xSize(xSize),
 	ySize(ySize),
-	cells(xSize, std::vector< int >(ySize, EMPTY_CELL))
+	cells(xSize, std::vector< int >(ySize, ROAD))
 {
 }
 
@@ -54,7 +54,7 @@ bool Map::canPlayerStayOnCell(int x, int y) const {
         return false;
     }
     
-    if (cells[x][y] == 0) {
+    if (cells[x][y] == ROAD) {
         return true;
     } else {
         return false;
@@ -76,7 +76,7 @@ bool Map::canPlayerStayOnCellLookOnOtherPlayers(int x, int y, int playerID, cons
         }
     }
     
-    if (cells[x][y] == 0) {
+    if (cells[x][y] == ROAD) {
         return true;
     } else {
         return false;
@@ -95,7 +95,7 @@ bool Map::hasBarrierOnPath(int xFirst, int yFirst, int xSecond, int ySecond) con
 
 	if (xFirst == xSecond) {
 		for (int j = std::min(yFirst, ySecond); j <= std::max(yFirst, ySecond); ++j) {
-			if (cells[xFirst][j] == FILLED_CELL) {
+			if (cells[xFirst][j] != ROAD/*== FILLED_CELL*/) {
 				return true;
 			}
 		}
@@ -124,7 +124,7 @@ bool Map::hasBarrierOnPath(int xFirst, int yFirst, int xSecond, int ySecond) con
 		for (int j = std::min(previousYInt, currentYInt);
 				j <= std::max(previousYInt, currentYInt); ++j) {
 			
-			if (cells[i - 1][j] == FILLED_CELL) {
+			if (cells[i - 1][j] != ROAD/*== FILLED_CELL*/) {
 				return true;
 			}
 		}
@@ -143,7 +143,7 @@ bool Map::hasBarrierOnPath(int xFirst, int yFirst, int xSecond, int ySecond) con
 
 	for (int j = std::min(previousYInt, ySecond);
 			j <= std::max(previousYInt, ySecond); ++j) {
-		if (cells[xSecond][j] == FILLED_CELL) {
+		if (cells[xSecond][j] != ROAD/*== FILLED_CELL*/) {
 			return true;
 		}
 	}

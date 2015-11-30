@@ -24,17 +24,17 @@ namespace Core {
 			for( int j = 0; j < m; ++j ) {
 				int cellCode;
 				in >> cellCode;
-				Cell cell = Cell(cellCode);
-				switch ( cell ) {
+				Cell cell = Cell( cellCode );
+				switch( cell ) {
 					case ROAD:
 					case FOREST:
 					case WALL:
 						gameField[i].push_back( cell );
 						break;
-					//case CAR:
-					//	gameField[i].push_back( ROAD );
-					//	startPoints.push_back( CCoordinates( j, i ) );
-					//	break;
+						//case CAR:
+						//	gameField[i].push_back( ROAD );
+						//	startPoints.push_back( CCoordinates( j, i ) );
+						//	break;
 					default:
 						throw std::invalid_argument( std::string( "invalid cell type on column " ) + std::to_string( i ) + " row " + std::to_string( j ) );
 				}
@@ -43,8 +43,8 @@ namespace Core {
 		int x1, y1, x2, y2;
 		in >> x1 >> y1 >> x2 >> y2;
 		CLine startLine = CLine( CCoordinates( x1, y1 ), CCoordinates( x2, y2 ) );
-		for( int i = x1; i <= x2; i++ ) {
-			for( int j = y1; j <= y2; j++ ) {
+		for( int i = min( x1, x2 ); i <= max( x2, x2 ); i++ ) {
+			for( int j = min( y1, y2 ); j <= max( y1, y2 ); j++ ) {
 				if( gameField[i][j] == ROAD ) {
 					startPoints.push_back( CCoordinates( i, j ) );
 				}

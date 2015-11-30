@@ -23,8 +23,8 @@ private:
 	bool wrongFinishLineIntersection(int xFirst, int yFirst, int xSecond, int ySecond) const;
 
 public:
-    const int EMPTY_CELL = 0;
-    const int FILLED_CELL = 1;
+    const int ROAD = 1;
+    const int FILLED_CELL = 0;
     const double epsilon = 1e-8;
     
     Map();
