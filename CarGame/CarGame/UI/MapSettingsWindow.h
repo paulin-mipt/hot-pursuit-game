@@ -19,9 +19,8 @@ namespace UI {
 		void StartGame();
 		void ChooseMap();
 		void BackToMenu() const;
-//		std::string GetMapName() const;
-		std::vector<Core::CPlayer> GetPlayersInfo( const std::vector<Core::CCoordinates>& coordinates );
-		
+		std::vector<Core::CPlayer> GetPlayersInfo();
+
 		void MakeVisible() const;
 		void MakeInvisible() const;
 

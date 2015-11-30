@@ -15,7 +15,7 @@ namespace UI {
 	public:
 		static void Init( int argc, char** argv );
 		static void Finish();
-		static void InitGame( const CMap &mapData, const std::vector<CCar> &carsData, const Core::CLine& finish );
+		static void InitGame( const CMap &mapData, const std::vector<CCar> &carsData, const Core::CLine& start, const Core::CLine& finish );
 		static void DropGame();
 		
 		static void keyboardFunction( unsigned char key, int x, int y );
@@ -51,7 +51,7 @@ namespace UI {
 		static void loadTexture( const char*, GLuint& texture );
 		static void timer( int value );
 		
-		static void drawFinishLine();
+		static void drawStartAndFinishLines();
 
 		static bool initialized;
 		static bool started;
@@ -61,6 +61,7 @@ namespace UI {
 		static CMap map;
 		static std::vector<CCar> cars;
 		static std::pair<CCoordinates, CCoordinates> finishLine;
+		static std::pair<CCoordinates, CCoordinates> startLine;
 		static std::mutex mutex;
 		static std::string windowName;
 		static int window;

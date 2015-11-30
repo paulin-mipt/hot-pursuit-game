@@ -23,7 +23,7 @@ public:
 	CUIManager( UI::CMainMenuWindow* mainMenuWindow, HINSTANCE hInst );
 
 	int GetDirection( const std::vector<Core::CCoordinates>& possibleMoves, Core::CCoordinates inertia, Core::CCoordinates position ) const;
-	void InitMap( const Core::CMap& map, const std::vector<Core::CPlayer>& players, const Core::CLine& finish ) const;
+	void InitMap( const Core::CMap& map, const std::vector<Core::CPlayer>& players, const Core::CLine& start, const Core::CLine& finish ) const;
 	void Move( const std::vector<Core::CPlayer>& movedPlayers ) const;
 	void ShowCollisions( const std::set<Core::CPlayer>& collidedPlayers ) const;
 	void ShowCrashes( const std::set<Core::CPlayer>& crashedPlayers ) const;

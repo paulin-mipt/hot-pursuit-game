@@ -46,8 +46,6 @@ bool UI::CMapSettingsWindow::Create()
 	handle = CreateWindow( className, L"Map settings - Rock'n'Roll race", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		200, 200, 400, 500, nullptr, nullptr, ::GetModuleHandle( nullptr ), this );
 
-	//mapNameControl = CreateWindow( L"EDIT", L"Map name", WS_VISIBLE | WS_CHILD, 40, 50, 125, 20,
-	//	handle, nullptr, HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 	chooseMapButton = CreateWindow( L"BUTTON", L"Choose map", WS_VISIBLE | WS_CHILD, 40, 50, 125, 20,
 		handle, HMENU( BUTTON_CHOOSE_MAP ), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 	for( int i = 0; i < positionOwnerControls.size(); ++i ) {
@@ -77,19 +75,30 @@ void UI::CMapSettingsWindow::Destroy() const
 
 void UI::CMapSettingsWindow::StartGame()
 {
+	int maxPlayerNumber = 0;
 	try {
-		//		Core::CMap map = reader.ReadMap( RESOURCE_DIRECTORY + "Maps\\" + mapName + ".txt" );
 		if( map == nullptr ) {
+			// no map
 			::MessageBox( handle, L"No map chosen", L"You're doing it wrong", MB_ICONHAND );
 		} else {
-			std::vector<Core::CPlayer> playersInfo = GetPlayersInfo( map->GetStartPoints() );
-			Core::CGame game( *map, playersInfo, manager );
-			manager->SwitchToGame();
-			game.Start();
+			maxPlayerNumber = map->GetStartPoints().size();
+			std::vector<Core::CPlayer> playersInfo = GetPlayersInfo();
+			if( playersInfo.empty() ) {
+				// no players
+				::MessageBox( handle, L"You need at least 1 player", L"You're doing it wrong", MB_ICONHAND );
+			} else {
+				// ok, we're ready to start
+				Core::CGame game( *map, playersInfo, manager );
+				manager->SwitchToGame();
+				game.Start();
+			}
 		}
 	} catch( std::exception& e ) {
 		if( std::string( "Can't open file" ) == e.what() ) {
 			::MessageBox( handle, L"Map not found", L"You're doing it wrong", MB_ICONHAND );
+		} else if( std::string( "Invalid number of players" ) == e.what() ) {
+			std::wstring errorMessage = L"This map can hold only " + std::to_wstring( maxPlayerNumber ) + L" players";
+			::MessageBox( handle, errorMessage.c_str(), L"You're doing it wrong", MB_ICONHAND );
 		} else {
 			::MessageBeep( SOUND_SYSTEM_BEEP );
 			::PostQuitMessage( 1 );
@@ -101,6 +110,9 @@ void UI::CMapSettingsWindow::ChooseMap()
 {
 	try {
 		Core::CReader reader;
+
+		wchar_t currPath[_MAX_PATH] = L"";
+		::GetCurrentDirectory( _MAX_PATH, currPath );
 
 		wchar_t szFilePathName[_MAX_PATH] = L"";
 		OPENFILENAME ofn = { 0 };
@@ -114,6 +126,7 @@ void UI::CMapSettingsWindow::ChooseMap()
 		ofn.Flags = OFN_READONLY;
 
 		::GetOpenFileName( &ofn );
+		::SetCurrentDirectory( currPath );
 
 		map = std::make_shared<Core::CMap>( reader.ReadMap( ofn.lpstrFile ) );
 
@@ -144,22 +157,32 @@ void UI::CMapSettingsWindow::BackToMenu() const
 //	return result;
 //}
 
-std::vector<Core::CPlayer> UI::CMapSettingsWindow::GetPlayersInfo( const std::vector<Core::CCoordinates>& coordinates )
+std::vector<Core::CPlayer> UI::CMapSettingsWindow::GetPlayersInfo()
 {
+	const std::vector<Core::CCoordinates> playerStartCoordinates = map->GetStartPoints();
+	const int maxPlayerNumber = playerStartCoordinates.size();
+
 	int playerNumber = 0;
 	std::vector<Core::CPlayer> result;
 	const size_t MAX_LENGTH = 1024;
 	std::shared_ptr<wchar_t> text = std::shared_ptr<wchar_t>( new wchar_t[MAX_LENGTH] );
-	for( int i = 0; i < min( 12, coordinates.size() ); ++i ) {
+	for( int i = 0; i < positionOwnerControls.size() && playerNumber <= maxPlayerNumber; ++i ) {
 		::GetWindowText( positionOwnerControls[i], text.get(), MAX_LENGTH );
 		std::wstring textString( text.get() );
 		if( textString == L"Player" ) {
-			result.push_back( Core::CPlayer( coordinates[i], playerNumber++, USER ) );
+			if( playerNumber >= maxPlayerNumber ) {
+				throw(std::runtime_error( "Invalid number of players" ));
+			}
+			result.push_back( Core::CPlayer( playerStartCoordinates[playerNumber], playerNumber, USER ) );
+			playerNumber++;
 		} else if( textString == L"AI" ) {
-			result.push_back( Core::CPlayer( coordinates[i], playerNumber++, AI ) );
+			if( playerNumber >= maxPlayerNumber ) {
+				throw(std::runtime_error( "Invalid number of players" ));
+			}
+			result.push_back( Core::CPlayer( playerStartCoordinates[playerNumber], playerNumber, AI ) );
+			playerNumber++;
 		}
 	}
-	// если 0 игроков, то сообщение об ошибке
 	return result;
 }
 

@@ -242,7 +242,7 @@ namespace Core {
 	void CGame::Start()
 	{
 		const CPlayer* winner = nullptr;
-		manager->InitMap( map, players, map.GetFinishLine() );
+		manager->InitMap( map, players, map.GetStartLine(), map.GetFinishLine() );
 
 		do {
 			for( size_t i = 0; i < players.size(); ++i ) {
