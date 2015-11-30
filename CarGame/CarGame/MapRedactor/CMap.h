@@ -5,7 +5,7 @@
 
 const int DEFAULT_SIZE_X = 20;
 const int DEFAULT_SIZE_Y = 15;
-const int DEFAULT_COLORS_NUMBER = 4;
+const int DEFAULT_COLORS_NUMBER = 3;
 
 
 enum BType {
@@ -37,8 +37,11 @@ public:
     void LoadMapFromFile( std::ifstream& );
     void SaveMapToFile( std::ofstream& );
 
+    std::list<std::array<int, 2>> StartLinePoints() { return startLinePoints; }
+
 private:
     std::vector< std::vector<int> > numbers;
+    std::list<std::array<int, 2>> startLinePoints;
     int sizeX;
     int sizeY;
     int colorsNumber;

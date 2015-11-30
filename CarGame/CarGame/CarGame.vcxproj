@@ -251,7 +251,10 @@
     <None Include="MapRedactor\toolbar.bml" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="MapRedactor\toolbar.xml" />
+    <CustomBuild Include="MapRedactor\toolbar.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UICC.exe MapRedactor\toolbar.xml MapRedactor\toolbar.bml /header:MapRedactor\toolbar.h /res:MapRedactor\toolbar.rc</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MapRedactor\toolbar.bml MapRedactor\toolbar.rc MapRedactor\toolbar.h</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -19,3 +19,5 @@
 #include <UIRibbon.h>
 #include <fstream>
 #include <string>
+#include <list>
+#include <array>

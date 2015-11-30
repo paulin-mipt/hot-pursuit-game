@@ -393,10 +393,10 @@ namespace UI {
 	
 	void CDrawing::mouseFunction( int button, int state, int x, int y )
 	{
-		if ( button == GLUT_LEFT_BUTTON ) {
+		if ( button == GLUT_LEFT_BUTTON && state == GLUT_DOWN ) {
 			UI::CWindowCoordinates indent = map.GetIndent();
 			CSize s = map.GetSize();
-			if ((x < indent.x) || (x > s.first * map.GetCellSize()) || (y < indent.y) || (x > s.second * map.GetCellSize())) {
+			if ((x < indent.x) || (x > s.first * map.GetCellSize() + indent.x) || (y < indent.y) || (y > s.second * map.GetCellSize() + indent.y)) {
 				mouse = Core::CCoordinates( -1, -1 );
 			}
 			else {
