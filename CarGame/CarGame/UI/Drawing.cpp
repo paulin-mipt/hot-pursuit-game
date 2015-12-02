@@ -95,29 +95,36 @@ namespace UI {
 
 	void CDrawing::drawStartAndFinishLines()
 	{
-		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-		glEnable( GL_BLEND ); glClearColor( 0.0, 0.0, 0.0, 0.0 );
+		//glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+		//glEnable( GL_BLEND ); 
+		//glClearColor( 0.0, 0.0, 0.0, 0.0 );
+		map.DrawTransparentTextureInCell( map.textureFlag, finishLine.first.ConvertToCoreCoordinates() );
+		map.DrawTransparentTextureInCell( map.textureFlag, finishLine.second.ConvertToCoreCoordinates() );
 		glLineWidth( 3 );
 		glBegin( GL_LINES );
 		{
-			glColor4f( 1, 0, 0, 0.5 );
-			auto point1 = transateToWcoord( finishLine.first.x + 0.5, finishLine.first.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
-			auto point2 = transateToWcoord( finishLine.second.x + 0.5, finishLine.second.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			//glColor4f( 1, 0, 0, 0.5 );
+			glColor3f( 0.2, 0.2, 0.2 );
+			auto point1 = transateToWcoord( finishLine.first.x, finishLine.first.y + 1, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			auto point2 = transateToWcoord( finishLine.second.x, finishLine.second.y + 1, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			glVertex2f( point1.x, point1.y );
 			glVertex2f( point2.x, point2.y );
 		}
 		glEnd();
-		
+
 		glLineWidth( 3 );
 		glBegin( GL_LINES );
 		{
-			glColor4f( 0, 1, 0, 0.5 );
-			auto point1 = transateToWcoord( startLine.first.x + 0.5, startLine.first.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
-			auto point2 = transateToWcoord( startLine.second.x + 0.5, startLine.second.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			//glColor4f( 0, 1, 0, 0.5 );
+			glColor3f( 0.4, 0.4, 0.4 );
+			auto point1 = transateToWcoord( startLine.first.x, startLine.first.y, map.GetCellSize(), map.GetIndent(), map.GetSize() );
+			auto point2 = transateToWcoord( startLine.second.x, startLine.second.y, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			glVertex2f( point1.x, point1.y );
 			glVertex2f( point2.x, point2.y );
 		}
 		glEnd();
+		//glDisable( GL_BLEND );
+
 	}
 
 	void CDrawing::display()
@@ -320,6 +327,7 @@ namespace UI {
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\wall.png").c_str(), map.textureWall ); // wall
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\active.png").c_str(), map.textureActiveCell ); // road active
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\flag.png").c_str(), map.textureFlag ); // flag
 
 		//load textures for cars (depends on color)
 		std::string carFilename;

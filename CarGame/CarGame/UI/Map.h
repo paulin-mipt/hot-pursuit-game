@@ -23,15 +23,16 @@ namespace UI {
 		GLuint textureRoad;
 		GLuint textureWall;
 
-		//GLuint textureActiveBoard;
-		//GLuint textureActiveRoad;
 		GLuint textureActiveCell;
 
 		GLuint textureMap;
+		GLuint textureFlag;
 
 		void MarkPossibleMoves(const std::vector<Core::CCoordinates>& _possibleMoves);
 		void UnMarkPossibleMoves(const std::vector<Core::CCoordinates>& _possibleMoves);
 		void HighLightPossibleMoves();
+
+		void DrawTransparentTextureInCell( GLuint& texture, Core::CCoordinates& coord );
 	private:
 		std::vector<Core::CCoordinates> possibleMoves;
 		std::vector<std::vector<int>> map;

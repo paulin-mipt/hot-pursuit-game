@@ -21,7 +21,14 @@ namespace UI {
 			this->y = coord.y;
 			return *this;
 		}
+
+		Core::CCoordinates ConvertToCoreCoordinates()
+		{
+			return Core::CCoordinates( x, y );
+		}
+
 	};
+
 
 	// координаты в окне
 	struct CWindowCoordinates {
