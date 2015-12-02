@@ -57,14 +57,8 @@ namespace UI {
 		cars = carsData;
 		initialized = true;
 		justStartedFlag = true;
-		startLine.first.x = start.first.x;
-		startLine.first.y = start.first.y;
-		startLine.second.x = start.second.x;
-		startLine.second.y = start.second.y;
-		finishLine.first.x = finish.first.x;
-		finishLine.first.y = finish.first.y;
-		finishLine.second.x = finish.second.x;
-		finishLine.second.y = finish.second.y;
+		startLine = start;
+		finishLine = finish;
 	}
 
 	void CDrawing::DropGame()
@@ -101,10 +95,12 @@ namespace UI {
 
 	void CDrawing::drawStartAndFinishLines()
 	{
+		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+		glEnable( GL_BLEND ); glClearColor( 0.0, 0.0, 0.0, 0.0 );
 		glLineWidth( 3 );
 		glBegin( GL_LINES );
 		{
-			glColor3f( 0, 0, 0 );
+			glColor4f( 1, 0, 0, 0.5 );
 			auto point1 = transateToWcoord( finishLine.first.x + 0.5, finishLine.first.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			auto point2 = transateToWcoord( finishLine.second.x + 0.5, finishLine.second.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			glVertex2f( point1.x, point1.y );
@@ -115,7 +111,7 @@ namespace UI {
 		glLineWidth( 3 );
 		glBegin( GL_LINES );
 		{
-			glColor3f( 0.2, 0.2, 0.2 );
+			glColor4f( 0, 1, 0, 0.5 );
 			auto point1 = transateToWcoord( startLine.first.x + 0.5, startLine.first.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			auto point2 = transateToWcoord( startLine.second.x + 0.5, startLine.second.y + 0.5, map.GetCellSize(), map.GetIndent(), map.GetSize() );
 			glVertex2f( point1.x, point1.y );
@@ -151,16 +147,14 @@ namespace UI {
 		glClearColor( 1.0, 1.0, 1.0, 0.0 ); // clear background to white
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffers
 
-		bool mapReloaded = !map.NeedToReload();
 		map.Draw(); // Draw the map
 		drawStartAndFinishLines();
+		map.HighLightPossibleMoves();
 		for( size_t i = 0; i < cars.size(); i++ ) {
 			cars[i].Draw( map.GetCellSize(), map.GetIndent(), map.GetSize() ); // Draw car
 		}
 		glFlush(); // flush changes
-		if( mapReloaded ) {
-			glutSwapBuffers(); // if map wasn't reloaded (and buffers weren't swapped), swap buffers
-		}
+		glutSwapBuffers(); // swap buffers
 	}
 
 	int CDrawing::GetWindow()
@@ -310,6 +304,8 @@ namespace UI {
 		started = false;
 		glDeleteTextures( 1, &map.textureRoad );
 		glDeleteTextures( 1, &map.textureBoard );
+		glDeleteTextures( 1, &map.textureActiveCell );
+		glDeleteTextures( 1, &map.textureWall );
 		for( auto car : cars ) {
 			glDeleteTextures( 1, &car.texture );
 		}
@@ -322,9 +318,8 @@ namespace UI {
 		
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\forest.png").c_str(), map.textureBoard ); // board
-		loadTexture( (RESOURCE_DIRECTORY + "Images\\roadActive.png").c_str(), map.textureActiveRoad ); // road active
-		loadTexture( (RESOURCE_DIRECTORY + "Images\\forestActive.png").c_str(), map.textureActiveBoard ); // board active
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\wall.png").c_str(), map.textureWall ); // wall
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\active.png").c_str(), map.textureActiveCell ); // road active
 
 		//load textures for cars (depends on color)
 		std::string carFilename;

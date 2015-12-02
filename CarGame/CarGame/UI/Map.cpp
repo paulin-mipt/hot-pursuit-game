@@ -49,7 +49,7 @@ namespace UI {
 		GLint height = viewPort[3];
 		imageSize = ((width + ((4 - (width % 4)) % 4)) * height * 3);
 		std::shared_ptr<GLbyte> data = std::shared_ptr<GLbyte>( new GLbyte[imageSize] );
-		glReadBuffer( GL_FRONT );
+		glReadBuffer( GL_BACK );
 		glReadPixels( 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data.get() );
 
 		// write pixels to texture of map
@@ -75,15 +75,15 @@ namespace UI {
 					case 2:
 						glBindTexture( GL_TEXTURE_2D, textureWall ); // load a texture of wall
 						break;
-					case 0 + TEXTURE_COUNT:
-						glBindTexture( GL_TEXTURE_2D, textureActiveBoard ); // load an active texture of board(forest)
-						break;
-					case 1 + TEXTURE_COUNT:
-						glBindTexture( GL_TEXTURE_2D, textureActiveRoad ); // load an active texture of road
-						break;
-					case 2 + TEXTURE_COUNT:
-						glBindTexture( GL_TEXTURE_2D, textureWall ); // load an active texture of wall (now the same)
-						break;
+					//case 0 + TEXTURE_COUNT:
+					//	glBindTexture( GL_TEXTURE_2D, textureActiveBoard ); // load an active texture of board(forest)
+					//	break;
+					//case 1 + TEXTURE_COUNT:
+					//	glBindTexture( GL_TEXTURE_2D, textureActiveRoad ); // load an active texture of road
+					//	break;
+					//case 2 + TEXTURE_COUNT:
+					//	glBindTexture( GL_TEXTURE_2D, textureWall ); // load an active texture of wall (now the same)
+					//	break;
 					default:
 						throw std::runtime_error( "Wrong number of texture" );
 				}
@@ -101,27 +101,59 @@ namespace UI {
 				glEnd();
 			}
 		}
-		glutSwapBuffers();
+//		glutSwapBuffers();
 		saveTexture(); // save the whole window with map to texture
 		needReload = false;
 	}
 
-	void CMap::MarkPossibleMoves( const std::vector<Core::CCoordinates>& possibleMoves )
+	void CMap::MarkPossibleMoves( const std::vector<Core::CCoordinates>& _possibleMoves )
 	{
-		for( auto move : possibleMoves ) {
-			//потом нужно будет изменить на константу
-			map[move.y][move.x] += TEXTURE_COUNT;
-		}
-		needReload = true;
+		possibleMoves = _possibleMoves;
+		//for( auto move : possibleMoves ) {
+		//	//потом нужно будет изменить на константу
+		//	map[move.y][move.x] += TEXTURE_COUNT;
+		//}
+		//needReload = true;
 	}
 
-	void CMap::UnMarkPossibleMoves( const std::vector<Core::CCoordinates>& possibleMoves )
+	void CMap::UnMarkPossibleMoves( const std::vector<Core::CCoordinates>& _possibleMoves )
 	{
-		for( auto move : possibleMoves ) {
-			//потом нужно будет изменить на константу
-			map[move.y][move.x] -= TEXTURE_COUNT;
+		possibleMoves.erase( possibleMoves.begin(), possibleMoves.end() );
+		//for( auto move : possibleMoves ) {
+		//	//потом нужно будет изменить на константу
+		//	map[move.y][move.x] -= TEXTURE_COUNT;
+		//}
+		//needReload = true;
+	}
+
+	void CMap::HighLightPossibleMoves()
+	{
+		for( auto coord : possibleMoves ) {
+			glEnable( GL_TEXTURE_2D );
+			glBindTexture( GL_TEXTURE_2D, textureActiveCell );
+			glTexEnvf( GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+			float left = coord.x * cellSize + indent.x;
+			float right = (coord.x + 1) * cellSize + indent.x;
+			float bottom = (map.size() - coord.y) * cellSize + indent.y;
+			float top = (map.size() - (coord.y + 1)) * cellSize + indent.y;
+
+			glDepthMask( GL_FALSE );
+			glEnable( GL_BLEND );
+			glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+			glBegin( GL_POLYGON );
+			{
+				glColor4f( 1, 1, 1, 1 );
+				glTexCoord2f( 0.0f, 0.0f ); glVertex3f( left, bottom, 0.0f );
+				glTexCoord2f( 1.0f, 0.0f ); glVertex3f( right, bottom, 0.0f );
+				glTexCoord2f( 1.0f, 1.0f ); glVertex3f( right, top, 0.0f );
+				glTexCoord2f( 0.0f, 1.0f ); glVertex3f( left, top, 0.0f );
+			}
+			glEnd();
+			glDisable( GL_BLEND );
+			glDepthMask( GL_TRUE );
 		}
-		needReload = true;
 	}
 
 	void CMap::Draw()

@@ -14,6 +14,13 @@ namespace UI {
 			y( _y ),
 			angle( _angle )
 		{}
+
+		CCoordinates& operator=( const Core::CCoordinates &coord )
+		{
+			this->x = coord.x;
+			this->y = coord.y;
+			return *this;
+		}
 	};
 
 	// координаты в окне
