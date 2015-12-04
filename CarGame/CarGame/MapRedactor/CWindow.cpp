@@ -278,7 +278,7 @@ void CWindow::LoadFile()
     ofn.lpstrDefExt = L"rcmap";
     ofn.nMaxFile = _MAX_PATH;
     ofn.lpstrTitle = L"Load Map";
-    ofn.Flags = OFN_FILEMUSTEXIST;
+    ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
     ::GetOpenFileName( &ofn );
 
@@ -312,7 +312,7 @@ void CWindow::SaveFile()
     ofn.lpstrDefExt = L"rcmap";
     ofn.nMaxFile = _MAX_PATH;
     ofn.lpstrTitle = L"Save Map";
-    ofn.Flags = OFN_OVERWRITEPROMPT;
+    ofn.Flags = OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 
     ::GetSaveFileName( &ofn );
 

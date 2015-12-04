@@ -257,9 +257,9 @@ namespace UI {
 		}
 		for( int j = 0; j <= fps; ++j ) {
 			for( int i = 0; i < numbers.size(); ++i ) {
-				cars[i].Move( UI::CCoordinates(
-					float( oldCoordinates[numbers[i]].x * (fps - j) + newCoordinates[i].x * j ) / fps,
-					float( oldCoordinates[numbers[i]].y * (fps - j) + newCoordinates[i].y * j ) / fps ) );
+        cars[numbers[i]].Move( UI::CCoordinates(
+					float( oldCoordinates[i].x * (fps - j) + newCoordinates[i].x * j ) / fps,
+					float( oldCoordinates[i].y * (fps - j) + newCoordinates[i].y * j ) / fps ) );
 			}
 			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / fps ) );
 		}
