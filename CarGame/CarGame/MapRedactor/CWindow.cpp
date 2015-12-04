@@ -38,8 +38,8 @@ CWindow::CWindow():
     backgroundBrush( ::CreateSolidBrush( RGB( 0xFF, 0xFF, 0xFF ) ) ), 
     startBrush( ::CreateSolidBrush( RGB( 0x0, 0x0, 0x0 ) ) ),
     finishBrush( ::CreateSolidBrush( RGB ( 0x0, 0x0, 0x0 ) ) ),
-    startPen( ( ::CreatePen( PS_SOLID, 5, RGB( 0x66, 0x66, 0x66) ) ) ),
-    finishPen( (::CreatePen( PS_SOLID, 5, RGB( 0x33, 0x33, 0x33 ) ) ) )
+    startPen( ( ::CreatePen( PS_SOLID, 3, RGB( 0x66, 0x66, 0x66) ) ) ),
+    finishPen( (::CreatePen( PS_SOLID, 3, RGB( 0x33, 0x33, 0x33 ) ) ) )
 {
     HINSTANCE hInst = ::GetModuleHandle( 0 );
     HBITMAP forest = ::LoadBitmap( hInst, MAKEINTRESOURCE( IDB_FOREST ) );

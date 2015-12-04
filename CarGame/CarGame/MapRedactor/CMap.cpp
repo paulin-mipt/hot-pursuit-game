@@ -92,17 +92,17 @@ void CMap::LoadMapFromFile( std::ifstream& fin )
         }
     }
 
-    startLinePoints.resize(0);
     std::array<int, 2> point;
-    fin >> point[0] >> point[1];
+    startLinePoints.resize(0);
+    fin >> point[1] >> point[0];
     startLinePoints.push_back(point);
-    fin >> point[0] >> point[1];
+    fin >> point[1] >> point[0];
     startLinePoints.push_back(point);
 
     finishLinePoints.resize(0);
-    fin >> point[0] >> point[1];
+    fin >> point[1] >> point[0];
     finishLinePoints.push_back(point);
-    fin >> point[0] >> point[1];
+    fin >> point[1] >> point[0];
     finishLinePoints.push_back(point);
 }
 
@@ -120,14 +120,14 @@ void CMap::SaveMapToFile( std::ofstream & fout )
     }
 
     std::list<std::array<int, 2>> points = StartLinePoints();
-    fout << points.front()[0] << " " << points.front()[1] << " ";
+    fout << points.front()[1] << " " << points.front()[0] << " ";
     points.pop_front();
-    fout << points.front()[0] << " " << points.front()[1] << std::endl;
-     
+    fout << points.front()[1] << " " << points.front()[0] << std::endl;
+
     points = FinishLinePoints();
-    fout << points.front()[0] << " " << points.front()[1] << " ";
+    fout << points.front()[1] << " " << points.front()[0] << " ";
     points.pop_front();
-    fout << points.front()[0] << " " << points.front()[1] << std::endl;
+    fout << points.front()[1] << " " << points.front()[0] << " ";     
 }
 
 
