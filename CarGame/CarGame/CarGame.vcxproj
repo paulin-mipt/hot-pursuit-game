@@ -75,7 +75,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)\..\Externals\FreeGLUT\include;$(SolutionDir)\..\Externals\SOIL\src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\Externals\FreeGLUT\lib;$(SolutionDir)\..\Externals\SOIL\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\Externals\FreeGLUT\bin;$(SolutionDir)\..\Externals\FreeGLUT\lib;$(SolutionDir)\..\Externals\SOIL\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -218,6 +218,7 @@
     <Image Include="MainIcon.ico" />
     <Image Include="MapRedactor\Exit16.bmp" />
     <Image Include="MapRedactor\Exit32.bmp" />
+    <Image Include="MapRedactor\flag.bmp" />
     <Image Include="MapRedactor\icon.ico" />
     <Image Include="MapRedactor\New16.bmp" />
     <Image Include="MapRedactor\New32.bmp" />
@@ -234,6 +235,7 @@
     <Image Include="MapRedactor\Wall32.bmp" />
     <Image Include="MapRedactor\ZoomIn32.bmp" />
     <Image Include="MapRedactor\ZoomOut32.bmp" />
+    <Image Include="Resources\Images\flag.png" />
     <Image Include="Resources\Images\wall.png" />
   </ItemGroup>
   <ItemGroup>

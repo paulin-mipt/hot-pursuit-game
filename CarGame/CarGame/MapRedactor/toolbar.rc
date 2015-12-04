@@ -22,6 +22,11 @@ END
 
 STRINGTABLE 
 BEGIN
+    cmdGroupStartFinish_LabelTitle_RESID L"\x0421\x0442\x0430\x0440\x0442 \x0438 \x0444\x0438\x043d\x0438\x0448" /* LabelTitle cmdGroupStartFinish_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
     cmdSaveMap_LabelTitle_RESID L"\x0421\x043e\x0445\x0440\x0430\x043d\x0438\x0442\x044c" /* LabelTitle cmdSaveMap_LabelTitle_RESID: (null) */
 END
 
@@ -144,10 +149,26 @@ END
 
 STRINGTABLE 
 BEGIN
-    cmdStart_TooltipDescription_RESID L"\x041d\x0430\x0440\x0438\x0441\x043e\x0432\x0430\x0442\x044c \x043b\x0438\x043d\x0438\x044e \x0441\x0442\x0430\x0440\x0442\x0430. \x0410\x0432\x0442\x043e\x043c\x043e\x0431\x0438\x043b\x044c \x043d\x0430\x0447\x043d\x0435\x0442 \x0438 \x043f\x0440\x0435\x043a\x0440\x0430\x0442\x0438\x0442 \x0434\x0432\x0438\x0436\x0435\x043d\x0438\x0435 \x043d\x0430 \x044d\x0442\x043e\x0439 \x043b\x0438\x043d\x0438\x0438" /* TooltipDescription cmdStart_TooltipDescription_RESID: (null) */
+    cmdStart_TooltipDescription_RESID L"\x041d\x0430\x0440\x0438\x0441\x043e\x0432\x0430\x0442\x044c \x043b\x0438\x043d\x0438\x044e \x0441\x0442\x0430\x0440\x0442\x0430. \x0410\x0432\x0442\x043e\x043c\x043e\x0431\x0438\x043b\x044c \x043d\x0430\x0447\x043d\x0435\x0442 \x0434\x0432\x0438\x0436\x0435\x043d\x0438\x0435 \x043d\x0430 \x044d\x0442\x043e\x0439 \x043b\x0438\x043d\x0438\x0438" /* TooltipDescription cmdStart_TooltipDescription_RESID: (null) */
 END
 
 cmdStart_LargeImages_RESID    BITMAP    "Start32.bmp" /* LargeImages cmdStart_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    cmdFinish_LabelTitle_RESID L"\x0424\x0438\x043d\x0438\x0448" /* LabelTitle cmdFinish_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    cmdFinish_TooltipTitle_RESID L"\x041d\x0430\x0440\x0438\x0441\x043e\x0432\x0430\x0442\x044c \x043b\x0438\x043d\x0438\x044e \x0444\x0438\x043d\x0438\x0448\x0430" /* TooltipTitle cmdFinish_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    cmdFinish_TooltipDescription_RESID L"\x041d\x0430\x0440\x0438\x0441\x043e\x0432\x0430\x0442\x044c \x043b\x0438\x043d\x0438\x044e \x0444\x0438\x043d\x0438\x0448\x0430. \x0410\x0432\x0442\x043e\x043c\x043e\x0431\x0438\x043b\x044c \x043f\x0440\x0435\x043a\x0440\x0430\x0442\x0438\x0442 \x0434\x0432\x0438\x0436\x0435\x043d\x0438\x0435 \x043d\x0430 \x044d\x0442\x043e\x0439 \x043b\x0438\x043d\x0438\x0438" /* TooltipDescription cmdFinish_TooltipDescription_RESID: (null) */
+END
+
+cmdFinish_LargeImages_RESID    BITMAP    "flag.bmp" /* LargeImages cmdFinish_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     InternalCmd2_LabelTitle_RESID L"Label:InternalCmd2" /* LabelTitle InternalCmd2_LabelTitle_RESID: (null) */

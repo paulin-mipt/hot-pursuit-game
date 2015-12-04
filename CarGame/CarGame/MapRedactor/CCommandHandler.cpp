@@ -110,6 +110,9 @@ STDMETHODIMP CCommandHandler::Execute(
     case cmdStart:
         MainMapRedactorWindow.SetBrush( MainMapRedactorWindow.GetBrush() == BStart ? BNone : BStart );
         break;
+    case cmdFinish:
+        MainMapRedactorWindow.SetBrush(MainMapRedactorWindow.GetBrush() == BFinish ? BNone : BFinish);
+        break;
 	default:
 		break;
 	}

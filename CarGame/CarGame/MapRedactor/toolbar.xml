@@ -4,6 +4,7 @@
     <Command Name="TabFile" Symbol="cmdTabFile" Id="30000" LabelTitle="Карта" />
     <Command Name="GroupMain" Symbol="cmdGroupMain" Id="30001" LabelTitle="Операции с картой" />
     <Command Name="GroupDraw" Symbol="cmdGroupDraw" Id="30101" LabelTitle="Инструменты рисования" />
+    <Command Name="GroupStartFinish" Symbol="cmdGroupStartFinish" Id="30201" LabelTitle="Старт и финиш" />
     <!--<Command Name="GroupZoom" Symbol="cmdGroupZoom" Id="30201" LabelTitle="Масштаб" />-->
     <Command Name="SaveMap" Symbol="cmdSaveMap" Id="30002" LabelTitle="Сохранить">
       <Command.TooltipTitle>Сохранить карту</Command.TooltipTitle>
@@ -56,9 +57,16 @@
     </Command>
     <Command Name="Start" Symbol="cmdStart" Id="30105" LabelTitle="Старт">
       <Command.TooltipTitle>Нарисовать линию старта</Command.TooltipTitle>
-      <Command.TooltipDescription>Нарисовать линию старта. Автомобиль начнет и прекратит движение на этой линии</Command.TooltipDescription>
+      <Command.TooltipDescription>Нарисовать линию старта. Автомобиль начнет движение на этой линии</Command.TooltipDescription>
       <Command.LargeImages>
         <Image Source="Start32.bmp"/>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="Finish" Symbol="cmdFinish" Id="30106" LabelTitle="Финиш">
+      <Command.TooltipTitle>Нарисовать линию финиша</Command.TooltipTitle>
+      <Command.TooltipDescription>Нарисовать линию финиша. Автомобиль прекратит движение на этой линии</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="flag.bmp"/>
       </Command.LargeImages>
     </Command>
     <!--<Command Name="ZoomIn" Symbol="cmdZoomIn" Id="30202" LabelTitle="Приблизить">
@@ -105,11 +113,14 @@
             <Button CommandName="LoadMap"/>
             <Button CommandName="SaveMap"/>
           </Group>
-          <Group CommandName="GroupDraw" SizeDefinition ="FourButtons">
+          <Group CommandName="GroupDraw" SizeDefinition ="ThreeButtons">
             <Button CommandName="Road" />
             <Button CommandName="Tree" />
             <Button CommandName="Wall" />
+          </Group>
+          <Group CommandName="GroupStartFinish" SizeDefinition ="TwoButtons">
             <Button CommandName="Start" />
+            <Button CommandName="Finish" />
           </Group>
           <!--<Group CommandName="GroupZoom" SizeDefinition ="TwoButtons">
             <Button CommandName="ZoomIn" />

@@ -36,7 +36,10 @@ bool CWindow::Create()
 CWindow::CWindow():
     brush( BNone ), m_cRef( 1 ), m_pCommandHandler( NULL ), lButtonPressed( false ),
     backgroundBrush( ::CreateSolidBrush( RGB( 0xFF, 0xFF, 0xFF ) ) ), 
-    startBrush( ::CreateSolidBrush( RGB( 0x0, 0x0, 0x0 ) ) )
+    startBrush( ::CreateSolidBrush( RGB( 0x0, 0x0, 0x0 ) ) ),
+    finishBrush( ::CreateSolidBrush( RGB ( 0x0, 0x0, 0x0 ) ) ),
+    startPen( ( ::CreatePen( PS_SOLID, 5, RGB( 0x66, 0x66, 0x66) ) ) ),
+    finishPen( (::CreatePen( PS_SOLID, 5, RGB( 0x33, 0x33, 0x33 ) ) ) )
 {
     HINSTANCE hInst = ::GetModuleHandle( 0 );
     HBITMAP forest = ::LoadBitmap( hInst, MAKEINTRESOURCE( IDB_FOREST ) );
@@ -187,20 +190,10 @@ void CWindow::OnPaint()
         }
     }
 
-    for (auto point: map.StartLinePoints()) {
-      int i = point[0], j = point[1];
-      rect = getRectByCoords(i, j);
-
-      ::SelectObject( backbuffDC, startBrush );
-
-      int deltaY = (rect.bottom - rect.top) / 6;
-      int deltaX = (rect.right - rect.left) / 6;
-
-      ::Ellipse(backbuffDC, rect.left + deltaX, rect.top + deltaY, rect.right - deltaX, rect.bottom - deltaY);
-    }
+    ::SelectObject(backbuffDC, startPen);
+    ::SelectObject(backbuffDC, startBrush);
 
     if (map.StartLinePoints().size() == 2) {
-      ::SelectObject(backbuffDC, startBrush);
       std::list<std::array<int, 2>> points = map.StartLinePoints();
       RECT rect1 = getRectByCoords(points.front()[0], points.front()[1]);
       points.pop_front();
@@ -208,6 +201,39 @@ void CWindow::OnPaint()
 
       ::MoveToEx(backbuffDC, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, NULL);
       ::LineTo(backbuffDC, (rect2.left + rect2.right) / 2, (rect2.top + rect2.bottom) / 2);
+    }
+
+    for (auto point: map.StartLinePoints()) {
+      int i = point[0], j = point[1];
+      rect = getRectByCoords(i, j);
+
+      int deltaY = (rect.bottom - rect.top) / 5;
+      int deltaX = (rect.right - rect.left) / 5;
+
+      ::Ellipse(backbuffDC, rect.left + deltaX, rect.top + deltaY, rect.right - deltaX, rect.bottom - deltaY);
+    }
+
+    ::SelectObject(backbuffDC, finishPen);
+    ::SelectObject(backbuffDC, finishBrush);
+
+    if (map.FinishLinePoints().size() == 2) {
+      std::list<std::array<int, 2>> points = map.FinishLinePoints();
+      RECT rect1 = getRectByCoords(points.front()[0], points.front()[1]);
+      points.pop_front();
+      RECT rect2 = getRectByCoords(points.front()[0], points.front()[1]);
+
+      ::MoveToEx(backbuffDC, (rect1.left + rect1.right) / 2, (rect1.top + rect1.bottom) / 2, NULL);
+      ::LineTo(backbuffDC, (rect2.left + rect2.right) / 2, (rect2.top + rect2.bottom) / 2);
+    }
+
+    for (auto point : map.FinishLinePoints()) {
+      int i = point[0], j = point[1];
+      rect = getRectByCoords(i, j);
+
+      int deltaY = (rect.bottom - rect.top) / 5;
+      int deltaX = (rect.right - rect.left) / 5;
+
+      ::Ellipse(backbuffDC, rect.left + deltaX, rect.top + deltaY, rect.right - deltaX, rect.bottom - deltaY);
     }
 
     ::BitBlt( hdc, 0, 0, width, height + ribbonHeight, backbuffDC, 0, 0, SRCCOPY );
@@ -270,6 +296,11 @@ void CWindow::SaveFile()
 {
     if (map.StartLinePoints().size() < 2) {
       ::MessageBox( handle,	L"Ошибка: отсутствует стартовая линия на карте!", L"Стартовая линия",	MB_OK );
+      return;
+    }
+
+    if (map.FinishLinePoints().size() < 2) {
+      ::MessageBox(handle, L"Ошибка: отсутствует финишная линия на карте!", L"Финишная линия", MB_OK);
       return;
     }
     wchar_t szFilePathName[_MAX_PATH] = L"";

@@ -81,7 +81,8 @@ private:
     HWND handleDlg;
     int cellSize;
     std::vector<HBRUSH> brushes;
-    HBRUSH startBrush;
+    HBRUSH startBrush, finishBrush;
+    HPEN startPen, finishPen;
     HBRUSH backgroundBrush;
     LONG m_cRef;                           // Reference count.
     IUICommandHandler* m_pCommandHandler;  // Generic Command Handler

@@ -59,6 +59,24 @@ void CMap::ClickCell( int i, int j, BType bType )
                   startLinePoints.pop_back();
           }
           break;
+        case BFinish:
+          if (finishLinePoints.size() < 2) {
+            finishLinePoints.push_front(std::array<int, 2> { i, j });
+          } else {
+            finishLinePoints.pop_back();
+            finishLinePoints.push_front(std::array<int, 2> { i, j });
+          }
+
+          // запретить негоризонтальные и пустые финишные линии
+          if (finishLinePoints.size() == 2) {
+            // негоризонтальные
+            if (finishLinePoints.front()[0] != finishLinePoints.back()[0])
+              finishLinePoints.pop_back();
+            // вырожденные
+            else if (finishLinePoints.front()[1] == finishLinePoints.back()[1])
+              finishLinePoints.pop_back();
+          }
+          break;
     }
 }
 
@@ -80,6 +98,12 @@ void CMap::LoadMapFromFile( std::ifstream& fin )
     startLinePoints.push_back(point);
     fin >> point[0] >> point[1];
     startLinePoints.push_back(point);
+
+    finishLinePoints.resize(0);
+    fin >> point[0] >> point[1];
+    finishLinePoints.push_back(point);
+    fin >> point[0] >> point[1];
+    finishLinePoints.push_back(point);
 }
 
 
@@ -100,12 +124,17 @@ void CMap::SaveMapToFile( std::ofstream & fout )
     points.pop_front();
     fout << points.front()[0] << " " << points.front()[1] << std::endl;
      
+    points = FinishLinePoints();
+    fout << points.front()[0] << " " << points.front()[1] << " ";
+    points.pop_front();
+    fout << points.front()[0] << " " << points.front()[1] << std::endl;
 }
 
 
 void CMap::RestartMap()
 {
   startLinePoints.clear(); 
+  finishLinePoints.clear();
   numbers = std::vector< std::vector<int> >( sizeY );
 
 	int border = 1; // forest border

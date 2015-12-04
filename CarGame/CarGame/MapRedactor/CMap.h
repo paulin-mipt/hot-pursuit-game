@@ -13,7 +13,8 @@ enum BType {
     BRoad,
     BTree,
     BWall,
-    BStart
+    BStart,
+    BFinish
 };
 
 
@@ -38,10 +39,12 @@ public:
     void SaveMapToFile( std::ofstream& );
 
     std::list<std::array<int, 2>> StartLinePoints() { return startLinePoints; }
+    std::list<std::array<int, 2>> FinishLinePoints() { return finishLinePoints; }
 
 private:
     std::vector< std::vector<int> > numbers;
     std::list<std::array<int, 2>> startLinePoints;
+    std::list<std::array<int, 2>> finishLinePoints;
     int sizeX;
     int sizeY;
     int colorsNumber;

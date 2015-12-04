@@ -238,6 +238,12 @@
     <Image Include="Resources\Images\wall.png">
       <Filter>Resource Files\Images</Filter>
     </Image>
+    <Image Include="Resources\Images\flag.png">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="MapRedactor\flag.bmp">
+      <Filter>Source Files\MapRedactor</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Resources\Maps\map1.txt">
