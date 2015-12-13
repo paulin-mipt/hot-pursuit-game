@@ -7,7 +7,7 @@
 
 HINSTANCE hInstanceDLLLibrary = NULL;
 
-typedef int(__cdecl *STRATEGY_PROC)(const IMap &_map, const std::vector<std::shared_ptr<IPlayerState>> &_playerStates, int curPlayerPosition);
+typedef int( __cdecl *STRATEGY_PROC )(const IMap &_map, const std::vector<std::shared_ptr<IPlayerState>> &_playerStates, int curPlayerPosition);
 typedef IPlayerState*(__cdecl *PLAYER_STATE_FACTORY_PROC)(int x, int y, int xVelocity, int yVelocity);
 
 typedef IMap*(__cdecl *MAP_DEFAULT_FACTORY_PROC)();
@@ -55,7 +55,8 @@ namespace Core {
 		numOfDeadPlayers( 0 ),
 		players( playersInfo ),
 		manager( _manager )
-	{}
+	{
+	}
 
 	int CGame::finishLineIntersectsWithPlayer( const CPlayer& player ) const
 	{
@@ -65,15 +66,14 @@ namespace Core {
 		CCoordinates playersPreviousCoordinates = player.GetPreviousPosition();
 		CCoordinates playersCoordinates = player.GetPosition();
 
-		if (playersCoordinates == playersPreviousCoordinates)
+		if( playersCoordinates == playersPreviousCoordinates )
 			return 0;
 
-		if ( isIntersects( playersPreviousCoordinates, playersCoordinates, map.GetFinishLine().first, map.GetFinishLine().second ) )
-		{
+		if( isIntersects( playersPreviousCoordinates, playersCoordinates, map.GetFinishLine().first, map.GetFinishLine().second ) ) {
 			CCoordinates normalVectorCoordinates( map.GetFinishLine().second.x - map.GetFinishLine().first.x,
 				map.GetFinishLine().second.y - map.GetFinishLine().first.y );
-			if (area(map.GetFinishLine().first, playersCoordinates, map.GetFinishLine().second) *
-				area(map.GetFinishLine().first, normalVectorCoordinates, map.GetFinishLine().second) >= 0 &&
+			if( area( map.GetFinishLine().first, playersCoordinates, map.GetFinishLine().second ) *
+				area( map.GetFinishLine().first, normalVectorCoordinates, map.GetFinishLine().second ) >= 0 &&
 				area( map.GetFinishLine().first, playersPreviousCoordinates, map.GetFinishLine().second ) *
 				area( map.GetFinishLine().first, normalVectorCoordinates, map.GetFinishLine().second ) < 0 )
 				return 1;
@@ -89,7 +89,7 @@ namespace Core {
 				players[i].StartCheating();
 			}
 			if( finishLineIntersectsWithPlayer( players[i] ) == 1 ) {
-				if (players[i].IsCheating() ) {
+				if( players[i].IsCheating() ) {
 					players[i].StopCheating();
 				} else {
 					return &players[i];
@@ -133,13 +133,106 @@ namespace Core {
 		return false;
 	}
 
+	class floatVector
+	{
+	public:
+		floatVector()
+		{
+			x = 0;
+			y = 0;
+		}
+
+		floatVector( const CCoordinates& coord )
+		{
+			x = coord.x;
+			y = coord.y;
+		}
+
+		float length()
+		{
+			return sqrt( x * x + y * y );
+		}
+
+		static float scalarMult( const floatVector& v1, const floatVector& v2 )
+		{
+			return v1.x * v2.x + v1.y * v2.y;
+		}
+
+		floatVector& operator-( const floatVector& v2 )
+		{
+			floatVector result;
+			result.x = x - v2.x;
+			result.y = y - v2.y;
+			return result;
+		}
+
+		floatVector& operator+( const floatVector& v2 )
+		{
+			floatVector result;
+			result.x = x + v2.x;
+			result.y = y + v2.y;
+			return result;
+		}
+
+		floatVector& operator*( const float scalar )
+		{
+			floatVector result;
+			result.x = x * scalar;
+			result.y = y * scalar;
+			return result;
+		}
+
+		float x;
+		float y;
+	};
+
+
+
+	floatVector getSpeed( CCoordinates& coord1, CCoordinates& coord2 )
+	{
+		floatVector result;
+		result.x = (( float )(coord1.x - coord2.x)) / 100;
+		result.y = (( float )(coord1.y - coord2.y)) / 100;
+		return result;
+	}
+
 	void CGame::findCollisions()
 	{
 		for( size_t i = 0; i < players.size(); ++i ) {
 			for( size_t j = i + 1; j < players.size(); ++j ) {
-				if ( players[i].GetPosition() == players[j].GetPosition() && players[i].IsAlive() && players[j].IsAlive() ) {
-					collidedPlayers.insert( players[i] );
-					collidedPlayers.insert( players[j] );
+				if( players[i].IsAlive() && players[j].IsAlive() ) {
+					CCoordinates prevCoordPlayer1 = players[i].GetPreviousPosition();
+					CCoordinates prevCoordPlayer2 = players[j].GetPreviousPosition();
+					CCoordinates coordPlayer1 = players[i].GetPosition();
+					CCoordinates coordPlayer2 = players[j].GetPosition();
+
+					floatVector speedPlayer1 = getSpeed( coordPlayer1, prevCoordPlayer1 );
+					floatVector speedPlayer2 = getSpeed( coordPlayer2, prevCoordPlayer2 );
+
+					floatVector startDiff( prevCoordPlayer1 - prevCoordPlayer2 );
+
+					float cosAngle = floatVector::scalarMult( speedPlayer1, speedPlayer2 )
+						/ speedPlayer1.length()
+						/ speedPlayer2.length();
+					float criticalDistance = 0;
+					if( cosAngle > sqrt( 2 ) / 2 ) {
+						criticalDistance = 0.25 + 0.25;
+					} else if( cosAngle >= -sqrt( 2 ) / 2 && cosAngle <= sqrt( 2 ) / 2 ) {
+						criticalDistance = 0.5 + 0.25;
+					} else {
+						criticalDistance = 0.5 + 0.5;
+					}
+
+					floatVector speedDiff = speedPlayer1 - speedPlayer2;
+
+					for( int t = 0; t < 100; t++ ) {
+						floatVector distDiff = speedDiff * t;
+						floatVector sumDiff = startDiff + distDiff;
+						if( criticalDistance > sumDiff.length() ) {
+							collidedPlayers.insert( players[i] );
+							collidedPlayers.insert( players[j] );
+						}
+					}
 				}
 			}
 		}
@@ -161,22 +254,21 @@ namespace Core {
 	{
 		int direction;
 		std::vector<CCoordinates> possibleMoves;
-		switch ( player.GetType() )
-		{
-			case USER: 
+		switch( player.GetType() ) {
+			case USER:
 				//вывести возможные ходы
-				possibleMoves = player.PossibleMoves(map.GetSize());
-				manager->MarkPossibleMoves(possibleMoves);
+				possibleMoves = player.PossibleMoves( map.GetSize() );
+				manager->MarkPossibleMoves( possibleMoves );
 				//manager-->possibleMoves
-				direction = manager->GetDirection(possibleMoves, player.GetInertia(), player.GetPosition());
-				manager->UnMarkPossibleMoves(possibleMoves);
+				direction = manager->GetDirection( possibleMoves, player.GetInertia(), player.GetPosition() );
+				manager->UnMarkPossibleMoves( possibleMoves );
 				break;
 			case AI:
 			{
 				if( !hInstanceDLLLibrary ) hInstanceDLLLibrary = LoadLibrary( TEXT( "StrategyDLL.dll" ) );
-				STRATEGY_PROC StrategyFunc = (STRATEGY_PROC)GetProcAddress( hInstanceDLLLibrary, "StrategyFunc" );
-				PLAYER_STATE_FACTORY_PROC GetPlayerState = (PLAYER_STATE_FACTORY_PROC)GetProcAddress( hInstanceDLLLibrary, "GetPlayerState" );
-				MAP_FACTORY_PROC GetMap = (MAP_FACTORY_PROC)GetProcAddress( hInstanceDLLLibrary, "GetMap" );
+				STRATEGY_PROC StrategyFunc = ( STRATEGY_PROC )GetProcAddress( hInstanceDLLLibrary, "StrategyFunc" );
+				PLAYER_STATE_FACTORY_PROC GetPlayerState = ( PLAYER_STATE_FACTORY_PROC )GetProcAddress( hInstanceDLLLibrary, "GetPlayerState" );
+				MAP_FACTORY_PROC GetMap = ( MAP_FACTORY_PROC )GetProcAddress( hInstanceDLLLibrary, "GetMap" );
 				// Map map;
 
 				CField field = map.GetField();
@@ -191,21 +283,20 @@ namespace Core {
 				CCoordinates firstFinishPoint = map.GetFinishLine().first;
 				CCoordinates secondFinishPoint = map.GetFinishLine().second;
 
-				std::shared_ptr< IMap > mapPtr( GetMap( 
-					mapForAI, 
-					std::make_pair( 
-						firstFinishPoint.y, 
-						firstFinishPoint.x ), 
-					std::make_pair( 
-						secondFinishPoint.y, 
-						secondFinishPoint.x ) 
-					) 
-				);
+				std::shared_ptr< IMap > mapPtr( GetMap(
+					mapForAI,
+					std::make_pair(
+					firstFinishPoint.y,
+					firstFinishPoint.x ),
+					std::make_pair(
+					secondFinishPoint.y,
+					secondFinishPoint.x )
+					)
+					);
 				std::vector< std::shared_ptr< IPlayerState > > playerStates;
 
-				for ( int i = 0; i < players.size(); ++i )
-				{
-					if ( !players[i].IsAlive() ) continue;
+				for( int i = 0; i < players.size(); ++i ) {
+					if( !players[i].IsAlive() ) continue;
 
 					CCoordinates currentPosition = players[i].GetPosition();
 					CCoordinates previuosPosition = players[i].GetPreviousPosition();
@@ -213,14 +304,14 @@ namespace Core {
 					int xVelocity = currentPosition.x - previuosPosition.x;
 					int yVelocity = currentPosition.y - previuosPosition.y;
 
-					std::shared_ptr<IPlayerState> playerStatePtr( 
-						GetPlayerState( 
-							currentPosition.y, 
-							currentPosition.x, 
-							yVelocity,
-							xVelocity
+					std::shared_ptr<IPlayerState> playerStatePtr(
+						GetPlayerState(
+						currentPosition.y,
+						currentPosition.x,
+						yVelocity,
+						xVelocity
 						)
-					);
+						);
 					playerStates.push_back( playerStatePtr );
 				}
 
@@ -246,7 +337,7 @@ namespace Core {
 
 		do {
 			for( size_t i = 0; i < players.size(); ++i ) {
-				
+
 				if( players[i].IsAlive() ) {
 					turnOfPlayer( players[i] );
 				}

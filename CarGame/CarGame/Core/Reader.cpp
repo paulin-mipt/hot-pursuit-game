@@ -43,8 +43,8 @@ namespace Core {
 		int x1, y1, x2, y2;
 		in >> x1 >> y1 >> x2 >> y2;
 		CLine startLine = CLine( CCoordinates( x1, y1 ), CCoordinates( x2, y2 ) );
-		for( int i = min( x1, x2 ); i <= max( x2, x2 ); i++ ) {
-			for( int j = min( y1, y2 ); j <= max( y1, y2 ); j++ ) {
+		for( int j = min( y1, y2 ); j <= max( y1, y2 ); j++ ) {
+			for( int i = min( x1, x2 ); i <= max( x1, x2 ); i++ ) {
 				if( gameField[i][j] == ROAD ) {
 					startPoints.push_back( CCoordinates( i, j ) );
 				}
