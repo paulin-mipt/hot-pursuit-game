@@ -24,6 +24,7 @@ namespace UI {
 		static void MoveCars( const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates );
 		static void MoveCarsToStart( const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates );
 		static void DeleteCars( const std::vector<int>& numbers );
+		static void ExplodeCars( const std::vector<int>& numbers );
 
 		static void Start();
 		static void Stop();
@@ -43,6 +44,9 @@ namespace UI {
 		static void UnMarkPossibleMoves( const std::vector<Core::CCoordinates>& possibleMoves );
 
 		static Core::CCoordinates translateToCoord( int x, int y, float cellSize );
+
+		static GLuint textureExplosion;
+		static const int numFramesExplosion;
 
 	private:
 		static void display();
@@ -66,6 +70,6 @@ namespace UI {
 		static std::string windowName;
 		static int window;
 		static int key;
-		static Core::CCoordinates mouse;		
+		static Core::CCoordinates mouse;
 	};
 }

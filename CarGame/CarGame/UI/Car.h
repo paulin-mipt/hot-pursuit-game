@@ -29,6 +29,7 @@ namespace UI {
 		void Rotate( float x1, float y1, float x2, float y2 );
 		GLuint texture;
 
+		int curFrameExplosion;
 	private:
 		void rotate( float &x, float &y, float angle ) const;
 		void rotateCar( float &Ax, float &Ay, float &Bx, float &By, float &Cx, float &Cy, float &Dx, float &Dy, float centerX, float centerY, float angle ) const;

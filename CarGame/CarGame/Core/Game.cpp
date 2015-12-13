@@ -348,7 +348,12 @@ namespace Core {
 
 			findCollisions();
 			findCrashes();
-
+			for( auto crashedPlayer : crashedPlayers ) {
+				auto it = collidedPlayers.find( crashedPlayer );
+				if( it != collidedPlayers.end() ) {
+					collidedPlayers.erase( it );
+				}
+			}
 
 			if( startAgainIfDead ) {
 				for( auto crashedPlayer : crashedPlayers ) {
@@ -357,12 +362,7 @@ namespace Core {
 				for( auto collidedPlayer : collidedPlayers ) {
 					players[collidedPlayer.GetNumber()].GoToStart();
 				}
-				if( !collidedPlayers.empty() ) {
-					manager->ShowCollisions( collidedPlayers );
-				}
-				if( !crashedPlayers.empty() ) {
-					manager->ShowCollisions( crashedPlayers );
-				}
+				manager->ShowExplosionAndStartAgain( collidedPlayers, crashedPlayers );
 			} else {
 				for( auto crashedPlayer : crashedPlayers ) {
 					players[crashedPlayer.GetNumber()].Die();
@@ -370,12 +370,7 @@ namespace Core {
 				for( auto collidedPlayer : collidedPlayers ) {
 					players[collidedPlayer.GetNumber()].Die();
 				}
-				if( !crashedPlayers.empty() ) {
-					manager->ShowCrashes( crashedPlayers );
-				}
-				if( !collidedPlayers.empty() ) {
-					manager->ShowCrashes( collidedPlayers );
-				}
+				manager->ShowExplosionAndDie( collidedPlayers, crashedPlayers );
 				numOfDeadPlayers += crashedPlayers.size();
 				numOfDeadPlayers += collidedPlayers.size();
 				if( numOfDeadPlayers == players.size() ) {

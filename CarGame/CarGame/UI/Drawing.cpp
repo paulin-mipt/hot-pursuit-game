@@ -21,6 +21,8 @@ namespace UI {
 	int CDrawing::window;
 	int CDrawing::key;
 	Core::CCoordinates CDrawing::mouse;
+	const int CDrawing::numFramesExplosion = 10;
+	GLuint CDrawing::textureExplosion;
 
 	void CDrawing::Init( int argc, char** argv )
 	{
@@ -268,14 +270,16 @@ namespace UI {
 	void CDrawing::MoveCarsToStart( const std::vector<int>& numbers, const std::vector<CCoordinates>& newCoordinates )
 	{
 		const int framesPerStep = 100;
-		for( int j = 0; j <= framesPerStep; ++j ) {
-			for( int i : numbers ) {
-				cars[i].SetOpacity( 1.0f - float( j ) / framesPerStep );
-			}
-			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / framesPerStep ) );
-		}
+		//for( int j = 0; j <= framesPerStep; ++j ) {
+		//	for( int i : numbers ) {
+		//		cars[i].SetOpacity( 1.0f - float( j ) / framesPerStep );
+		//	}
+		//	std::this_thread::sleep_for( std::chrono::milliseconds( 500 / framesPerStep ) );
+		//}
 		for( int i = 0; i < numbers.size(); ++i ) {
+			cars[numbers[i]].curFrameExplosion = 0;
 			cars[numbers[i]].Move( newCoordinates[i] );
+			cars[numbers[i]].Rotate( newCoordinates[i].x, newCoordinates[i].y, newCoordinates[i].x, newCoordinates[i].y - 1 );
 		}
 		for( int j = 0; j <= framesPerStep; ++j ) {
 			for( int i : numbers ) {
@@ -287,15 +291,27 @@ namespace UI {
 
 	void CDrawing::DeleteCars( const std::vector<int>& numbers )
 	{
-		const int framesPerStep = 100;
-		for( int j = 0; j <= framesPerStep; ++j ) {
-			for( int i : numbers ) {
-				cars[i].SetOpacity( 1.0f - float( j ) / framesPerStep );
-			}
-			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / framesPerStep ) );
-		}
+//		const int framesPerStep = 100;
+		//for( int j = 0; j <= numFramesExplosion; ++j ) {
+		//	for( int i : numbers ) {
+		//		cars[i].SetOpacity( 1.0f - float( j ) / numFramesExplosion );
+		//		cars[i].curFrameExplosion++;
+		//	}
+		//	std::this_thread::sleep_for( std::chrono::milliseconds( 500 / numFramesExplosion ) );
+		//}
 		for( int i : numbers ) {
 			cars[i].Crash();
+		}
+	}
+
+	void CDrawing::ExplodeCars( const std::vector<int>& numbers )
+	{
+		for( int j = 0; j <= numFramesExplosion; ++j ) {
+			for( int i : numbers ) {
+				cars[i].SetOpacity( 1.0f - float( j ) / numFramesExplosion );
+				cars[i].curFrameExplosion++;
+			}
+			std::this_thread::sleep_for( std::chrono::milliseconds( 500 / numFramesExplosion ) );
 		}
 	}
 
@@ -321,6 +337,7 @@ namespace UI {
 
 	void CDrawing::load()
 	{
+		loadTexture( (RESOURCE_DIRECTORY + "Images\\explosion.png").c_str(), textureExplosion );
 		//load textures for map
 		
 		loadTexture( (RESOURCE_DIRECTORY + "Images\\road.png").c_str(), map.textureRoad ); // road

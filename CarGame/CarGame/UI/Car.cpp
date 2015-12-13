@@ -1,6 +1,7 @@
 ﻿#include <vector>
 
 #include "UI/Car.h"
+#include "UI/Drawing.h"
 
 namespace UI {
 	namespace {
@@ -19,7 +20,8 @@ namespace UI {
 		coords( startCoordinates ),
 		color( carColor ),
 		alpha( 1.0f ),
-		crashed( false )
+		crashed( false ),
+		curFrameExplosion( 0 )
 	{}
 
 	Color CCar::GetColor() const
@@ -108,6 +110,26 @@ namespace UI {
 			glTexCoord2f( 0.0f, 1.0f ); glVertex3f( Dx, Dy, 0.0f );
 		}
 		glEnd();
+
+		glBindTexture( GL_TEXTURE_2D, CDrawing:: textureExplosion );
+		if( curFrameExplosion > 0 ) {
+			left = coord.x;
+			right = coord.x + cellSize;
+			bottom = coord.y;
+			top = coord.y - cellSize;
+			glTexEnvf( GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+			glBegin( GL_POLYGON );
+			{
+				glColor4f( 1, 1, 1, 1 );
+				glTexCoord2f( (curFrameExplosion - 1.0f) / CDrawing::numFramesExplosion, 1.0f ); glVertex2f( left, bottom );
+				glTexCoord2f( (curFrameExplosion - 1.0f) / CDrawing::numFramesExplosion, 0.0f ); glVertex2f( right, bottom );
+				glTexCoord2f( curFrameExplosion * 1.0f / CDrawing::numFramesExplosion, 0.0f ); glVertex2f( right, top );
+				glTexCoord2f( curFrameExplosion * 1.0f / CDrawing::numFramesExplosion, 1.0f ); glVertex2f( left, top );
+			}
+			glEnd();
+		}
+
+
 		glDisable( GL_BLEND );
 		glDepthMask( GL_TRUE );
 	}
