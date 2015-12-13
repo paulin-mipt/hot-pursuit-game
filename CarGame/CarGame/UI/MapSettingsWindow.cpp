@@ -61,7 +61,14 @@ bool UI::CMapSettingsWindow::Create()
 		handle, HMENU( BUTTON_START_GAME ), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
 	backToMenuButton = CreateWindow( L"BUTTON", L"Back to main menu", WS_VISIBLE | WS_CHILD, 225, 430, 150, 30,
 		handle, HMENU( BUTTON_BACK_TO_MENU ), HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
-
+	CreateWindow( L"STATIC", L"After death", WS_CHILD | WS_VISIBLE | SS_CENTER,
+		225, 300, 150, 20, handle, nullptr, HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
+	mod = CreateWindow( L"COMBOBOX", L"Choose mod",
+		CBS_DROPDOWNLIST | WS_VISIBLE | WS_CHILD | WS_VSCROLL | CBS_HASSTRINGS | WS_OVERLAPPED, 225, 330, 150, 80,
+		handle, nullptr, HINSTANCE( GetWindowLong( handle, GWL_HINSTANCE ) ), this );
+	::SendMessage( mod, CB_ADDSTRING, 0, LPARAM( L"Remove" ) );
+	::SendMessage( mod, CB_ADDSTRING, 0, LPARAM( L"Start again" ) );
+	::SendMessage( mod, CB_SELECTSTRING, 0, LPARAM( L"Remove" ) );
 	return handle != nullptr;
 }
 
@@ -83,12 +90,13 @@ void UI::CMapSettingsWindow::StartGame()
 		} else {
 			maxPlayerNumber = map->GetStartPoints().size();
 			std::vector<Core::CPlayer> playersInfo = GetPlayersInfo();
+			bool startAgainIfDead = GetMod();
 			if( playersInfo.empty() ) {
 				// no players
 				::MessageBox( handle, L"You need at least 1 player", L"You're doing it wrong", MB_ICONHAND );
 			} else {
 				// ok, we're ready to start
-				Core::CGame game( *map, playersInfo, manager );
+				Core::CGame game( *map, playersInfo, manager, startAgainIfDead );
 				manager->SwitchToGame();
 				game.Start();
 			}
@@ -184,6 +192,20 @@ std::vector<Core::CPlayer> UI::CMapSettingsWindow::GetPlayersInfo()
 		}
 	}
 	return result;
+}
+
+bool UI::CMapSettingsWindow::GetMod()
+{
+	const size_t MAX_LENGTH = 1024;
+	LPWSTR text = new wchar_t[MAX_LENGTH];
+	::GetWindowText( mod, text, MAX_LENGTH );
+	std::wstring textString( text );
+	if( textString == L"Start again" ) {
+		return true;
+	} else if( textString == L"Remove" ) {
+		return false;
+	}
+
 }
 
 void UI::CMapSettingsWindow::MakeVisible() const

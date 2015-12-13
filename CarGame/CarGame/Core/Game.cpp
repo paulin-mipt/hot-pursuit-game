@@ -50,11 +50,12 @@ namespace Core {
 		}
 	}
 
-	CGame::CGame( const CMap& newMap, const std::vector<CPlayer>& playersInfo, const CUIManager* _manager ) :
+	CGame::CGame( const CMap& newMap, const std::vector<CPlayer>& playersInfo, const CUIManager* _manager, bool _startAgain ) :
 		map( newMap ),
 		numOfDeadPlayers( 0 ),
 		players( playersInfo ),
-		manager( _manager )
+		manager( _manager ),
+		startAgainIfDead( _startAgain )
 	{
 	}
 
@@ -348,29 +349,53 @@ namespace Core {
 			findCollisions();
 			findCrashes();
 
-			for( auto crashedPlayer : crashedPlayers ) {
-				auto it = collidedPlayers.find( crashedPlayer );
-				if( it != collidedPlayers.end() ) {
-					collidedPlayers.erase( it );
+
+			if( startAgainIfDead ) {
+				for( auto crashedPlayer : crashedPlayers ) {
+					players[crashedPlayer.GetNumber()].GoToStart();
+				}
+				for( auto collidedPlayer : collidedPlayers ) {
+					players[collidedPlayer.GetNumber()].GoToStart();
+				}
+				if( !collidedPlayers.empty() ) {
+					manager->ShowCollisions( collidedPlayers );
+				}
+				if( !crashedPlayers.empty() ) {
+					manager->ShowCollisions( crashedPlayers );
+				}
+			} else {
+				for( auto crashedPlayer : crashedPlayers ) {
+					players[crashedPlayer.GetNumber()].Die();
+				}
+				for( auto collidedPlayer : collidedPlayers ) {
+					players[collidedPlayer.GetNumber()].Die();
+				}
+				if( !crashedPlayers.empty() ) {
+					manager->ShowCrashes( crashedPlayers );
+				}
+				if( !collidedPlayers.empty() ) {
+					manager->ShowCrashes( collidedPlayers );
+				}
+				numOfDeadPlayers += crashedPlayers.size();
+				numOfDeadPlayers += collidedPlayers.size();
+				if( numOfDeadPlayers == players.size() ) {
+					break;
 				}
 			}
-			for( auto collidedPlayer : collidedPlayers ) {
-				players[collidedPlayer.GetNumber()].GoToStart();
-			}
-			for( auto crashedPlayer : crashedPlayers ) {
-				players[crashedPlayer.GetNumber()].Die();
-			}
-			if( !collidedPlayers.empty() ) {
-				manager->ShowCollisions( collidedPlayers );
-			}
-			if( !crashedPlayers.empty() ) {
-				manager->ShowCrashes( crashedPlayers );
-			}
 
-			numOfDeadPlayers += crashedPlayers.size();
-			if( numOfDeadPlayers == players.size() ) {
-				break;
-			}
+			//for( auto crashedPlayer : crashedPlayers ) {
+			//	auto it = collidedPlayers.find( crashedPlayer );
+			//	if( it != collidedPlayers.end() ) {
+			//		collidedPlayers.erase( it );
+			//	}
+			//}
+
+			//for( auto collidedPlayer : collidedPlayers ) {
+			//	players[collidedPlayer.GetNumber()].GoToStart();
+			//}
+			//for( auto crashedPlayer : crashedPlayers ) {
+			//	players[crashedPlayer.GetNumber()].Die();
+			//}
 
 			collidedPlayers.clear();
 			crashedPlayers.clear();

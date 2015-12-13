@@ -9,7 +9,7 @@
 namespace Core {
 	class CGame {
 	public:
-		CGame( const CMap& map, const std::vector<CPlayer>& playersInfo, const CUIManager* _manager );
+		CGame( const CMap& map, const std::vector<CPlayer>& playersInfo, const CUIManager* _manager, bool _startAgain );
 
 		void Start();
 
@@ -31,5 +31,6 @@ namespace Core {
 		void findCollisions();
 		void findCrashes();
 		void finish( const CPlayer* player = nullptr );
+		bool startAgainIfDead;
 	};
 }

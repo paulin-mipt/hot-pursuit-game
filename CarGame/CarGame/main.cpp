@@ -8,11 +8,11 @@ CWindow MainMapRedactorWindow;
 
 int __stdcall wWinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR commandLine, int nCmdShow )
 {
-  CoInitialize(NULL);
-  UNREFERENCED_PARAMETER(hPrevInst);
-  UNREFERENCED_PARAMETER(commandLine);
+	CoInitialize( NULL );
+	UNREFERENCED_PARAMETER( hPrevInst );
+	UNREFERENCED_PARAMETER( commandLine );
 
-  UI::CMainMenuWindow mainWindow( hInst );
+	UI::CMainMenuWindow mainWindow( hInst );
 	UI::CMainMenuWindow::RegisterClass( hInst );
 	mainWindow.Create();
 	mainWindow.Show( nCmdShow );
@@ -31,7 +31,7 @@ int __stdcall wWinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR commandLine
 		::DispatchMessage( &msg );
 	}
 
-  CoUninitialize();
+	CoUninitialize();
 
-	return static_cast<int>(msg.wParam);
+	return static_cast< int >(msg.wParam);
 }

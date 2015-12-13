@@ -20,6 +20,7 @@ namespace UI {
 		void ChooseMap();
 		void BackToMenu() const;
 		std::vector<Core::CPlayer> GetPlayersInfo();
+		bool GetMod();
 
 		void MakeVisible() const;
 		void MakeInvisible() const;
@@ -31,6 +32,8 @@ namespace UI {
 		HWND startGameButton;
 		HWND backToMenuButton;
 		HWND chooseMapButton;
+		HWND mod;
+
 		std::vector<HWND> positionOwnerControls;
 
 		CUIManager* manager;
